@@ -1,0 +1,56 @@
+# 30-cursor-bearer.yaml — cursor pagination with Bearer token authentication.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/rest/30-cursor-bearer.yaml
+#   lm connector run rest-cursor
+#
+# How cursor pagination works
+# ---------------------------
+# The connector issues GET /v1/items (no cursor param on the first request).
+# It reads the last item's `id` via `cursor_path` (JSONPath $.data[-1:].id) and
+# carries it as `?starting_after=<id>` on subsequent requests.  Iteration stops
+# when `$.has_more` is false.
+#
+# Auth: bearer — the platform sends `Authorization: Bearer <token>`.
+# The token is NEVER inline: `token_env` names an env var the platform holds.
+# Use `lm secret set REST_DEMO_TOKEN <value>` (DB secret store, resolved first; OS env is the fallback).
+#
+# Pagination: cursor — opaque cursor extracted from the last record of each page.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: rest-cursor
+  connector_type: rest-generic
+  scopes: [demo]
+
+spec:
+  base_url: http://localhost:8081
+
+  auth:
+    kind: bearer
+    token_env: REST_DEMO_TOKEN        # env var the platform holds (never inline the token)
+
+  endpoints:
+    - id: items
+      path: /v1/items
+      method: GET
+
+      # ── Pagination ─────────────────────────────────────────────────────────
+      pagination:
+        kind: cursor
+        cursor_param: starting_after  # query param that carries the cursor value
+        cursor_path: "$.data[-1:].id" # JSONPath to extract the next-page cursor from the response
+        has_more_path: "$.has_more"   # JSONPath boolean: true → fetch the next page
+        response_path: "$.data"       # JSONPath that unwraps the records array
+
+      # ── Hybrid target table ────────────────────────────────────────────────
+      target:
+        kind: hybrid
+        table: ext.rest_cursor
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+      incremental:
+        mode: full

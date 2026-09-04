@@ -1,0 +1,54 @@
+# 50-kotlin-row-hook.yaml — Kotlin escape hatch: a cell hook normalizes the legacy
+# date format during ingestion so the hub stores clean ISO-8601 values.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/csv/50-kotlin-row-hook.yaml
+#   lm connector run csv-kotlin-hook
+#
+# The hook rewrites every signup_date cell from the source format "DD/MM/YYYY"
+# to "YYYY-MM-DD" before the row is written to the hub table.  The transformation
+# is idempotent — rows that already carry ISO dates pass through unchanged.
+#
+# Script distribution (v1 rule)
+# -----------------------------
+# Hook scripts are loaded from the PLATFORM CLASSPATH only (`script: classpath:...`).
+# This is a deliberate security restriction: a `file:` path in a manifest would let anyone
+# who can apply manifests execute arbitrary code on the server. Operator-deployed scripts
+# on the classpath are the v1 trust boundary. This example uses a sample shipped with the
+# platform (hooks/samples/normalize-date.kts); its readable source is also mirrored at
+# docs/connectors/csv/hooks/normalize-date.kts for documentation.
+#
+# KotlinScriptHost binding contract
+# ----------------------------------
+# The host injects two top-level bindings into the script:
+#   bindings["cells"]   — MutableMap<String, Any?> — the current row's columns; mutate in-place.
+#   bindings["context"] — Map<String, Any?>          — the hook's own params.context values from the
+#                          manifest (read-only; e.g. `context: { defaultCountry: FR }` under the hook).
+# Changes to "cells" are visible to subsequent hooks in the chain and to the sink writer.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-kotlin-hook           # unique connector name within the workspace
+  connector_type: csv-file
+  scopes: [demo]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/customers.csv
+
+  parser:
+    has_header: true
+
+  after_process: none
+
+  target: {}
+
+  mapping:
+    cell:
+      - kotlin:
+          script: classpath:hooks/samples/normalize-date.kts   # v1: classpath only (see header)
+          # The script receives the mutable 'cells' map.  Any column value may be
+          # read or overwritten; rows are not filtered (return nothing — the sink
+          # always writes the row).

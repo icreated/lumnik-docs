@@ -1,0 +1,58 @@
+# 20-page-basic.yaml — page-number pagination with HTTP Basic authentication.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/rest/20-page-basic.yaml
+#   lm connector run rest-page
+#
+# How page pagination works
+# -------------------------
+# The connector issues GET /v1/orders?page=1&size=2, reads `$.has_more` to decide whether
+# to advance to page=2, and so on until has_more is false.
+#
+# Auth: basic — the platform sends `Authorization: Basic base64(username:password)`.
+# The password is NEVER inline: `password_env` names a credential reference resolved at
+# run time as: DB secret store → OS env var → JVM system property (dev/test).
+# Use `lm secret set REST_DEMO_BASIC_PW <value>` (encrypted at rest, resolved first).
+#
+# Pagination: page — numbered pages with a has_more sentinel.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: rest-page
+  connector_type: rest-generic
+  scopes: [demo]
+
+spec:
+  base_url: http://localhost:8081
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: REST_DEMO_BASIC_PW  # env var the platform holds; never the password itself
+
+  endpoints:
+    - id: orders
+      path: /v1/orders
+      method: GET
+
+      # ── Pagination ─────────────────────────────────────────────────────────
+      pagination:
+        kind: page
+        page_param: page              # query param carrying the current page number
+        size_param: size              # query param carrying the page size
+        size: 2                       # page size (small for the demo stub)
+        start_page: 1                 # first page index (1-based APIs are common)
+        has_more_path: "$.has_more"   # JSONPath boolean: true → advance to the next page
+        response_path: "$.data"       # JSONPath that unwraps the records array
+
+      # ── Hybrid target table ────────────────────────────────────────────────
+      target:
+        kind: hybrid
+        table: ext.rest_page
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+      incremental:
+        mode: full

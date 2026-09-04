@@ -1,0 +1,56 @@
+# 40-link-header-apikey.yaml — Link rel=next header pagination with API-key authentication.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/rest/40-link-header-apikey.yaml
+#   lm connector run rest-link-header
+#
+# How Link-header pagination works
+# ---------------------------------
+# GitHub's REST API and many modern APIs follow RFC 5988: each response carries a
+# `Link: <url>; rel="next"` header.  The connector extracts the absolute `next` URL
+# and follows it verbatim until the header is absent.  No query-param arithmetic
+# is needed — the server owns the cursor.
+#
+# Auth: api-key — the platform injects a custom header on every request.
+# `in: header` + `name: X-API-Key` + `value_env: REST_DEMO_APIKEY` means every
+# request carries  `X-API-Key: <value of REST_DEMO_APIKEY>`.
+# Use `lm secret set REST_DEMO_APIKEY <value>` (DB secret store, resolved first; OS env is the fallback).
+#
+# Pagination: link-header — follows Link rel=next until it disappears.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: rest-link-header
+  connector_type: rest-generic
+  scopes: [demo]
+
+spec:
+  base_url: http://localhost:8081
+
+  auth:
+    kind: api-key
+    in: header                        # inject the key as an HTTP header
+    name: X-API-Key                   # header name (X-API-Key is the conventional choice)
+    value_env: REST_DEMO_APIKEY       # env var the platform holds; never inline the key
+
+  endpoints:
+    - id: events
+      path: /v1/events
+      method: GET
+
+      # ── Pagination ─────────────────────────────────────────────────────────
+      pagination:
+        kind: link-header             # follows the RFC 5988 Link: <url>; rel="next" header
+        response_path: "$.data"       # JSONPath that unwraps the records array in each page
+
+      # ── Hybrid target table ────────────────────────────────────────────────
+      target:
+        kind: hybrid
+        table: ext.rest_link_header
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+      incremental:
+        mode: full

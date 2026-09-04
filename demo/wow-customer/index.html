@@ -1,0 +1,3104 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/demo/wow-customer/">
+      
+      
+        <link rel="prev" href="../../wow/">
+      
+      
+        <link rel="next" href="../../connectors/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>The WOW, hands-on - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wow-demo-one-customer-fused-from-two-legacy-systems-alive-over-rest" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The WOW, hands-on
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whats-in-this-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's in this folder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-proof-headless-nightly-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The proof (headless, nightly-verified)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay-it-by-hand-on-the-self-host-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay it by hand (on the self-host stack)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ask-it-the-last-20-seconds-of-the-wow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask it (the last 20 seconds of the WOW)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zero-row-honesty-it-refuses-the-deceptive-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-row honesty: it refuses the deceptive "none"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-it-the-first-app-surface-kindview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See it — the first app surface (kind:View)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#act-2-the-process-kindprocess-notify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Act 2 — the process (kind:Process, notify)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#act-3-the-lifecycle-kindworkflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Act 3 — the lifecycle (kind:Workflow)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whats-in-this-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's in this folder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-proof-headless-nightly-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The proof (headless, nightly-verified)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replay-it-by-hand-on-the-self-host-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replay it by hand (on the self-host stack)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ask-it-the-last-20-seconds-of-the-wow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask it (the last 20 seconds of the WOW)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zero-row-honesty-it-refuses-the-deceptive-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-row honesty: it refuses the deceptive "none"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-it-the-first-app-surface-kindview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See it — the first app surface (kind:View)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#act-2-the-process-kindprocess-notify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Act 2 — the process (kind:Process, notify)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#act-3-the-lifecycle-kindworkflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Act 3 — the lifecycle (kind:Workflow)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="wow-demo-one-customer-fused-from-two-legacy-systems-alive-over-rest">WOW demo — one Customer, fused from two legacy systems, alive over REST</h1>
+<p>The 60-second integrator story:</p>
+<blockquote>
+<p>Take <strong>Customer</strong> (the hero entity), fuse it from <strong>two realistic legacy sources</strong> — a
+<strong>SOAP/Siebel CRM</strong> and a nightly <strong>CSV export</strong> — and serve <strong>one canonical, conflict-aware
+Customer</strong> over REST. No ETL job, no warehouse. A declarative manifest over the live hub.</p>
+</blockquote>
+<p>You don't have a Siebel to point at — so this folder ships a tiny <strong><code>fake-siebel.py</code></strong> (stdlib only) that
+speaks just enough of the <code>CustomerQueryPage</code> dialect. Everything else is real lumnik.</p>
+<div class="highlight"><pre><span></span><code>┌─ fake-siebel.py  (SOAP QueryPage) ─→ siebel-customers ─→ connector.cust_siebel ┐
+│                                                          (tenant_id + RLS)      │
+│                                                                                 ├─→ Customer entity
+└─ customer.csv    (flat-file export) ─→ csv-customers ──→ connector.t_cust_csv ──┘   (fuse on customer_code)
+                                                          (tenant_id + RLS)                   │
+                                                                                              ▼
+                                              GET /api/entities/customer  →  fused JSON + _conflicts ledger
+</code></pre></div>
+<h2 id="whats-in-this-folder">What's in this folder</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fake-siebel.py</code></td>
+<td>Stand-in Siebel — POST → a <code>CustomerQueryPage</code> SOAP envelope (stdlib only).</td>
+</tr>
+<tr>
+<td><code>customer.csv</code></td>
+<td>The second legacy source: a flat-file customer export.</td>
+</tr>
+<tr>
+<td><code>siebel-connector.yaml</code></td>
+<td><code>kind: soap</code> connector → lands <code>connector.cust_siebel</code>.</td>
+</tr>
+<tr>
+<td><code>csv-connector.yaml</code></td>
+<td><code>csv-file</code> connector → lands <code>connector.t_cust_csv</code>.</td>
+</tr>
+<tr>
+<td><code>customer-entity.yaml</code></td>
+<td>The <code>kind: Entity</code> manifest — fuses both on <code>customer_code</code>.</td>
+</tr>
+<tr>
+<td><code>clients-view.yaml</code></td>
+<td><code>kind: View</code> — the first app surface: a list over the fused Customer.</td>
+</tr>
+<tr>
+<td><code>lyon-process.yaml</code></td>
+<td><code>kind: Process</code> — emits a decision when a Lyon customer lands (Act 2).</td>
+</tr>
+<tr>
+<td><code>fake-n8n.py</code></td>
+<td>Stand-in webhook receiver for Act 2 (stdlib only).</td>
+</tr>
+<tr>
+<td><code>commandes.csv</code></td>
+<td>Act 3's source: a dirty statuses export, <code>EN LITIGE</code> lurking undeclared.</td>
+</tr>
+<tr>
+<td><code>commandes-connector.yaml</code></td>
+<td><code>csv-file</code> connector → lands <code>connector.t_commandes_csv</code> (Act 3).</td>
+</tr>
+<tr>
+<td><code>commande-workflow.yaml</code></td>
+<td><code>kind: Workflow</code> — the declared commande lifecycle (Act 3).</td>
+</tr>
+<tr>
+<td><code>docker-compose.wow.yml</code></td>
+<td>Overlay for the self-host stack: mounts this folder at <code>/demo</code>, adds host-gateway.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-proof-headless-nightly-verified">The proof (headless, nightly-verified)</h2>
+<p>The exact same fil runs as an integration test (<code>CustomerWowFusionIT</code>) — start there if you
+just want certainty. Scope of that guard: no Java test runs per PR; the suite runs in
+the <strong>nightly</strong> <code>mvn verify</code> (non-blocking, so a red can sit for up to a day):</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">JAVA_HOME</span><span class="o">=</span>/path/to/jdk-21
+mvn<span class="w"> </span>-pl<span class="w"> </span>lumnik-hub<span class="w"> </span>verify<span class="w"> </span>-Dit.test<span class="o">=</span><span class="s1">'CustomerWowFusionIT'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DfailIfNoTests<span class="o">=</span><span class="nb">false</span><span class="w"> </span>-Dsurefire.failIfNoSpecifiedTests<span class="o">=</span><span class="nb">false</span><span class="w"> </span>-Dtest<span class="o">=</span>NoSuchUnitTest
+</code></pre></div>
+<p><code>CustomerWowFusionIT</code> stands up a WireMock fake-Siebel, runs both connectors for real, applies the
+manifest, and asserts the fused result over REST — agreement, gap-fill, and a cross-source conflict.</p>
+<h2 id="replay-it-by-hand-on-the-self-host-stack">Replay it by hand (on the self-host stack)</h2>
+<p>This replays the WOW against the <strong>deployed</strong> stack — real OIDC, no dev-bypass — the one
+<code>deploy/selfhost/up.sh</code> brings up. <strong>Every command runs from the repo root</strong> (all paths are
+relative to it; on Windows, run them in the <strong>Ubuntu</strong> window — see
+<a href="../../deploy-windows/">Deploy on Windows</a>, and spell <code>lm</code> as <code>.\lm.exe</code> if you drive
+from PowerShell instead).</p>
+<p>Three prerequisites — <strong>the first two are the ones everyone skips</strong>, and each
+failure they cause is silent, so run their ✔ checks:</p>
+<ul>
+<li>The self-host stack running with the demo folder mounted and the host Ollama reachable:
+  <div class="highlight"><pre><span></span><code>./deploy/selfhost/up.sh<span class="w"> </span>--build<span class="w">     </span><span class="c1"># hub + postgres + keycloak (real OIDC)</span>
+<span class="c1"># recreate the hub with the WOW overlay so it can read /demo/customer.csv:</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="se">\</span>
+<span class="w">               </span>-f<span class="w"> </span>docs/demo/wow-customer/docker-compose.wow.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>hub
+<span class="c1"># recreating RESTARTS the hub — wait until healthy before any lm call (an early</span>
+<span class="c1"># call gets 401 while the hub is still establishing OIDC with Keycloak):</span>
+<span class="k">until</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Health.Status}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">      </span><span class="s2">"</span><span class="k">$(</span>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span>ps<span class="w"> </span>-q<span class="w"> </span>hub<span class="k">)</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>healthy<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</code></pre></div>
+  ✔ <strong>Check the mount</strong> — the hub must see the demo files:
+  <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>hub<span class="w"> </span>ls<span class="w"> </span>/demo
+</code></pre></div>
+  You should see <code>customer.csv</code> in the list. If you get <em>No such file or
+  directory</em>, the overlay <code>up -d hub</code> above didn't run — without it the CSV
+  connector later "succeeds" with <strong>0 rows</strong> and the fusion has nothing to fuse.</li>
+</ul>
+<p>(Ollama + models: see <code>deploy/selfhost/README.md</code> — the "ask" step needs them.)
+- The fake Siebel, on the host: <code>python3 docs/demo/wow-customer/fake-siebel.py</code> (leave it
+  running; if it says "address already in use", it's already up — skip this).
+  ✔ <strong>Check it answers</strong> (from another terminal):
+  <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8077/eai<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">60</span>
+</code></pre></div>
+  You should see the start of a SOAP envelope — <code>&lt;soap:Envelope xmlns:soap=…</code>.
+  (It's a fake <em>Siebel</em>: it speaks XML, as the real one would.) Without it the
+  Siebel run below fails — and only <code>lm run list</code> will tell you.
+- The <code>lm</code> binary on PATH (needs Go 1.25+ — the floor is <code>lm/go.mod</code>):
+  <code>make -C lm install</code> — builds and copies it to <code>~/.local/bin</code>, no <code>sudo</code>
+  — or, on Windows, <code>lm.exe</code> (<a href="../../deploy-windows/">Deploy on Windows, step 6</a>).</p>
+<p><strong>Point <code>lm</code> at the stack and log in.</strong> The bundled realm ships a demo integrator
+(<code>integrator</code>, tenant 1) with <strong>no password baked in</strong> — <code>up.sh</code> mints one per install
+through the Keycloak admin API, written to <code>.env</code> as <code>INTEGRATOR_PASSWORD</code>. Change it for
+anything real.</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>selfhost<span class="w"> </span>--server<span class="w"> </span>http://localhost:8080<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--oidc-issuer<span class="w"> </span>http://localhost:8180/realms/lumnik
+lm<span class="w"> </span>config<span class="w"> </span>use-context<span class="w"> </span>selfhost
+lm<span class="w"> </span>login<span class="w">                                     </span><span class="c1"># prints a URL + device code — open it, sign in as integrator (password: INTEGRATOR_PASSWORD in .env)</span>
+</code></pre></div>
+<p>Then run the full flow — every call is a real Bearer-authenticated request:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Source 1 — the SOAP/Siebel CRM</span>
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/demo/wow-customer/siebel-connector.yaml
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>siebel-customers<span class="w">           </span><span class="c1"># → run scheduled: &lt;runId&gt;</span>
+<span class="w">                                             </span><span class="c1">#   lands connector.cust_siebel  (C-100, C-200)</span>
+
+<span class="c1"># 2. Source 2 — the CSV export (read from /demo inside the hub container)</span>
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/demo/wow-customer/csv-connector.yaml
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>cust-csv<span class="w">                    </span><span class="c1"># → run scheduled: &lt;runId&gt;</span>
+<span class="w">                                             </span><span class="c1">#   lands connector.t_cust_csv   (C-100, C-200, C-300)</span>
+
+<span class="c1"># ✔ CHECKPOINT — "run scheduled" is NOT "run succeeded". Look at the ledger:</span>
+lm<span class="w"> </span>run<span class="w"> </span>list
+<span class="c1">#   expected: siebel-customers  Completed  IN=2 OUT=2   ·   cust-csv  Completed  IN=8 OUT=8</span>
+<span class="c1">#   Failed on the siebel run?      → fake-siebel isn't running (prerequisite ✔ above).</span>
+<span class="c1">#   Completed but 0/0 on the csv?  → the /demo mount is missing (prerequisite ✔ above);</span>
+<span class="c1">#                                    fix it, then re-run the connector.</span>
+
+<span class="c1"># 3. Fuse them into the hero entity — only once BOTH runs above landed their rows</span>
+lm<span class="w"> </span>entity<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/demo/wow-customer/customer-entity.yaml
+<span class="c1"># → Applied entity "customer" → connector.v_customer</span>
+<span class="c1">#   (an API error naming a relation that "does not exist" means a source run above</span>
+<span class="c1">#    didn't land — go back to the checkpoint)</span>
+
+<span class="c1"># 4. Ask the hub for the fused Customer over REST (read-only, tenant-scoped by your JWT).</span>
+<span class="c1">#    curl can't share lm's login session, so grab a password-grant token from Keycloak —</span>
+<span class="c1">#    it is the SAME Bearer identity (integrator, tenant 1) by another road (password from</span>
+<span class="c1">#    .env, INTEGRATOR_PASSWORD — up.sh set it per install, there is no static one):</span>
+<span class="nv">PW</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span><span class="s1">'^INTEGRATOR_PASSWORD='</span><span class="w"> </span>.env<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2-<span class="k">)</span>
+<span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$PW</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8180/realms/lumnik/protocol/openid-connect/token<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="nv">grant_type</span><span class="o">=</span>password<span class="w"> </span>-d<span class="w"> </span><span class="nv">client_id</span><span class="o">=</span>lm-cli<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="nv">username</span><span class="o">=</span>integrator<span class="w"> </span>--data-urlencode<span class="w"> </span>password@-<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.access_token<span class="k">)</span>
+curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">'http://localhost:8080/api/entities/customer'</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+
+<span class="c1"># 5. Ask the fused Customer a question in natural language (per-métier text-to-SQL)</span>
+lm<span class="w"> </span>ask<span class="w"> </span>--scope<span class="w"> </span>clients<span class="w"> </span><span class="s2">"combien de clients à Lyon ?"</span>
+</code></pre></div>
+<h2 id="what-you-see">What you see</h2>
+<p>Three customers, fused from two systems that never agreed:</p>
+<ul>
+<li><strong>C-100</strong> — Siebel and the CSV agree on the name; <code>email</code>/<code>city</code> are <strong>gap-filled</strong> from the CSV.
+  <code>_conflicts</code> is empty.</li>
+<li><strong>C-200</strong> — the systems <strong>disagree</strong> on the name (Siebel <code>Marie</code> vs CSV <code>MARIE A.</code>). The hub keeps
+  Siebel as the representative (it's listed first) <strong>and</strong> preserves both in the <code>_conflicts</code> ledger —
+  nothing is silently dropped.</li>
+<li><strong>C-300</strong> — exists <strong>only</strong> in the CSV. Still fused, no conflict.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"customer_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C-100"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jean Dupont"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jd@x.fr"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w"> </span><span class="nt">"_conflicts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{}"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"customer_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C-200"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Marie"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"m@x.fr"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lyon"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"_conflicts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"name\":[{\"src\":\"cust_siebel\",\"value\":\"Marie\"},{\"src\":\"t_cust_csv\",\"value\":\"MARIE A.\"}]}"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"customer_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C-300"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Solo"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"solo@x.fr"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nice"</span><span class="p">,</span><span class="w"> </span><span class="nt">"_conflicts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{}"</span><span class="w"> </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>The fused view is <code>security_invoker</code>, so it inherits each base table's row-level security for free —
+each tenant sees only its own customers through the fusion (pinned by an RLS integration test).</p>
+<h2 id="ask-it-the-last-20-seconds-of-the-wow">Ask it (the last 20 seconds of the WOW)</h2>
+<p>Because <code>customer-entity.yaml</code> declares <code>scopes: [clients]</code>, applying it makes the fused Customer
+<strong>discoverable</strong> to the per-métier chat — <code>lm entity apply</code> registers the view and rebuilds the
+<code>clients</code> schema card, so the ask-to-SQL engine can translate a natural-language question into a
+read-only <code>SELECT</code> over <code>connector.v_customer</code>:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>ask<span class="w"> </span>--scope<span class="w"> </span>clients<span class="w"> </span><span class="s2">"combien de clients à Lyon ?"</span>
+<span class="c1"># → an answer computed over a fused truth that lived in neither Siebel nor the CSV alone.</span>
+</code></pre></div>
+<p>The chat reads through the same <code>security_invoker</code> view, so the answer is tenant-scoped for free.</p>
+<h2 id="zero-row-honesty-it-refuses-the-deceptive-none">Zero-row honesty: it refuses the deceptive "none"</h2>
+<p>The cardinal sin of an enterprise data chat isn't a wrong query — it's a confident <em>"there are none"</em>
+that gets the user blamed by their boss. Because <code>customer-entity.yaml</code> declares
+<code>segment.values: [GOLD, SILVER, BRONZE]</code>, the chat <strong>knows the domain</strong>. Ask for a value that isn't in
+it and the system <strong>refuses before running anything</strong> — it never returns 0 rows phrased as a fact:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>ask<span class="w"> </span>--scope<span class="w"> </span>clients<span class="w"> </span><span class="s2">"combien de clients Platinum ?"</span>
+<span class="c1"># → I won't run this: 'PLATINUM' is not a declared value of segment (known: GOLD, SILVER, BRONZE).</span>
+<span class="c1">#   If it should exist, add it to the entity manifest.</span>
+</code></pre></div>
+<p>The refusal holds in both cases: if <code>PLATINUM</code> is a hallucination, it's caught; if it's a real
+segment the model just doesn't know about, the message tells you exactly how to teach it (declare it).
+Abstention over a confident-wrong answer — always.</p>
+<h2 id="see-it-the-first-app-surface-kindview">See it — the first app surface (kind:View)</h2>
+<p>Before reacting to the data, look at it: <code>clients-view.yaml</code> declares a read-only list over the
+fused Customer — no code, one YAML (<a href="../../apps/views/">reference</a>).</p>
+<div class="highlight"><pre><span></span><code>lm view -f docs/demo/wow-customer/clients-view.yaml --filter city=Lyon
+# Clients — city=Lyon
+# CUSTOMER_CODE  NAME   CITY  SEGMENT
+# C-200          Marie  Lyon  SILVER
+
+lm view C-200 -f docs/demo/wow-customer/clients-view.yaml
+# the record's detail — including the _conflicts ledger (Siebel 'Marie' vs CSV 'MARIE A.')
+</code></pre></div>
+<p>A filter is refused with the reason named, never silently ignored: an unknown column, a malformed comparison,
+or a <code>segment=PLATINUM</code> (out of the declared domain) each name the problem instead of returning
+a lying empty table.</p>
+<p>Thresholds work too — <code>--filter "montant&gt;1000"</code>, <code>--filter "echeance&lt;2026-08-01"</code>
+(<code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code>; the value must be a number or an ISO date, refused loudly otherwise).</p>
+<p>And you don't have to write the YAML yourself — <strong>describe the view, the AI writes the
+manifest</strong>, the same card-backed gate validates every column and filter before anything
+is suggested (<a href="../../apps/views/#generate-a-view-with-the-ai">reference</a>):</p>
+<div class="highlight"><pre><span></span><code>lm view generate clients "les clients gold avec leur ville et segment" -o gold.yaml
+cat gold.yaml
+# first line = the ready-to-run render command, e.g.:
+# lm view -f gold.yaml --filter 'segment=GOLD'
+
+lm view generate clients "les commandes du mois de mars"
+# → generation abstained: no order data in this scope — the model refuses
+#   to invent columns rather than fake an answer.
+</code></pre></div>
+<p><strong>Quote the filter</strong> — an unquoted <code>&gt;</code> is a shell redirect that truncates a file named <code>1000</code>.</p>
+<h2 id="act-2-the-process-kindprocess-notify">Act 2 — the process (kind:Process, notify)</h2>
+<p>The dragon's first rung — <strong>proven live 2026-07-05</strong>: a declared rule watches the CSV and emits a
+decision when a new customer from Lyon arrives (Marie's city).</p>
+<blockquote>
+<p><strong>Why <code>ville</code> on scope <code>demo</code>.</strong> A process triggers on <code>data.row.changed</code>, born at the <strong>raw</strong>
+write path — so <code>on.table</code> is the raw ingest table <code>connector.t_cust_csv</code>, whose columns are the
+CSV's own (<code>code, cname, email, ville</code>). <code>segment</code> is a Siebel field, absent from the CSV. The raw
+table lives in the <strong><code>demo</code></strong> scope card (the csv connector is tagged <code>demo</code>); the fused <code>clients</code>
+card names only <code>connector.v_customer</code>, so a process's <code>on.table</code> must name a raw table that its
+<code>scope:</code> card actually carries — otherwise apply 400s, naming the reason.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># a fake n8n on the host (stdlib only)
+python3 docs/demo/wow-customer/fake-n8n.py
+
+# subscribe deliveries to decision.* — the real admin API is
+# POST /api/tenants/{tid}/integrations (IntegrationResource, @RequiresPermission("lm_admin")).
+# There is no `lm` CLI wrapper for it yet, so call it straight, with the same Bearer
+# token used for the fused-Customer call above (the `1` in the path = the demo
+# integrator's tenant — use your own tid otherwise):
+curl -s -X POST http://localhost:8080/api/tenants/1/integrations \
+     -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+     -d '{"name":"fake-n8n","targetUrl":"http://host.docker.internal:9099/hook",
+          "authMode":"NONE","eventTypes":["decision.*"],"enabled":true}'
+
+# declare the process (this also gates data.row.changed ON for t_cust_csv):
+lm process apply -f docs/demo/wow-customer/lyon-process.yaml
+lm process list
+
+# a process fires only on a GENUINELY-NEW row (content-hash dedup: re-running the same CSV
+# emits nothing). Add a new Lyon customer, then re-run the connector. Pick a `code` the file
+# does not already carry — customer.csv ships C-100/200/300/500/600/700/800/900, and
+# docs/wow.md's narrated replay spends C-400; an already-present line hashes identically,
+# the dedup swallows it, and the inbox stays empty:
+echo 'C-1000,Colette Vidal,colette@x.fr,Lyon' &gt;&gt; docs/demo/wow-customer/customer.csv
+lm connector run cust-csv
+
+# ~10-15s later (two 5s consumer ticks), fake-n8n prints the decision payload — this shape,
+# over your row:
+#   {"message":"Nouveau client Colette Vidal à Lyon","process":"lyon-client-arrive",
+#    "entity":"connector.t_cust_csv","entity_key":"&lt;row hash&gt;",
+#    "fields":{"cname":"Colette Vidal","ville":"Lyon"}}
+# the {cname}/{ville} placeholders rendered from the row — and `fields` carries the
+# referenced columns as data, so n8n consumes values, not text-parsing.
+</code></pre></div>
+<p><code>core.webhook_endpoint</code> normally takes an HMAC <code>secret</code> for signed delivery (<code>authMode: HMAC</code>); the
+demo passes <code>authMode: NONE</code> so <code>fake-n8n.py</code> doesn't have to verify a signature — real n8n/Make/Zapier
+subscriptions should use <code>HMAC</code> and check it.</p>
+<p>And the same decision, on the human side — no n8n required. The human disposes; the ack is
+itself an event (<code>annotation.decision.acked</code>), so a webhook subscribed to <code>annotation.*</code>
+reacts when someone marks it done — and app state stays a fold over the log, never a state row:</p>
+<div class="highlight"><pre><span></span><code>lm inbox
+# the shape, not a transcript — ID and ENTITY_KEY are whatever your own run produced, and
+# the inbox prints ENTITY_KEY whole: its 64 hex characters, unabridged.
+# ID    QUAND        PROCESS             MESSAGE                              ENTITY_KEY
+# &lt;id&gt;  à l'instant  lyon-client-arrive  Nouveau client Colette Vidal à Lyon  &lt;row hash, 64 hex&gt;
+
+lm inbox ack &lt;id&gt;
+# acked.
+
+lm inbox            # the fold: only what still needs you
+lm inbox --all      # everything, disposed entries marked [traité]
+</code></pre></div>
+<p>The ack is idempotent: re-acking the same ID writes no second event and answers the same 200.
+The inbox reads the event log, so history is bounded by the outbox retention purge
+(<code>lumnik.events.retention-days</code>, default 30 days) — it shows what retention keeps, and an
+ack expires together with its decision.</p>
+<h2 id="act-3-the-lifecycle-kindworkflow">Act 3 — the lifecycle (kind:Workflow)</h2>
+<p>Replayed live 2026-08-04. <strong>Not</strong> on the self-host stack: on an isolated <code>quarkus:dev</code> hub
+against a throwaway pgvector and a local Ollama (<code>llama3.2</code>), with dev-bypass headers over
+<code>curl</code> instead of <code>lm</code>. So the OIDC path and the CLI itself are still unexercised here — the
+hub behaviour below is captured output, the two <code>lm</code> invocations are the equivalent calls.</p>
+<p>The first replay is also what caught the bug fixed in #200: applying a workflow answered 200
+while the chunk never reached the corpus, so the chat stayed ungrounded and only a WARN said
+so. Every output below is from the run after that fix.</p>
+<p>Twenty years of Excel don't produce clean statuses. <code>commandes.csv</code> carries <code>En cours</code>,
+<code>fini</code>, <code>TERMINE</code> (trailing space), <code>BROUILLON</code>, <code>encours</code> — and twice, <code>EN LITIGE</code>, a
+value nobody ever told the system about. <code>commande-workflow.yaml</code> declares the lifecycle
+Madame Martin kept in her head — three states, two transitions, <code>provenance: declared</code> —
+and applying it doesn't hide the mess: it names it.</p>
+<div class="highlight"><pre><span></span><code># land the raw commandes table
+lm apply -f docs/demo/wow-customer/commandes-connector.yaml
+lm connector run commandes-csv               # → run scheduled: &lt;runId&gt;
+                                              #   lands connector.t_commandes_csv — the run
+                                              #   recorded 7 in / 7 out / 0 skipped, dirty
+                                              #   statuses and all
+
+# declare the lifecycle
+lm workflow apply -f docs/demo/wow-customer/commande-workflow.yaml
+</code></pre></div>
+<p><code>lm workflow apply</code> prints the hub's response verbatim — the data-truth confrontation
+between the declared graph and what's actually in the column. Captured from the run:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"commande-lifecycle"</span><span class="p">,</span><span class="nt">"scope"</span><span class="p">:</span><span class="s2">"demo"</span><span class="p">,</span><span class="nt">"table"</span><span class="p">:</span><span class="s2">"connector.t_commandes_csv"</span><span class="p">,</span><span class="nt">"column"</span><span class="p">:</span><span class="s2">"statut"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"dataTruth"</span><span class="p">:{</span><span class="nt">"undeclared"</span><span class="p">:[{</span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"EN LITIGE"</span><span class="p">,</span><span class="nt">"rows"</span><span class="p">:</span><span class="mi">2</span><span class="p">}],</span><span class="nt">"unobserved"</span><span class="p">:[],</span><span class="nt">"nullOrBlank"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"tableMissing"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nt">"keyColumnMissing"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"checkUnavailable"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nt">"unavailableReason"</span><span class="p">:</span><span class="kc">null</span><span class="p">}}</span>
+</code></pre></div>
+<p><strong>200, not blocked.</strong> <code>EN LITIGE</code> is reported, never refused — it's reality, and reality
+doesn't ask the manifest's permission. <code>unobserved</code> is empty (every declared state was
+seen at least once); had the CSV never carried a <code>TERMINE</code>/<code>fini</code> row, <code>TERMINE</code> would
+show up there instead — a declared code that's never actually reached.</p>
+<p>The manifest applied above also declares two fields this walkthrough hasn't touched yet:
+<code>on.key: num</code> and <code>dormancy.after: 30d</code>. Together they turn the lifecycle from a static
+taxonomy into a <strong>watched</strong> one — a scheduled sweep reads every commande's current state
+and alerts when it has sat, unmoved, in a non-terminal state past the threshold. Expect
+nothing on the sweep tick right after this <code>apply</code>: the clock starts
+at lumnik's own first observation of each commande, never at whatever happened in the ERP
+before lumnik looked. Alerts show up in <code>lm inbox</code> only once <code>30d</code> has actually elapsed
+from that first observation, tagged <code>workflow:commande-lifecycle</code>. Full vocabulary, the
+alert's exact wording, and the rules behind it live in
+<a href="../../apps/workflows/#dormancy-the-memory-of-the-breathing">Dormancy</a> — not repeated
+here.</p>
+<p>Applying the workflow also indexes it into the <code>demo</code>-scope corpus as one chunk — states,
+aliases, terminal marks and the transition graph, spelled out with <code>declared by the
+integrator</code> so the chat can cite <em>how</em> this lifecycle is known, never as observed fact.
+Now the magasinier can ask the obvious question instead of guessing:</p>
+<div class="highlight"><pre><span></span><code>lm ask --scope demo "pourquoi je ne peux pas clôturer la commande CMD-001 ?"
+</code></pre></div>
+<p>Captured, <code>llama3.2</code>, abridged:</p>
+<blockquote>
+<p>« D'après le workflow, il est possible que la commande CMD-001 soit en cours de traitement
+(EN_COURS) et qu'elle nécessite encore certaines étapes pour être clôturée. Vous pouvez
+vérifier son statut actuel en consultant la table <code>connector.t_commandes_csv</code>. Vous pouvez
+également vérifier si les transitions autorisées sont correctement configurées entre les
+états BROUILLON, EN_COURS et TERMINE. »</p>
+</blockquote>
+<p>Worth reading closely, because it is <strong>less</strong> than the aspirational answer this act used to
+show — and that is the correct result. The chunk carries the <em>lifecycle</em>, not the rows, so the
+model grounds itself in the declared states and transitions and then <strong>abstains on CMD-001's
+actual status</strong> rather than guessing it. Naming the table to look in is the correct move when
+you know the shape of the answer but not the value.</p>
+<p>The contrast is the whole point. Asked the same question with the chunk missing — the state
+this demo was in before #200 — the same model had nothing to stand on and read <em>commande</em> as
+a shell command:</p>
+<blockquote>
+<p>« je n'ai pas accès aux informations spécifiques sur la commande CMD-001 […] Quel est
+l'environnement dans lequel vous utilisez la commande (par exemple, un système Windows,
+Linux ou macOS) ? »</p>
+</blockquote>
+<p>The exact wording is the model's, run to run — what's fixed is the ground truth it must agree
+with: the states, aliases and transitions declared in <code>commande-workflow.yaml</code>, never an
+invented lifecycle.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,586 @@
+/* ==========================================================================
+   lumnik docs — « la lumière dans le congélateur »
+   The lumnik.fr visual language ported onto mkdocs-material.
+   Icy night dominant · one single yellow, treated as real light.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&display=swap");
+
+/* Both site fonts draw stylized single-story ampersands — Archivo's reads as
+   "ε", Fraunces' as a looped "8". These families patch ONLY U+0026 back to a
+   conventional double-story & from the system fonts; every other glyph is
+   untouched. If no local font matches, the stack falls through to the site
+   font's own ampersand. */
+@font-face {
+  font-family: "lm-amp-sans";
+  src: local("Helvetica Neue"), local("Arial"), local("Liberation Sans");
+  unicode-range: U+26;
+}
+@font-face {
+  font-family: "lm-amp-serif";
+  src: local("Georgia"), local("Times New Roman"), local("Liberation Serif");
+  unicode-range: U+26;
+}
+
+:root {
+  /* Prepend the ampersand patch to the theme's text font (mkdocs.yml sets
+     "Archivo"; this override loads after the theme's inline :root rule). */
+  --md-text-font: "lm-amp-sans", "Archivo";
+
+  /* The icy night */
+  --lm-nuit: #060d16;
+  --lm-nuit-2: #0a1420;
+  --lm-glace: #122233;
+  --lm-givre: #1c3349;
+  /* Softened text (GitHub dark values, ratified 2026-08-18, mirrors the two
+     vitrines): near-white #e9f1f8 flashed against the night. */
+  --lm-brume: #9198a1;
+  --lm-neige: #d1d7e0;
+
+  /* The yellow of light — the only accent */
+  --lm-lumiere: #ffd24a;
+  --lm-lumiere-chaude: #ffb938;
+  --lm-lueur: rgba(255, 210, 74, 0.14);
+  --lm-lueur-forte: rgba(255, 210, 74, 0.35);
+
+  /* The light as a readable FOREGROUND: raw --lm-lumiere on a light
+     background is ~1.6:1 contrast — never use it as a text color directly.
+     This variable is the yellow on the night and a dark amber on snow
+     (overridden in the light scheme below). */
+  --lm-lumiere-fg: var(--lm-lumiere);
+
+  /* Fraunces carries the editorial voice; Archivo and IBM Plex Mono
+     come from the theme.font declaration in mkdocs.yml. */
+  --lm-serif: "lm-amp-serif", "Fraunces", Georgia, serif;
+}
+
+/* --------------------------------------------------------------------------
+   Dark scheme — the site's own night, unchanged
+   -------------------------------------------------------------------------- */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: var(--lm-nuit);
+  --md-default-bg-color--light: var(--lm-nuit-2);
+  --md-default-bg-color--lighter: var(--lm-glace);
+  --md-default-bg-color--lightest: var(--lm-givre);
+
+  --md-default-fg-color: var(--lm-neige);
+  --md-default-fg-color--light: var(--lm-brume);
+  --md-default-fg-color--lighter: rgba(145, 152, 161, 0.55);
+  --md-default-fg-color--lightest: rgba(145, 152, 161, 0.18);
+
+  --md-primary-fg-color: var(--lm-nuit-2);
+  --md-primary-bg-color: var(--lm-neige);
+  --md-accent-fg-color: var(--lm-lumiere-chaude);
+  --md-typeset-a-color: var(--lm-lumiere);
+
+  --md-code-bg-color: var(--lm-nuit-2);
+  --md-code-fg-color: var(--lm-neige);
+  --md-code-hl-comment-color: var(--lm-brume);
+  --md-code-hl-string-color: #9fe0b0;
+  --md-code-hl-keyword-color: var(--lm-lumiere);
+  --md-code-hl-number-color: var(--lm-lumiere-chaude);
+
+  --md-typeset-table-color: rgba(145, 152, 161, 0.16);
+  --md-typeset-mark-color: var(--lm-lueur);
+  --md-footer-bg-color: var(--lm-nuit-2);
+  --md-footer-bg-color--dark: var(--lm-nuit);
+  --md-shadow-z1: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --md-shadow-z2: 0 16px 44px rgba(0, 0, 0, 0.45);
+}
+
+/* Frost grain — the same texture as the site, dark scheme only. */
+[data-md-color-scheme="slate"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Light scheme — frost rather than night; the same single light, darkened
+   just enough to stay readable on snow.
+   -------------------------------------------------------------------------- */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #f6fafd;
+  --md-default-fg-color: var(--lm-nuit);
+  --md-default-fg-color--light: #46617a;
+  --md-default-fg-color--lighter: #6f8aa2;
+
+  --md-primary-fg-color: var(--lm-nuit);      /* the nav stays night, always */
+  --md-primary-bg-color: var(--lm-neige);
+  --md-accent-fg-color: #7a5200;
+  --md-typeset-a-color: #8a5b00;
+  --lm-lumiere-fg: #8a5b00;                   /* the same light, darkened to stay readable on snow */
+
+  --md-code-bg-color: #eaf1f7;
+  --md-typeset-table-color: rgba(28, 51, 73, 0.18);
+  --md-typeset-mark-color: var(--lm-lueur-forte);
+  --md-footer-bg-color: var(--lm-nuit);
+  --md-footer-bg-color--dark: var(--lm-nuit-2);
+}
+
+::selection { background: var(--lm-lumiere); color: var(--lm-nuit); }
+
+/* --------------------------------------------------------------------------
+   Typography — Fraunces for the editorial voice
+   -------------------------------------------------------------------------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-family: var(--lm-serif);
+  letter-spacing: -0.015em;
+}
+
+.md-typeset h1 {
+  color: var(--md-default-fg-color);
+  font-weight: 470;
+  line-height: 1.1;
+}
+
+.md-typeset h2 { font-weight: 500; line-height: 1.2; }
+.md-typeset h3 { font-weight: 550; }
+
+/* h5/h6 are the site's mono labels. */
+.md-typeset h5,
+.md-typeset h6 {
+  font-family: var(--md-code-font-family);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset em { color: inherit; }
+.md-typeset strong { color: var(--md-default-fg-color); }
+
+/* --------------------------------------------------------------------------
+   The pulsing lumen — the site's logo dot, carried into the header
+   -------------------------------------------------------------------------- */
+.md-header__topic:first-child .md-ellipsis::after {
+  content: "";
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-left: 3px;
+  border-radius: 50%;
+  background: var(--lm-lumiere);
+  box-shadow: 0 0 14px var(--lm-lumiere), 0 0 34px var(--lm-lueur-forte);
+  animation: lm-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes lm-pulse {
+  50% { box-shadow: 0 0 6px var(--lm-lumiere), 0 0 16px var(--lm-lueur); }
+}
+
+.md-header {
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(145, 152, 161, 0.14);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation — light marks the place you are
+   -------------------------------------------------------------------------- */
+.md-nav__link--active,
+.md-nav__item .md-nav__link--active { color: var(--lm-lumiere-fg); }
+
+.md-nav__item--section > .md-nav__link {
+  font-family: var(--md-code-font-family);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .md-nav__title { font-family: var(--lm-serif); }
+
+/* --------------------------------------------------------------------------
+   Tables — the comparison table's mono header
+   -------------------------------------------------------------------------- */
+.md-typeset table:not([class]) th {
+  font-family: var(--md-code-font-family);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  background: transparent;
+  border-bottom: 1px solid var(--lm-lueur-forte);
+}
+
+.md-typeset table:not([class]) { border: none; box-shadow: none; }
+.md-typeset table:not([class]) td { border-top: 1px solid var(--md-typeset-table-color); }
+
+/* --------------------------------------------------------------------------
+   Quotes, admonitions, code — light on the left edge
+   -------------------------------------------------------------------------- */
+.md-typeset blockquote {
+  border-left: 2px solid var(--lm-lumiere);
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--md-typeset-table-color);
+  border-left-width: 3px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.md-typeset .admonition.note,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.info,
+.md-typeset details.note,
+.md-typeset details.tip,
+.md-typeset details.info { border-left-color: var(--lm-lumiere); }
+
+.md-typeset .note > .admonition-title,
+.md-typeset .tip > .admonition-title,
+.md-typeset .info > .admonition-title,
+.md-typeset .note > summary,
+.md-typeset .tip > summary,
+.md-typeset .info > summary { background: var(--lm-lueur); }
+
+.md-typeset .note > .admonition-title::before,
+.md-typeset .tip > .admonition-title::before,
+.md-typeset .info > .admonition-title::before,
+.md-typeset .note > summary::before,
+.md-typeset .tip > summary::before,
+.md-typeset .info > summary::before { background-color: var(--lm-lumiere); }
+
+.md-typeset pre > code,
+.md-typeset .highlight { border-radius: 10px; }
+
+.md-typeset code { border-radius: 5px; }
+
+/* --------------------------------------------------------------------------
+   Docs landing components — enough structure to make entry pages feel guided
+   -------------------------------------------------------------------------- */
+.md-typeset .lm-hero {
+  position: relative;
+  padding: 2rem 0 1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .lm-hero::before {
+  content: "";
+  position: absolute;
+  top: -8rem;
+  right: -6rem;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 74, 0.16), transparent 68%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.md-typeset .lm-eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lm-lumiere-fg);
+}
+
+.md-typeset .lm-hero h1 {
+  margin-bottom: 1rem;
+  max-width: 11ch;
+  font-size: clamp(2.3rem, 5vw, 3.9rem);
+}
+
+.md-typeset .lm-lead {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--md-default-fg-color--light);
+}
+
+/* A hero may carry two short leads (statement, then vignette) — give the
+   second one a breath so they read as separate thoughts. */
+.md-typeset .lm-lead + .lm-lead { margin-top: 0.7em; }
+
+.md-typeset .lm-meta,
+.md-typeset .lm-grid,
+.md-typeset .lm-path-grid,
+.md-typeset .lm-rail,
+.md-typeset .lm-band,
+.md-typeset .lm-mini-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.md-typeset .lm-meta {
+  margin: 1.5rem 0 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.md-typeset .lm-grid,
+.md-typeset .lm-path-grid {
+  margin: 1.75rem 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.md-typeset .lm-mini-grid {
+  margin: 1.25rem 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.md-typeset .lm-band {
+  margin: 2rem 0;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: stretch;
+}
+
+.md-typeset .lm-rail {
+  margin: 1.5rem 0 2rem;
+}
+
+.md-typeset .lm-card,
+.md-typeset .lm-step,
+.md-typeset .lm-pane,
+.md-typeset .lm-meta-item {
+  border: 1px solid var(--md-typeset-table-color);
+  border-radius: 16px;
+  background: rgba(18, 34, 51, 0.04);
+  padding: 1rem 1.1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .lm-card,
+[data-md-color-scheme="slate"] .md-typeset .lm-step,
+[data-md-color-scheme="slate"] .md-typeset .lm-pane,
+[data-md-color-scheme="slate"] .md-typeset .lm-meta-item {
+  background: rgba(18, 34, 51, 0.46);
+}
+
+.md-typeset .lm-card--accent,
+.md-typeset .lm-pane--accent,
+.md-typeset .lm-meta-item--accent {
+  border-color: rgba(255, 210, 74, 0.32);
+  background: var(--lm-lueur);
+}
+
+.md-typeset .lm-card h2,
+.md-typeset .lm-card h3,
+.md-typeset .lm-step h2,
+.md-typeset .lm-step h3,
+.md-typeset .lm-pane h2,
+.md-typeset .lm-pane h3 {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  max-width: none;
+}
+
+.md-typeset .lm-card p:last-child,
+.md-typeset .lm-step p:last-child,
+.md-typeset .lm-pane p:last-child,
+.md-typeset .lm-meta-item p:last-child {
+  margin-bottom: 0;
+}
+
+.md-typeset .lm-kicker {
+  margin-bottom: 0.6rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .lm-meta-item strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--lm-serif);
+  font-size: 1.15rem;
+  font-weight: 520;
+}
+
+.md-typeset .lm-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+/* Buttons are markdown links (validated by --strict); Markdown wraps them in a
+   <p> — dissolve it so the anchors stay the flex children. */
+.md-typeset .lm-cta-row p {
+  display: contents;
+}
+
+.md-typeset .lm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--lm-givre);
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.md-typeset .lm-button:hover,
+.md-typeset .lm-button:focus-visible {
+  transform: translateY(-2px);
+}
+
+.md-typeset .lm-button--primary {
+  background: var(--lm-lumiere);
+  color: var(--lm-nuit);
+  border-color: var(--lm-lumiere);
+}
+
+.md-typeset .lm-button--primary:hover,
+.md-typeset .lm-button--primary:focus-visible {
+  background: var(--lm-lumiere-chaude);
+  border-color: var(--lm-lumiere-chaude);
+  color: var(--lm-nuit);
+  box-shadow: 0 8px 34px var(--lm-lueur-forte);
+}
+
+.md-typeset .lm-button--ghost {
+  color: var(--md-default-fg-color);
+  background: transparent;
+}
+
+.md-typeset .lm-button--ghost:hover,
+.md-typeset .lm-button--ghost:focus-visible {
+  border-color: var(--lm-lumiere-fg);
+  color: var(--lm-lumiere-fg);
+}
+
+.md-typeset .lm-path-grid .lm-card a,
+.md-typeset .lm-card a.lm-link {
+  font-weight: 600;
+}
+
+.md-typeset .lm-path-grid .lm-card p,
+.md-typeset .lm-grid .lm-card p,
+.md-typeset .lm-step p,
+.md-typeset .lm-pane p,
+.md-typeset .lm-meta-item p {
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .lm-step {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.md-typeset .lm-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--lm-lumiere-fg) 35%, transparent);
+  color: var(--lm-lumiere-fg);
+  font-family: var(--lm-serif);
+  font-size: 1.4rem;
+}
+
+.md-typeset .lm-check {
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--md-typeset-table-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.96rem;
+}
+
+.md-typeset .lm-note {
+  margin: 1rem 0 0;
+  font-family: var(--md-code-font-family);
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .lm-section-title {
+  margin-top: 2.4rem;
+}
+
+.md-typeset .lm-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.md-typeset .lm-list li + li {
+  margin-top: 0.5rem;
+}
+
+.md-typeset .lm-split-code {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin: 1.25rem 0;
+}
+
+.md-typeset .lm-divider {
+  margin: 2.4rem 0;
+  border: 0;
+  border-top: 1px solid var(--md-typeset-table-color);
+}
+
+@media screen and (max-width: 76.2344em) {
+  .md-typeset .lm-meta,
+  .md-typeset .lm-mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 59.9844em) {
+  .md-typeset .lm-meta,
+  .md-typeset .lm-grid,
+  .md-typeset .lm-path-grid,
+  .md-typeset .lm-band,
+  .md-typeset .lm-mini-grid,
+  .md-typeset .lm-split-code {
+    grid-template-columns: 1fr;
+  }
+
+  .md-typeset .lm-step {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & footer
+   -------------------------------------------------------------------------- */
+.md-typeset .md-button {
+  border-radius: 999px;
+  border-width: 1px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.md-typeset .md-button--primary {
+  background: var(--lm-lumiere);
+  border-color: var(--lm-lumiere);
+  color: var(--lm-nuit);
+}
+
+.md-typeset .md-button--primary:hover,
+.md-typeset .md-button--primary:focus-visible {
+  background: var(--lm-lumiere-chaude);
+  border-color: var(--lm-lumiere-chaude);
+  color: var(--lm-nuit);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 34px var(--lm-lueur-forte);
+}
+
+.md-footer-meta { border-top: 1px solid rgba(145, 152, 161, 0.12); }
+
+/* --------------------------------------------------------------------------
+   Accessibility
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,29 @@
+# 10-local-simple.yaml — the simplest CSV ingest: one local file, full load.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/csv/10-local-simple.yaml
+#   lm connector run csv-local-simple
+#
+# Every run re-reads the whole file (after_process: none means the source is
+# never moved or deleted, and there is no cursor — suitable for small reference
+# files that are expected to be fully replaced on each load cycle).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-local-simple          # unique connector name within the workspace
+  connector_type: csv-file        # selects the CSV-file connector implementation
+  scopes: [demo]                  # the métier(s) this table is askable in — a scope-bound user needs scope:demo
+
+spec:
+  transport:
+    kind: local                   # no remote fetch — the path below is on the HUB's filesystem,
+                                  # not on yours (mount a volume, or use sftp/s3 / lm csv ingest)
+    path: docs/connectors/csv/data/customers.csv   # plain path = single file
+
+  parser:
+    has_header: true              # first row holds column names; they drive target column mapping
+
+  after_process: none             # leave the source file untouched after ingestion
+
+  target: {}

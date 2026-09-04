@@ -1,0 +1,3598 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/csv/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../jdbc/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>CSV & files (SFTP/S3) - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#csv-files-sftps3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CSV & files (SFTP/S3)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transports
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SFTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-and-s3-compatible-minio-cloudflare-r2-gcs-s3-compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 (and S3-compatible: MinIO, Cloudflare R2, GCS-S3-compat)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#malformed-rows-per-row-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Malformed rows — per-row DLQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduling-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling &amp; lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#target-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transform-at-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transform at ingestion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connector-runs-vs-one-shot-lm-csv-ingest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector runs vs one-shot lm csv ingest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connector runs vs one-shot lm csv ingest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-one-shot-actually-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What one-shot actually does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-hooks-one-shot-lm-csv-ingest-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin hooks (one-shot lm csv ingest only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingest-an-sftp-folder-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest an SFTP folder nightly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-one-file-for-a-quick-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load one file for a quick look
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingest-every-file-under-an-s3-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest every file under an S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingest-headerless-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest headerless files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transports
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transports">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SFTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-and-s3-compatible-minio-cloudflare-r2-gcs-s3-compat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 (and S3-compatible: MinIO, Cloudflare R2, GCS-S3-compat)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#malformed-rows-per-row-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Malformed rows — per-row DLQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduling-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling &amp; lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#target-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transform-at-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transform at ingestion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connector-runs-vs-one-shot-lm-csv-ingest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector runs vs one-shot lm csv ingest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connector runs vs one-shot lm csv ingest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-one-shot-actually-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What one-shot actually does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-hooks-one-shot-lm-csv-ingest-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin hooks (one-shot lm csv ingest only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingest-an-sftp-folder-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest an SFTP folder nightly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-one-file-for-a-quick-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load one file for a quick look
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingest-every-file-under-an-s3-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest every file under an S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingest-headerless-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingest headerless files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="csv-files-sftps3">CSV &amp; files (SFTP/S3)</h1>
+<blockquote>
+<p>Ingest CSV files — dropped locally, on an SFTP server, or in an S3 bucket — into a hub
+table on a schedule, with per-row error isolation.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td><code>csv-file</code></td>
+</tr>
+<tr>
+<td><strong>Transports</strong></td>
+<td>local, sftp, s3</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td><code>connector.t_&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Schedulable</strong></td>
+<td>cron</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<h2 id="quickstart">Quickstart</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-local-simple.yaml — the simplest CSV ingest: one local file, full load.</span>
+<span class="c1">#</span>
+<span class="c1"># Apply and run:</span>
+<span class="c1">#   lm apply -f docs/connectors/csv/10-local-simple.yaml</span>
+<span class="c1">#   lm connector run csv-local-simple</span>
+<span class="c1">#</span>
+<span class="c1"># Every run re-reads the whole file (after_process: none means the source is</span>
+<span class="c1"># never moved or deleted, and there is no cursor — suitable for small reference</span>
+<span class="c1"># files that are expected to be fully replaced on each load cycle).</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-local-simple</span><span class="w">          </span><span class="c1"># unique connector name within the workspace</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-file</span><span class="w">        </span><span class="c1"># selects the CSV-file connector implementation</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">demo</span><span class="p p-Indicator">]</span><span class="w">                  </span><span class="c1"># the métier(s) this table is askable in — a scope-bound user needs scope:demo</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transport</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span><span class="w">                   </span><span class="c1"># no remote fetch — the path below is on the HUB's filesystem,</span>
+<span class="w">                                  </span><span class="c1"># not on yours (mount a volume, or use sftp/s3 / lm csv ingest)</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/connectors/csv/data/customers.csv</span><span class="w">   </span><span class="c1"># plain path = single file</span>
+
+<span class="w">  </span><span class="nt">parser</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">              </span><span class="c1"># first row holds column names; they drive target column mapping</span>
+
+<span class="w">  </span><span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w">             </span><span class="c1"># leave the source file untouched after ingestion</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>docs/connectors/csv/10-local-simple.yaml
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/connectors/csv/10-local-simple.yaml
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>csv-local-simple
+</code></pre></div>
+<h2 id="transports">Transports</h2>
+<h3 id="local">Local</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">transport</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/imports/*.csv</span><span class="w">        </span><span class="c1"># glob OK</span>
+</code></pre></div>
+<p>The path is the <strong>hub's</strong> filesystem, not yours — the shipped self-host stack mounts nothing, so
+a local path needs a volume (or use <code>sftp</code>/<code>s3</code>, or upload with <code>lm csv ingest</code>).</p>
+<p>Glob limits: <code>*</code> and <code>?</code> only, and only in the <strong>final filename segment</strong> — the directory
+part must be literal (<code>/imports/*/x.csv</code> never matches; there is no <code>**</code> recursion). A
+plain path (no glob characters) that doesn't exist simply yields an empty run. No name is
+excluded implicitly — a <code>*.csv</code> glob is how you keep <code>.tmp</code> files out.</p>
+<div class="admonition warning">
+<p class="admonition-title">Drop-directory contract: names must grow lexically</p>
+<p>On scheduled runs the local cursor resumes by the current file's position in the
+<strong>lexically sorted</strong> glob result. A file dropped later with a lexically <em>earlier</em>
+name sorts before the cursor and is treated as already ingested — it is never read.
+Name incoming files monotonically (date-prefixed: <code>2026-07-25-orders.csv</code>); if your
+producer cannot guarantee that, use an sftp/s3 transport, whose cursor tracks files
+by modification time instead.</p>
+</div>
+<p><em>Older pre-manifest configs with a bare top-level <code>path:</code> still work; manifests always
+declare <code>transport:</code>.</em></p>
+<h3 id="sftp">SFTP</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">transport</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp.acme.io</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">22</span><span class="w">                    </span><span class="c1"># optional, default 22</span>
+<span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/export/*.csv</span><span class="w">         </span><span class="c1"># glob OK</span>
+<span class="w">  </span><span class="nt">key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_SFTP_KEY</span><span class="w">      </span><span class="c1"># OR password_env, at least one required</span>
+<span class="w">  </span><span class="c1"># password_env: ACME_SFTP_PWD</span>
+<span class="w">  </span><span class="nt">strict_host_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">       </span><span class="c1"># optional, default true — refuses unless the fingerprint below matches</span>
+<span class="w">  </span><span class="nt">host_key_fingerprint</span><span class="p">:</span><span class="w"> </span><span class="s">"SHA256:2Mc+KLpM…"</span><span class="w">   </span><span class="c1"># required when strict_host_key is true</span>
+<span class="c1"># spec level, next to transport:</span>
+<span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">move</span>
+<span class="nt">archive_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/archive/</span><span class="w">       </span><span class="c1"># required when after_process: move; archive defaults to /archive/</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Host-key verification actually verifies now — and existing connectors will stop</p>
+<p><code>strict_host_key</code> used to change nothing. Set to <code>false</code> it installed an accept-anything
+verifier; set to <code>true</code> — the default — it installed <strong>nothing</strong>, and Apache MINA SSHD's own
+default is <code>AcceptAllServerKeyVerifier</code>. Both settings accepted any key that answered, so an
+active attacker between the hub and your SFTP server could impersonate it, feed arbitrary
+rows into ingestion, and collect the password (<code>password_env</code> is offered to whoever picks up).</p>
+<p>It now refuses when <code>strict_host_key</code> is true and <code>host_key_fingerprint</code> is absent or does
+not match. <strong>An SFTP connector that ran happily on the default will stop connecting until you
+declare the fingerprint</strong> — which is the point: it was never verified, and the green said
+otherwise. The refusal prints the fingerprint the server presented, so confirm that value out
+of band and paste it in. <code>strict_host_key: false</code> remains available and now means what it
+says.</p>
+</div>
+<p><code>key_env</code> and <code>password_env</code> reference an entry from <a href="../../admin-console-guide/"><code>lm secret</code></a>
+or an OS env var (resolution: DB secret registry first, env var fallback).</p>
+<h3 id="s3-and-s3-compatible-minio-cloudflare-r2-gcs-s3-compat">S3 (and S3-compatible: MinIO, Cloudflare R2, GCS-S3-compat)</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">transport</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">  </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-exports</span><span class="w">         </span><span class="c1"># required</span>
+<span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">billing/</span><span class="w">             </span><span class="c1"># optional key prefix filter, default ""</span>
+<span class="w">  </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eu-west-3</span><span class="w">            </span><span class="c1"># optional, default eu-west-3</span>
+<span class="w">  </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://...</span><span class="w">        </span><span class="c1"># optional, for non-AWS S3</span>
+<span class="w">  </span><span class="nt">suffix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.csv</span><span class="w">                 </span><span class="c1"># optional filename filter, default "" (no filter)</span>
+<span class="w">  </span><span class="nt">access_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span><span class="w">   </span><span class="c1"># optional, default AWS_ACCESS_KEY_ID</span>
+<span class="w">  </span><span class="nt">secret_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span><span class="w"> </span><span class="c1"># optional, default AWS_SECRET_ACCESS_KEY</span>
+<span class="w">  </span><span class="nt">archive_bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-archive</span><span class="w"> </span><span class="c1"># optional, for after_process=archive|move (default: source bucket)</span>
+<span class="w">  </span><span class="nt">archive_prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">archive/</span><span class="w">     </span><span class="c1"># optional, default "archive/"</span>
+</code></pre></div>
+<h2 id="parser">Parser</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">parser</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">delimiter</span><span class="p">:</span><span class="w"> </span><span class="s">","</span><span class="w">                </span><span class="c1"># optional, auto-detected if absent</span>
+<span class="w">  </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UTF-8</span><span class="w">               </span><span class="c1"># optional, auto-detected if absent</span>
+<span class="w">  </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">              </span><span class="c1"># default true</span>
+<span class="w">  </span><span class="nt">bom_strip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">               </span><span class="c1"># default true</span>
+<span class="w">  </span><span class="nt">null_values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">""</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"NULL"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"null"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"#N/A"</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># default as shown</span>
+<span class="w">  </span><span class="nt">columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">email</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># REQUIRED when has_header: false (names the columns); ignored otherwise</span>
+</code></pre></div>
+<p>Auto-detection mechanics (per file, when the key is absent): <code>encoding</code> is detected with a
+fallback of UTF-8; <code>delimiter</code> by counting the candidates <code>,</code> <code>;</code> TAB <code>|</code> over the first
+8 KB — most frequent wins, fallback <code>,</code>. An explicit key overrides only that aspect; the
+other stays auto-detected.</p>
+<div class="admonition note">
+<p class="admonition-title">Chunking is fixed, not a knob</p>
+<p>Local connector runs commit in fixed 500-row chunks; remote transports (sftp/s3) read
+<strong>one whole file per transaction</strong>. A <code>chunk_size</code> key is ignored (the validator warns).
+Very large remote files: split producer-side.</p>
+</div>
+<h3 id="malformed-rows-per-row-dlq">Malformed rows — per-row DLQ</h3>
+<p>A malformed row never fails the file: it is isolated to the dead-letter queue (reason
+<code>MalformedSource</code>) and the run continues. Inspect with <code>lm dlq list</code> / <code>lm dlq get ID</code>; the
+cursor counts consumed events, so a resume never re-emits already-dead-lettered rows.</p>
+<p><strong>Malformed means the row does not match the column count its header declares — in either
+direction.</strong> A row with fewer values is quarantined, and so is a row with more: the extra value
+is never dropped to make the row fit, because a value the hub silently discards is a loss no
+count would ever show you. The dead-letter payload keeps <strong>every</strong> raw value, so <code>lm dlq get ID</code>
+shows you exactly what the source sent.</p>
+<p>This is the <strong>connector-run</strong> behaviour. The same shape mismatch reaching the one-shot
+<code>lm csv ingest</code> path aborts the whole ingest instead — that path has no DLQ to route a row to
+(see <a href="#what-one-shot-actually-does">Abort, not DLQ</a>).</p>
+<div class="admonition warning">
+<p class="admonition-title">A trailing delimiter is one column too many</p>
+<p><code>a,b</code> with a row <code>1,2,</code> is three values against two columns, so it is quarantined like any
+other shape mismatch. If your export ends every line with a separator, strip it
+producer-side — otherwise the whole file lands in the DLQ. An <strong>empty value between
+delimiters</strong> (<code>1,</code>) is a present-and-empty column, not a missing one: the row is written
+normally, and the value reads as <code>null</code> when the empty string is in <code>null_values</code> (it is,
+by default — override that list and the column keeps <code>""</code> instead).</p>
+</div>
+<h2 id="scheduling-lifecycle">Scheduling &amp; lifecycle</h2>
+<ul>
+<li><code>schedule</code> — optional cron expression. 5 fields (UNIX crontab dialect) supported (<code>0 6 * * *</code> = daily at 06:00 UTC — the hub scheduler evaluates cron in UTC). Validated at apply time. Once applied, the hub's own scheduler fires it — no OS cron needed (absent <code>schedule</code> on a re-apply unschedules the run).</li>
+<li><code>after_process</code> — required. One of:</li>
+<li><code>archive</code> — relocate processed files (sftp: <code>archive_path</code>, default <code>/archive/</code>; s3: <code>archive_bucket</code>/<code>archive_prefix</code>, defaults source bucket + <code>archive/</code>)</li>
+<li><code>delete</code> — remove the file after success</li>
+<li><code>move</code> — move to <code>archive_path</code> (required when this mode is selected). At runtime <code>archive</code> and <code>move</code> are the same relocation action — <code>move</code> just makes <code>archive_path</code> mandatory.</li>
+<li><code>none</code> — leave the file in place (useful for testing)</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Local transport: only <code>none</code> is valid in a manifest</p>
+<p>The local scheduled reader (row-level glob cursor) has no per-file completion tracking —
+<code>archive</code>/<code>delete</code>/<code>move</code> never execute there, so the validator <strong>refuses</strong> them on a
+local connector rather than let files silently stay in place. sftp/s3 honor all four
+values; the one-shot <code>lm csv ingest</code> path honors them on every transport.</p>
+</div>
+<p><strong>At-least-once: the file and its rows are never lost together.</strong> Crash-safety timing
+(sftp/s3): a file is archived/deleted only <strong>after</strong> a later chunk's committed cursor
+proves its rows landed — never inside the read that ingests it. A crash in between leaves
+the file in place; dedup skips re-ingestion and the action runs on the next read.</p>
+<p>Zero-byte files are skipped by the sftp/s3 listings (and by the one-shot path) — they are
+never ingested and never archived.</p>
+<h2 id="target-table">Target table</h2>
+<p>The métier scope is not a target concern — it is declared on the connector, as
+<code>metadata.scopes</code> (see <a href="../../rag/scopes/">Scopes</a>); the connector warns at validate-time when
+none is declared. What lands under <code>target</code> is about the hub table itself.</p>
+<p><code>target.indexes</code> declares Postgres indexes on the hub table — a list of
+<code>{ columns: [...], unique: &lt;bool&gt; }</code> objects (<code>unique</code> optional, default false):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">target</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">indexes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">email</span><span class="p p-Indicator">],</span><span class="nt"> unique</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bpartner_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">dateordered</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Each entry needs a non-empty <code>columns</code> list of strings; malformed entries fail validation
+with a per-entry error instead of being silently dropped.</p>
+<p>Tables are created in the <code>connector</code> schema as <code>connector.t_&lt;name&gt;</code> (one per file target).
+The hub table always carries seven reserved columns (<code>id</code>, <code>_row_hash</code>, <code>_ingested_at</code>,
+<code>_source</code>, <code>_run_id</code>, <code>_mapping_version</code>, <code>tenant_id</code>) — a source column sharing any of
+those names is refused. Rename it with a <code>map-columns</code> hook in the mapping before
+ingesting (see <a href="../transformers/#legacy-column-names-cust_nm">Transformers: legacy column names</a>).</p>
+<p>Deleting the connector (<code>lm connector delete</code>) <strong>purges</strong> its <code>connector.t_*</code> tables,
+registry rows and every RAG chunk it produced — the data goes with it.</p>
+<h2 id="transform-at-ingestion">Transform at ingestion</h2>
+<p>An optional <code>mapping</code> block repairs legacy data as it flows in (dataset → row → cell hooks,
+applied in that order on every connector run):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cell</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">fix-mojibake</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">      </span><span class="c1"># "BÃ©nÃ©dict" → "Bénédict"</span>
+</code></pre></div>
+<p>Full parameter reference: <a href="../transformers/">Transformers</a>. Parse hooks (<code>parse-date</code>,
+<code>parse-number</code>, <code>parse-email</code>, <code>parse-phone</code>, <code>lookup</code>) fail <strong>soft</strong> — a value they can't
+read becomes <code>null</code> and the row is still written, counted in the run's <code>cell_errors</code> (see
+<a href="../transformers/#reference-cell-hooks">Transformers § Reference — cell hooks</a>).</p>
+<h2 id="connector-runs-vs-one-shot-lm-csv-ingest">Connector runs vs one-shot <code>lm csv ingest</code></h2>
+<p>Two ingestion surfaces share the transports but not the features — the validator refuses
+what a scheduled run would silently ignore:</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Connector manifest (scheduled runs)</th>
+<th>One-shot <code>lm csv ingest</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transports</td>
+<td>local, sftp, s3</td>
+<td>local upload, sftp, s3</td>
+</tr>
+<tr>
+<td><code>schedule</code> (cron)</td>
+<td>yes</td>
+<td>no (one shot, by definition)</td>
+</tr>
+<tr>
+<td><code>mapping</code> hooks (dataset/row/cell)</td>
+<td>yes (<code>aggregator</code> refused)</td>
+<td>no — never applied</td>
+</tr>
+<tr>
+<td>Transport hooks (<code>file_filter</code>/<code>pre_process</code>/<code>post_process</code>)</td>
+<td><strong>refused at validate/apply</strong></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>max_file_size</code></td>
+<td><strong>refused at validate/apply</strong></td>
+<td>yes (default 500 MB, over-limit aborts)</td>
+</tr>
+<tr>
+<td><code>after_process</code> on sftp/s3</td>
+<td>yes (deferred until the cursor proves the commit)</td>
+<td>yes (deferred until the ingest transaction commits)</td>
+</tr>
+<tr>
+<td><code>after_process</code> on local</td>
+<td>only <code>none</code> — archive/delete/move <strong>refused</strong></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Malformed rows</td>
+<td>isolated per-row to the DLQ, run continues</td>
+<td><strong>abort</strong> on the first malformed row (whole ingest rolls back)</td>
+</tr>
+<tr>
+<td>Target table</td>
+<td><code>connector.t_&lt;name&gt;</code> (auto-schema)</td>
+<td><code>ext.&lt;name&gt;</code> (hybrid JSONB + promoted columns)</td>
+</tr>
+<tr>
+<td>Naming a multi-file source</td>
+<td>that is what a manifest <strong>is</strong> — one connector over a glob</td>
+<td><code>name</code> + more than one matched file is <strong>refused</strong> (see below)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-one-shot-actually-does">What one-shot actually does</h3>
+<p>One transaction: sample → infer → write. The service samples the first rows (default 100),
+infers a schema, creates a <strong>dormant</strong> connector + endpoint (<code>enabled: false</code>, no schedule
+— inspect, promote, or delete before enabling anything), then writes all rows to a hybrid
+<code>ext.&lt;name&gt;</code> table (full row as JSONB + typed promoted columns).</p>
+<ul>
+<li><strong>Type inference</strong> (widest type across the sample): integers → <code>BIGINT</code>, decimals →
+  <code>DECIMAL</code>, true/false → <code>BOOLEAN</code>, everything else <code>TEXT</code>. A column mixing whole and
+  decimal values is <code>DECIMAL</code> (a bigint is a decimal); empty cells contribute nothing;
+  any other mix falls back to <code>TEXT</code>. Date-looking values deliberately stay <code>TEXT</code> in v1.</li>
+<li><strong>Reserved columns</strong> are never promoted (they already exist in every <code>ext.*</code> table):
+  <code>id</code>, <code>tenant_id</code>, <code>external_id</code>, <code>data</code>, <code>indexed_at</code>, <code>connector_id</code>, <code>endpoint_id</code>.
+  A source column with one of these names survives inside the JSONB <code>data</code>, just not as a
+  typed column.</li>
+<li><strong>Askable, immediately.</strong> Once the ingest commits, the scope you passed (<code>--scope</code>,
+  default <code>system</code>) holds a schema card listing the table and its typed columns, and one
+  descriptor chunk enters the scope's corpus — so <code>lm ask --scope &lt;scope&gt; "how many rows are in ext.&lt;name&gt;?"</code> can answer
+  questions about the table with zero further configuration (<code>lm chat</code> reaches the same
+  data interactively). Deleting the connector
+  removes the table, the card entry and the descriptor together. Row-level semantic
+  indexing remains a connector-run feature — the one-shot indexes one descriptor, never
+  your rows.</li>
+<li><strong>Re-ingesting the same name is a refresh, not an error.</strong> Running the same command
+  again reuses the connector: rows deduplicate by key (unchanged rows stay, changed rows
+  update, new rows append — nothing duplicates), new columns are added to the table, and
+  the schema card and descriptor follow. Passing a different <code>--scope</code> re-publishes the
+  dataset under the new scope, and the old scope's card lets go. Only a name belonging to
+  a <strong>configured</strong> connector refuses (409) — pass <code>--name</code> or delete that connector.</li>
+<li><strong>Abort, not DLQ</strong>: the first malformed row aborts the ingest and the transaction rolls
+  back — nothing is half-written, and <strong>no source file is archived</strong>: an aborted run leaves
+  every file where it was, so the whole batch can simply be re-run. Per-row DLQ isolation is
+  a <em>connector-run</em> behavior.</li>
+<li>Delimiter and encoding are auto-detected per file (same detectors as the connector path).</li>
+<li>Remote (sftp/s3): each matching file is checked against <code>max_file_size</code> (default 500 MB,
+  over-limit aborts), buffered to a temp file and run through the same pipeline.
+  <code>after_process</code> (and <code>post_process</code>) run <strong>after the transaction commits</strong>, for every
+  ingested file at once — the commit is the proof the rows landed, so a crash can never
+  leave archived files whose rows were rolled back. If the archive step itself fails once
+  the rows are committed, it is logged as a WARNING per file and the run still succeeds:
+  the file simply stays on the source.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title"><code>--name</code> needs a single file</p>
+<p>Each matched file registers <strong>its own</strong> dormant connector under the name you give, so a
+name over a glob that matches more than one file is <strong>refused before anything is
+downloaded</strong> — one name cannot label two connectors:</p>
+<div class="highlight"><pre><span></span><code>API error 400: name 'clients' would ingest 3 files into one dataset, which the one-shot
+path cannot register: each file creates its own dormant connector under that name. Point
+at a single file, or drop the name to get one dataset per file. To fuse a folder into one
+dataset, declare a connector manifest with a glob path.
+</code></pre></div>
+<p>Mind that <code>sftp://host/dir/</code> globs <code>*.csv</code> by default (<code>--pattern</code>), so the plain folder
+gesture <em>is</em> multi-file. Three ways forward:</p>
+<ul>
+<li><strong>one dataset per file</strong> — drop <code>--name</code>; each file gets <code>ext.&lt;filename&gt;</code> and its own
+  dormant connector.</li>
+<li><strong>one specific file</strong> — point the URL at it (or narrow <code>--pattern</code> / <code>--suffix</code>), and
+  <code>--name</code> works as documented.</li>
+<li><strong>the whole folder as one dataset</strong> — that is a <em>connector manifest</em> with a glob path:
+  one connector, one table, and a schedule if you want it. See
+  <a href="#quickstart">Quickstart</a> and <a href="#transports">Transports</a> above.</li>
+</ul>
+</div>
+<h3 id="kotlin-hooks-one-shot-lm-csv-ingest-only">Kotlin hooks (one-shot <code>lm csv ingest</code> only)</h3>
+<blockquote>
+<p><strong>Boundary:</strong> these hooks and <code>max_file_size</code> run only on the one-shot
+<code>lm csv ingest</code> path. A connector manifest carrying them is <strong>refused at validate/apply</strong>
+— scheduled connector runs would silently ignore them (the same validate-time refusal
+applies to <code>after_process: archive|delete|move</code> on a local transport — see
+<a href="#scheduling-lifecycle">Scheduling &amp; lifecycle</a>).</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="nt">transport</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file_filter</span><span class="p">:</span><span class="w">  </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">kotlin</span><span class="p p-Indicator">,</span><span class="nt"> script_ref</span><span class="p">:</span><span class="w"> </span><span class="nv">reference/skip-if-too-small.kt</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">pre_process</span><span class="p">:</span><span class="w">  </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">kotlin</span><span class="p p-Indicator">,</span><span class="nt"> script_ref</span><span class="p">:</span><span class="w"> </span><span class="nv">reference/decompress-gzip.kt</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">post_process</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">kotlin</span><span class="p p-Indicator">,</span><span class="nt"> script_ref</span><span class="p">:</span><span class="w"> </span><span class="nv">reference/notify-webhook.kt</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>3 reference hooks ship under <code>META-INF/hooks/connectors/csv-file/reference/</code>.</p>
+<p>Signatures:
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">shouldProcess</span><span class="p">(</span><span class="n">file</span><span class="p">:</span><span class="w"> </span><span class="n">FileDescriptor</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="p">:</span><span class="w"> </span><span class="kt">Any?</span><span class="p">):</span><span class="w"> </span><span class="kt">Boolean</span><span class="w">   </span><span class="c1">// file_filter</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="n">file</span><span class="p">:</span><span class="w"> </span><span class="n">FileDescriptor</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">:</span><span class="w"> </span><span class="n">InputStream</span><span class="p">):</span><span class="w"> </span><span class="n">InputStream</span><span class="w">   </span><span class="c1">// pre_process</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">postProcess</span><span class="p">(</span><span class="n">file</span><span class="p">:</span><span class="w"> </span><span class="n">FileDescriptor</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">:</span><span class="w"> </span><span class="kt">Any?</span><span class="p">)</span><span class="w">   </span><span class="c1">// post_process</span>
+</code></pre></div></p>
+<p><code>after_process</code> accepts only <code>archive | delete | move | none</code> (validator). The Kotlin hooks
+above run <em>in addition to</em> the declared action.</p>
+<h3 id="cli">CLI</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>&lt;local-file&gt;
+lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>sftp://user@host<span class="o">[</span>:port<span class="o">]</span>/path-or-glob<span class="w"> </span>--key-secret<span class="w"> </span>X<span class="w"> </span><span class="p">|</span><span class="w"> </span>--password-secret<span class="w"> </span>X
+lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>s3://bucket/prefix<span class="w"> </span>--region<span class="w"> </span>eu-west-3<span class="w"> </span><span class="o">[</span>--endpoint<span class="w"> </span>X<span class="o">]</span><span class="w"> </span><span class="o">[</span>--suffix<span class="w"> </span>.csv<span class="o">]</span>
+</code></pre></div>
+<h2 id="how-to">How to…</h2>
+<h3 id="ingest-an-sftp-folder-nightly">Ingest an SFTP folder nightly</h3>
+<ol>
+<li>Set the secret the manifest references — <code>password_env: CSV_SFTP_PASSWORD</code> resolves via
+   <a href="../../admin-console-guide/"><code>lm secret</code></a> (DB registry first, env var fallback; see
+   <a href="#transports">SFTP transport</a> above):</li>
+</ol>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>CSV_SFTP_PASSWORD<span class="w"> </span>-<span class="w">   </span><span class="c1"># paste the value on stdin, Ctrl+D</span>
+</code></pre></div>
+<ol>
+<li>Apply the manifest:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># 30-sftp-key.yaml — pull CSVs from an SFTP server into the hub.</span>
+<span class="c1">#   lm apply -f docs/connectors/csv/30-sftp-key.yaml</span>
+<span class="c1">#   lm connector run csv-sftp</span>
+<span class="c1">#</span>
+<span class="c1"># Credentials are NEVER inline: `password_env` names an environment variable the PLATFORM process</span>
+<span class="c1"># holds (resolved at run time via the secret store, then system property, then env). Use `key_env`</span>
+<span class="c1"># instead for SSH key auth (the value is the PEM private key).</span>
+<span class="c1">#</span>
+<span class="c1"># Cursor: the connector tracks a per-file watermark — each run ingests only files newer than the</span>
+<span class="c1"># last processed one (atomic per file; replays are idempotent via _row_hash dedup).</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-sftp</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-file</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">demo</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transport</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2222</span><span class="w">                       </span><span class="c1"># the docker-compose 'sftp' service</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csvuser</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/upload/seed/*.csv</span><span class="w">         </span><span class="c1"># glob on the remote side (seed/ subdir from the read-only mount)</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CSV_SFTP_PASSWORD</span><span class="w">  </span><span class="c1"># env var the platform holds (never the password itself)</span>
+<span class="w">    </span><span class="nt">strict_host_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">           </span><span class="c1"># DEMO ONLY. The docker-compose 'sftp' service mounts no volume</span>
+<span class="w">                                     </span><span class="c1"># for /etc/ssh/ssh_host_*_key, so the container generates a new</span>
+<span class="w">                                     </span><span class="c1"># host key every time it is recreated — there is no stable</span>
+<span class="w">                                     </span><span class="c1"># fingerprint to pin here. Against a real server drop this line</span>
+<span class="w">                                     </span><span class="c1"># (the default is true) and declare host_key_fingerprint: false</span>
+<span class="w">                                     </span><span class="c1"># accepts an impostor as readily as the real host.</span>
+
+<span class="w">  </span><span class="nt">parser</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w">              </span><span class="c1"># validator vocab: archive|delete|move|none ('none' = leave file in place)</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>The example above leaves <code>after_process: none</code> for a first dry run. Once it looks right,
+   add <code>schedule: "0 6 * * *"</code> (daily at 06:00) and switch <code>after_process</code> to <code>archive</code>
+   with an <code>archive_path</code> (spec-level, next to <code>transport:</code> — see <a href="#transports">SFTP transport</a>
+   above) so processed files are moved out of the way between runs.</p>
+<p><strong>Result:</strong> <code>lm connector run csv-sftp</code> reads every file under <code>/upload/seed/*.csv</code>; on
+each scheduled run the cursor picks up only files newer than the last one processed. Watch
+it land in the TUI (<a href="../../cli/lm-reference/">CLI &amp; TUI</a>): <code>:runs</code> for the run's status,
+<code>:dlq</code> for any rejected rows.</p>
+<h3 id="load-one-file-for-a-quick-look">Load one file for a quick look</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>./clients.csv
+</code></pre></div>
+<p><strong>Result:</strong> a dormant connector (<code>enabled: false</code>, no schedule) plus a hybrid table
+<code>ext.clients</code> — inspect the data, then either promote it into a scheduled manifest or run
+<code>lm connector delete clients</code> to clean up.</p>
+<h3 id="ingest-every-file-under-an-s3-prefix">Ingest every file under an S3 prefix</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 40-s3-prefix.yaml — pull every .csv under an S3 (or S3-compatible, e.g. MinIO) prefix.</span>
+<span class="c1">#   lm apply -f docs/connectors/csv/40-s3-prefix.yaml</span>
+<span class="c1">#   lm connector run csv-s3</span>
+<span class="c1">#</span>
+<span class="c1"># `access_key_env` / `secret_key_env` name environment variables holding the credentials (resolved</span>
+<span class="c1"># via secret store → system property → env). For AWS, omit `endpoint`; for MinIO set it explicitly.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-s3</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-file</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">demo</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transport</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:9000</span><span class="w">   </span><span class="c1"># the docker-compose 'minio' service; omit for real AWS</span>
+<span class="w">    </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">    </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik-demo</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv/</span>
+<span class="w">    </span><span class="nt">suffix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.csv</span>
+<span class="w">    </span><span class="nt">access_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
+<span class="w">    </span><span class="nt">secret_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
+
+<span class="w">  </span><span class="nt">parser</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p><strong>Result:</strong> <code>lm connector run csv-s3</code> reads every object matching <code>prefix:</code>/<code>suffix:</code> in
+the bucket, writing all rows into <code>connector.t_csv_s3</code>.</p>
+<h3 id="ingest-headerless-files">Ingest headerless files</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">parser</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">email</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p><strong>Result:</strong> column 1 maps to <code>code</code>, column 2 to <code>name</code>, column 3 to <code>email</code> — no header
+row is read or expected.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sftp connect failed: auth</code></td>
+<td>key/password missing or invalid</td>
+<td><code>lm secret list</code> then <code>lm secret set ACME_SFTP_KEY ...</code></td>
+</tr>
+<tr>
+<td><code>SFTP host key refused</code></td>
+<td><code>strict_host_key</code> is true (the default) and <code>host_key_fingerprint</code> is absent or does not match</td>
+<td>the error prints the fingerprint the server presented — confirm it out of band with <code>ssh-keyscan -p 22 HOST \| ssh-keygen -lf -</code>, then paste it into <code>host_key_fingerprint</code>. <code>strict_host_key: false</code> skips the check entirely and accepts an impostor as readily as the real server.</td>
+</tr>
+<tr>
+<td><code>S3 403 Forbidden</code></td>
+<td>invalid S3 credentials</td>
+<td>check the variables named by <code>access_key_env</code> / <code>secret_key_env</code> (defaults <code>AWS_ACCESS_KEY_ID</code> / <code>AWS_SECRET_ACCESS_KEY</code>)</td>
+</tr>
+<tr>
+<td><code>file exceeds max_file_size</code></td>
+<td>file &gt; 500 MB</td>
+<td>raise <code>max_file_size</code> or split producer-side</td>
+</tr>
+<tr>
+<td><code>Hook script not found</code></td>
+<td>script_ref points to a missing file</td>
+<td>check <code>META-INF/hooks/connectors/csv-file/&lt;script_ref&gt;</code></td>
+</tr>
+<tr>
+<td>file never picked up on schedule</td>
+<td>the <a href="#transports">lexical-cursor contract</a> — a lexically earlier name sorts before the cursor</td>
+<td>name incoming files monotonically (date-prefixed), or switch to sftp/s3</td>
+</tr>
+<tr>
+<td>rows missing after a run</td>
+<td>malformed rows, or rows a <code>validate-row</code> hook rejected, land in the DLQ — not the target table</td>
+<td><code>lm dlq list</code> / <code>lm dlq get ID</code></td>
+</tr>
+<tr>
+<td>rows missing after a run, but the DLQ is empty</td>
+<td><code>filter-where</code> or <code>skip-empty-rows</code> excluded them by declared policy — counted in <code>records_skipped</code>, never DLQ'd (a declared filter isn't a quality failure)</td>
+<td>check <code>SKIPPED</code> in <code>lm run get</code> (or the TUI's <code>:runs</code> RECORDS <code>in/out/skip</code>) — that's the count; see <a href="../transformers/#troubleshooting">transformers.md § Troubleshooting</a></td>
+</tr>
+<tr>
+<td>a mapped column (date/number/email/phone) is blank for some rows, but the row landed</td>
+<td>a <code>parse-*</code> or <code>lookup</code> cell hook in <code>spec.mapping</code> couldn't read that value and nulled it by design — the row was written, not dropped</td>
+<td>check <code>cell_errors</code> on the run: <code>lm run get &lt;id&gt;</code> (stderr alert when &gt; 0, or <code>-o json</code>/<code>-o yaml</code>), or the TUI describe panel (<code>:runs</code>, select the run, <code>d</code>) — see <a href="../transformers/#reference-cell-hooks">Transformers § Reference — cell hooks</a></td>
+</tr>
+<tr>
+<td>ingestion fails on a column sharing a reserved hub-column name</td>
+<td>collides with one of the seven columns the hub always adds to the table — see <a href="#target-table">Target table</a></td>
+<td>rename it via a <code>map-columns</code> transform</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../">Overview</a></li>
+<li><a href="../transformers/">Transformers</a></li>
+<li><a href="../../rag/scopes/">Scopes</a></li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

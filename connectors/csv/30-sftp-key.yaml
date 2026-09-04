@@ -1,0 +1,39 @@
+# 30-sftp-key.yaml — pull CSVs from an SFTP server into the hub.
+#   lm apply -f docs/connectors/csv/30-sftp-key.yaml
+#   lm connector run csv-sftp
+#
+# Credentials are NEVER inline: `password_env` names an environment variable the PLATFORM process
+# holds (resolved at run time via the secret store, then system property, then env). Use `key_env`
+# instead for SSH key auth (the value is the PEM private key).
+#
+# Cursor: the connector tracks a per-file watermark — each run ingests only files newer than the
+# last processed one (atomic per file; replays are idempotent via _row_hash dedup).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-sftp
+  connector_type: csv-file
+  scopes: [demo]
+
+spec:
+  transport:
+    kind: sftp
+    host: localhost
+    port: 2222                       # the docker-compose 'sftp' service
+    user: csvuser
+    path: /upload/seed/*.csv         # glob on the remote side (seed/ subdir from the read-only mount)
+    password_env: CSV_SFTP_PASSWORD  # env var the platform holds (never the password itself)
+    strict_host_key: false           # DEMO ONLY. The docker-compose 'sftp' service mounts no volume
+                                     # for /etc/ssh/ssh_host_*_key, so the container generates a new
+                                     # host key every time it is recreated — there is no stable
+                                     # fingerprint to pin here. Against a real server drop this line
+                                     # (the default is true) and declare host_key_fingerprint: false
+                                     # accepts an impostor as readily as the real host.
+
+  parser:
+    has_header: true
+
+  after_process: none              # validator vocab: archive|delete|move|none ('none' = leave file in place)
+
+  target: {}
