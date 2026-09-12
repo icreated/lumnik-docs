@@ -1,0 +1,70 @@
+# 90-soap-querypage.yaml — the Siebel QueryPage shape, on the same engine as every REST file here.
+#
+# `connector_type` stays rest-generic. What `kind: soap` changes is the request: a POST carrying
+# a templated <soap:Body> inside a SOAP 1.1 envelope, an XML answer, and a cursor that is a ROW
+# OFFSET woven into that body rather than a query parameter.
+#
+# ── The hard rule ─────────────────────────────────────────────────────────────────────────
+# `kind: soap` and `pagination.kind: soap` require each other, in both directions. `kind` picks
+# the request builder (envelope, templating, POST + SOAPAction); `pagination.kind` picks the XML
+# parser and the offset arithmetic. Either half alone pairs a builder with a parser that does
+# not understand it — an empty run that looks successful, which is why the refusal is at apply.
+#
+# ── The two placeholders ──────────────────────────────────────────────────────────────────
+#   {{page_size}}  → pagination.page_size, verbatim
+#   {{cursor}}     → the row offset: 0 on the first request, +page_size per page
+#
+# ── What the paths must look like ─────────────────────────────────────────────────────────
+# The demo service answers with ns:-prefixed elements (<ns:Customer><ns:Id>) — every path below
+# is written WITHOUT the prefix, because the parser strips them before matching. And a SOAP
+# `response_path` is a PLAIN DOTTED PATH: no [*], no .. — it names the repeated element itself
+# so the parser can force it into a list.
+#
+# ── XML has no types ──────────────────────────────────────────────────────────────────────
+# Every leaf arrives as a string. `credit_limit` becomes a decimal and `updated_at` a
+# timestamptz because the promote ladder says so, not because the source announced anything.
+#
+#   lm secret set ACME_BASIC_PW        # the demo API answers to demo-user / demo-pass
+#
+# Expect: 2 400 rows in ext.acme_soap_partners, walked 500 at a time.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /siebel/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+          <ListOfCustomer><Customer><Id query="*"/><Name query="*"/></Customer></ListOfCustomer>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_partners
+        unique_key: "$.Id"
+        promote:
+          - { name: name,         path: "$.Name",        type: text }
+          - { name: city,         path: "$.City",        type: text }
+          - { name: credit_limit, path: "$.CreditLimit", type: decimal }
+          - { name: updated_at,   path: "$.UpdatedAt",   type: timestamptz, transform: parse_iso8601 }

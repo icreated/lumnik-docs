@@ -1,0 +1,36 @@
+# Siebel CustomerQueryPage over SOAP, exposed as a canonical hub table.
+# kind: soap is a request-shape on the HTTP engine (connector_type stays rest-generic).
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: siebel-customers
+  connector_type: rest-generic
+  scopes: [crm, customers, siebel]
+spec:
+  base_url: https://siebel.example.com
+  auth:
+    kind: basic
+    username: siebel_svc          # literal username (the basic block reads `username`, not an env)
+    password_env: SIEBEL_PWD      # env var name holding the password
+  endpoints:
+    - id: customers
+      kind: soap
+      path: /eai_enu/start.swe
+      soap_action: "document/urn:crmod:...:CustomerQueryPage"
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+          <ListOfCustomer><Customer><Id query="*"/><Name query="*"/></Customer></ListOfCustomer>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.siebel_customers
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }

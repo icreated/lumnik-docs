@@ -1,0 +1,40 @@
+# 20-watermark.yaml — the same table, read incrementally on a column that moves on every change.
+#
+# `updated_at` only ever grows, so a run reads the rows past the persisted cursor and nothing
+# else: an INSERT and an UPDATE both arrive, a run with nothing changed reads 0 rows.
+#
+# Same connector name as 10-full-dump.yaml on purpose. Applying this over a table that already
+# ran in `full` meets the cursor the full read persisted; the hub recognises it as foreign,
+# logs a WARN naming both, and restarts the table from the beginning. Rows already in the hub
+# table are deduplicated on their content hash — the table does not grow.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-invoices
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  defaults:
+    schema: demo
+    mode: watermark
+    watermark_column: updated_at
+
+  source:
+    tables:
+      - name: invoices
+        pk_columns: [invoice_id]
+        indexes:
+          - { columns: [customer], unique: false }
+
+  # Uncomment to let the hub poll the source itself. Incremental runs cost one keyset query
+  # per table when nothing has changed. Cron times are UTC.
+  # schedule: "*/10 * * * *"
+  # window: "22:00-06:00"
+
+  target: {}

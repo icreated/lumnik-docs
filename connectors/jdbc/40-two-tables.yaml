@@ -1,0 +1,35 @@
+# 40-two-tables.yaml — two tables under one connector, each with its own mode.
+#
+# Every entry in `source.tables[]` becomes an endpoint, and every endpoint gets its own run
+# row in the ledger: one `lm connector run` on this connector produces two rows. `defaults:`
+# carries what both tables share; each table overrides what it needs.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-erp
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  defaults:
+    schema: demo
+
+  source:
+    tables:
+      - name: warehouses
+        mode: watermark
+        watermark_column: updated_at
+        pk_columns: [warehouse_id]
+
+      - name: price_list
+        mode: full
+        pk_columns: [id]
+        rename:
+          id: price_list_id
+
+  target: {}

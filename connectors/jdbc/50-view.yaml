@@ -1,0 +1,32 @@
+# 50-view.yaml — read a VIEW instead of a table.
+#
+# A view is how a source-side table reaches the hub when the table itself cannot: no primary
+# key to page on, a column name the hub reserves, a column too wide for the hub's numeric
+# type, or simply more rows than the métier needs. jdbc-generic issues `SELECT *` — a view is
+# a table as far as the read is concerned.
+#
+# The guided `lm source jdbc add` refuses views on purpose: a view has no primary key to
+# discover, so `pk_columns` has to be declared, and that is what a manifest is for. The column
+# named here must be unique and stable — it is what the reader pages on.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-open-invoices
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  source:
+    tables:
+      # demo.v_open_invoices is created by data/demo-source.sql, with the tables.
+      - name: v_open_invoices
+        schema: demo
+        mode: full
+        pk_columns: [invoice_id]
+
+  target: {}

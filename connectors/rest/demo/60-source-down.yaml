@@ -1,0 +1,60 @@
+# 60-source-down.yaml — what a run does when the source is simply down.
+#
+# `/down/partners` answers 500 to everything. The retry policy spends its five attempts, and
+# then the run must FAIL: an outage that lands as a clean empty sync pages nobody, and the
+# next run reads a table it believes to be current.
+#
+# The guard refuses a FINAL non-2xx, not a retried one — `/flaky/partners` below answers 429
+# then 503 before serving each page, and its endpoint completes in full.
+#
+#   curl http://127.0.0.1:8099/admin/reset     # before re-running: the flaky counters persist
+#
+# Expect: `down` Failed with the upstream status in the message, `flaky` Completed with 2 400.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-outage
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: down
+      path: /down/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+      target:
+        kind: hybrid
+        table: ext.acme_outage_down
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+    - id: flaky
+      path: /flaky/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+      target:
+        kind: hybrid
+        table: ext.acme_outage_flaky
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }

@@ -1,0 +1,55 @@
+# 93-soap-retry.yaml — the other error channel, on the same status code.
+#
+# The /flaky service answers 500 twice per page window and then serves the page. The body of
+# those 500s is XML, but it carries NO <soap:Fault> — it is an infrastructure hiccup, not an
+# answer. The shared REST retry policy applies unchanged: 5 attempts, transient on exactly
+# 429, 500, 502, 503, 504, 408.
+#
+# Read this file against 92. Same server, same 500, opposite outcome — and the body is the only
+# thing that differs. That is the whole design: the status says "something went wrong", the
+# body says whose fault it is.
+#
+# ── Before running ────────────────────────────────────────────────────────────────────────
+#   curl http://127.0.0.1:8099/admin/reset
+#
+# The failure counters are per page window and they persist. Without a reset, a second run finds
+# the failures already burnt in, retries nothing, and goes green for the wrong reason.
+#
+# Expect: Completed with 2 400 rows, and visibly slower than 91's short-page endpoint over the
+# same data — three requests per window instead of one, plus the backoff between them.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-retry
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: flaky
+      kind: soap
+      path: /flaky/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 800         # 3 windows x 3 requests — enough retries to see, few to wait for
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_flaky
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }

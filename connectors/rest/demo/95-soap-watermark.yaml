@@ -1,0 +1,67 @@
+# 95-soap-watermark.yaml — incremental over SOAP, and the seam it lands on.
+#
+# `incremental: watermark` is not a REST-only block: the engine sends the stored mark on the
+# FIRST request of a run, under the parameter named by `incremental.param`, and computes the new
+# one as the MAX of `watermark_path` over everything the run read.
+#
+# ── The seam, and it is worth knowing before you promise a customer an incremental SOAP feed ─
+# The request here is a POST whose payload is a templated XML body — and the mark does NOT go
+# into that body. There is no {{watermark}} placeholder: the template knows four, and those are
+# page_size, cursor, secret:NAME and env:NAME. The mark rides in the URL QUERY STRING, bolted
+# onto the POST:
+#
+#   POST /siebel/start.swe?updated_since=2026-01-02T15:59:00Z
+#
+# which is what the demo service reads. A real SOAP service would almost certainly want that
+# filter as an element inside the body, and this release gives no way to put it there. A body
+# carrying <UpdatedSince>{{watermark}}</UpdatedSince> APPLIES cleanly — the validator does not
+# inspect templates — and then fails every run with `unknown placeholder: watermark`.
+#
+#   lm connector run acme-soap-incremental      # run 1 — the full 2 400
+#   lm connector run acme-soap-incremental      # run 2 — only what shares the maximal instant
+#   lm endpoint reset-cursor acme-soap-incremental/partners
+#
+# Expect: run 1 = 2 400 in / 2 400 out. Run 2 = 1 in / 1 out — the boundary is inclusive, so the
+# row holding the maximal instant comes back and is re-upserted on its unique key.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-incremental
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /siebel/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      incremental:
+        mode: watermark
+        param: updated_since          # a query parameter on the POST — not a body element
+        watermark_path: "$.UpdatedAt"
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_incremental
+        unique_key: "$.Id"
+        promote:
+          - { name: name,       path: "$.Name",      type: text }
+          - { name: updated_at, path: "$.UpdatedAt", type: timestamptz, transform: parse_iso8601 }

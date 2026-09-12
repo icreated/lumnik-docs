@@ -1,0 +1,5379 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/transformers/">
+      
+      
+        <link rel="prev" href="../kafka/">
+      
+      
+        <link rel="next" href="../../entities/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Transformers - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#transformers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Transformers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-applies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this applies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-tiers-one-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tiers, one order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-hooks-the-whole-chunk-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset hooks — the whole chunk, once
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataset hooks — the whole chunk, once">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#require-headers-refuse-a-file-with-the-wrong-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        require-headers — refuse a file with the wrong shape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skip-empty-rows-blank-lines-in-the-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        skip-empty-rows — blank lines in the export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-where-keep-only-the-rows-you-asked-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        filter-where — keep only the rows you asked for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sort-by-order-within-the-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sort-by — order within the chunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enrich-context-stamp-provenance-on-every-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enrich-context — stamp provenance on every row
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-hooks-one-record-in-0n-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row hooks — one record in, 0..N out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Row hooks — one record in, 0..N out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-columns-legacy-column-names-cust_nm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        map-columns — legacy column names (CUST_NM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coalesce-first-non-blank-of-several-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        coalesce — first non-blank of several columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defaults-fill-blanks-in-several-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        defaults — fill blanks in several columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validate-row-rows-missing-mandatory-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validate-row — rows missing mandatory fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-row-one-row-per-value-of-abc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split-row — one row per value of a;b;c
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregator-exists-but-csv-file-runs-refuse-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aggregator — exists, but csv-file runs refuse it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cell-hooks-one-value-in-place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell hooks — one value, in place
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cell hooks — one value, in place">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clean-bom-stray-whitespace-control-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        clean — BOM, stray whitespace, control characters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-mojibake-accents-came-out-as-banadict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fix-mojibake — accents came out as BÃ©nÃ©dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decode-html-entities-amp-in-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        decode-html-entities — &amp;amp; in text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-smart-quotes-curly-quotes-from-word-and-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        replace-smart-quotes — curly quotes from Word and Excel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strip-invisible-a-code-that-looks-equal-but-never-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        strip-invisible — a code that "looks equal" but never matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-diacritics-ascii-only-identifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remove-diacritics — ASCII-only identifiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upper-lower-titlecase-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        upper / lower / titlecase — case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#truncate-hard-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        truncate — hard cut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex-replace-normalise-with-a-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        regex-replace — normalise with a pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex-extract-pull-a-piece-into-its-own-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        regex-extract — pull a piece into its own column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-fill-one-blank-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        default — fill one blank column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lookup-translate-codes-with-an-inline-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lookup — translate codes with an inline table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-date-dates-are-31122019" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-date — dates are 31/12/2019
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-number-numbers-are-1-23456-or-123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-number — numbers are 1 234,56 € or (123)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-email-trim-lowercase-validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-email — trim, lowercase, validate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-phone-one-format-for-every-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-phone — one format for every phone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mask-a-column-holds-cardpii-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mask — a column holds card/PII data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-parts-into-new-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split — parts into new columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to-uuid-an-id-column-holds-junk-like-na-or-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to-uuid — an id column holds junk like N/A or 0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-the-escape-hatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kotlin — the escape hatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-manifest-every-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One manifest, every transformer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="One manifest, every transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-source-row-column-by-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One source row, column by column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-run-as-lm-shows-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The run, as lm shows it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-cell-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — cell hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-row-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — row hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-dataset-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — dataset hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kotlin-escape-hatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin escape hatch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-the-transform-enum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST: the transform: enum
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-this-applies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where this applies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-tiers-one-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three tiers, one order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-hooks-the-whole-chunk-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dataset hooks — the whole chunk, once
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataset hooks — the whole chunk, once">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#require-headers-refuse-a-file-with-the-wrong-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        require-headers — refuse a file with the wrong shape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skip-empty-rows-blank-lines-in-the-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        skip-empty-rows — blank lines in the export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-where-keep-only-the-rows-you-asked-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        filter-where — keep only the rows you asked for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sort-by-order-within-the-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sort-by — order within the chunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enrich-context-stamp-provenance-on-every-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enrich-context — stamp provenance on every row
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-hooks-one-record-in-0n-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row hooks — one record in, 0..N out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Row hooks — one record in, 0..N out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-columns-legacy-column-names-cust_nm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        map-columns — legacy column names (CUST_NM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coalesce-first-non-blank-of-several-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        coalesce — first non-blank of several columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defaults-fill-blanks-in-several-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        defaults — fill blanks in several columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validate-row-rows-missing-mandatory-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validate-row — rows missing mandatory fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-row-one-row-per-value-of-abc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split-row — one row per value of a;b;c
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregator-exists-but-csv-file-runs-refuse-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        aggregator — exists, but csv-file runs refuse it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cell-hooks-one-value-in-place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell hooks — one value, in place
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cell hooks — one value, in place">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clean-bom-stray-whitespace-control-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        clean — BOM, stray whitespace, control characters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-mojibake-accents-came-out-as-banadict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fix-mojibake — accents came out as BÃ©nÃ©dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decode-html-entities-amp-in-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        decode-html-entities — &amp;amp; in text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replace-smart-quotes-curly-quotes-from-word-and-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        replace-smart-quotes — curly quotes from Word and Excel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strip-invisible-a-code-that-looks-equal-but-never-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        strip-invisible — a code that "looks equal" but never matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-diacritics-ascii-only-identifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remove-diacritics — ASCII-only identifiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upper-lower-titlecase-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        upper / lower / titlecase — case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#truncate-hard-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        truncate — hard cut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex-replace-normalise-with-a-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        regex-replace — normalise with a pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex-extract-pull-a-piece-into-its-own-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        regex-extract — pull a piece into its own column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-fill-one-blank-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        default — fill one blank column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lookup-translate-codes-with-an-inline-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lookup — translate codes with an inline table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-date-dates-are-31122019" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-date — dates are 31/12/2019
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-number-numbers-are-1-23456-or-123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-number — numbers are 1 234,56 € or (123)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-email-trim-lowercase-validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-email — trim, lowercase, validate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-phone-one-format-for-every-phone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse-phone — one format for every phone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mask-a-column-holds-cardpii-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mask — a column holds card/PII data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split-parts-into-new-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        split — parts into new columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to-uuid-an-id-column-holds-junk-like-na-or-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to-uuid — an id column holds junk like N/A or 0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-the-escape-hatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kotlin — the escape hatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-manifest-every-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One manifest, every transformer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="One manifest, every transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-source-row-column-by-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One source row, column by column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-run-as-lm-shows-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The run, as lm shows it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-cell-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — cell hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-row-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — row hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-dataset-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference — dataset hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kotlin-escape-hatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin escape hatch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-the-transform-enum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST: the transform: enum
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="transformers">Transformers</h1>
+<blockquote>
+<p>Repair legacy data as it flows in — mojibake, <code>DD/MM/YYYY</code> dates, numbers in parentheses —
+declared in the manifest's <code>spec.mapping</code> block, no code.</p>
+</blockquote>
+<h2 id="where-this-applies">Where this applies</h2>
+<p><strong>Read this before promising a customer their data will be cleaned:</strong></p>
+<ul>
+<li><strong><code>csv-file</code> connector runs only.</strong> The csv-file connector parses <code>spec.mapping</code> and applies
+  its hooks before writing.</li>
+<li><strong>jdbc and kafka write a 1:1 dump</strong> — no <code>spec.mapping</code>. jdbc has one narrow knob for a source
+  column colliding with a hub system column: <code>source.tables[].rename</code>, see
+  <a href="../jdbc/#the-hub-table">JDBC: the hub table</a>.</li>
+<li><strong>REST/GraphQL/SOAP</strong> transform in the <code>promote:</code> block's <code>transform:</code> enum — a short fixed
+  list, see <a href="#rest-the-transform-enum">REST: the <code>transform:</code> enum</a>.</li>
+<li><strong>Not the one-shot <code>lm csv ingest</code>.</strong> That path writes directly; its <code>spec.mapping</code> (if any)
+  is ignored. To transform, apply a <code>csv-file</code> connector manifest and run it.</li>
+<li><strong>Dirty status values are a different tool's job</strong> — declare them as
+  <a href="../../apps/workflows/#alias-semantics">workflow aliases</a>, which map legacy statuses without
+  touching the data.</li>
+<li><strong>Rehearse before the live feed.</strong> <a href="../#the-lifecycle-every-connector-same-three-commands"><code>lm validate</code></a>
+  checks the manifest's shape, not your data. Run against a sample file first, read the result,
+  then point the same manifest at the real feed.</li>
+</ul>
+<h2 id="three-tiers-one-order">Three tiers, one order</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dataset</span><span class="p">:</span><span class="w">                    </span><span class="c1"># tier 1 — the whole chunk, once</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">skip-empty-rows</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">    </span><span class="nt">row</span><span class="p">:</span><span class="w">                        </span><span class="c1"># tier 2 — one record; may emit 0..N rows</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">map-columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> rename</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> CUST_NM</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">cell</span><span class="p">:</span><span class="w">                       </span><span class="c1"># tier 3 — one value, mutated in place</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">fix-mojibake</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<pre class="mermaid"><code>flowchart TB
+  F["file chunk"] --&gt; D
+  subgraph D["1 · dataset — the whole chunk, once"]
+    D1["require-headers · skip-empty-rows · filter-where · sort-by · enrich-context"]
+  end
+  D --&gt; R
+  subgraph R["2 · row — one record in, 0..N out"]
+    R1["map-columns · coalesce · defaults · validate-row · split-row"]
+  end
+  R --&gt; C
+  subgraph C["3 · cell — one value, in place"]
+    C1["clean · fix-mojibake · parse-* · lookup · mask · regex-* · split · to-uuid · kotlin …"]
+  end
+  C --&gt; T[("target table")]
+  D1 -. "filter-where / skip-empty-rows" .-&gt; S["records_skipped"]
+  R1 -. "validate-row" .-&gt; Q["records_skipped + DLQ"]
+  C1 -. "unreadable value → null" .-&gt; E["cell_errors"]</code></pre>
+<ul>
+<li><strong>Across tiers the order is fixed</strong>: dataset → row → cell, always.</li>
+<li><strong>Within a tier, hooks run top to bottom</strong> as listed — order is yours, and it matters
+  (<code>validate-row</code> before <code>split-row</code>; <code>regex-extract</code> before the <code>default</code> that fills its misses).</li>
+<li><strong>One entry per hook</strong>: <code>- hook-name: { params }</code>. An unknown name fails the run
+  (<code>unknown dataset hook: &lt;name&gt;</code>).</li>
+<li><strong>Three exits, three counters.</strong> A row <code>filter-where</code> or <code>skip-empty-rows</code> excludes →
+  <code>records_skipped</code>. A row <code>validate-row</code> drops → <code>records_skipped</code> <strong>and</strong> the DLQ. A value a
+  cell hook cannot read → <code>null</code> in a row that is still written, counted in <code>cell_errors</code>.
+  Nothing is dropped silently.</li>
+</ul>
+<h2 id="dataset-hooks-the-whole-chunk-once">Dataset hooks — the whole chunk, once</h2>
+<p>Run <strong>once per chunk</strong>, before the row and cell tiers. A dataset hook may rewrite the whole
+chunk, never more — it never sees the full file. Every csv-file run, local or remote (sftp/s3),
+commits in fixed <strong>500-row chunks</strong>, and a large file spans as many chunks as it needs. A
+chunk and a file are different things: a remote chunk holds rows from one file only, while a
+local glob run fills the chunk from the <strong>next</strong> file when the current one runs out.
+Consequence: <code>sort-by</code> orders <strong>within a chunk</strong> — not the file, not the run.</p>
+<h3 id="require-headers-refuse-a-file-with-the-wrong-shape"><code>require-headers</code> — refuse a file with the wrong shape</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">require-headers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">],</span><span class="nt"> any-of</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">created</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">isactive</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>the file's header</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c_bpartner_id,name,created,isactive</code></td>
+<td>passes</td>
+</tr>
+<tr>
+<td><code>c_bpartner_id,name,created</code></td>
+<td>passes — <code>columns</code> all present, one of <code>any-of</code> present</td>
+</tr>
+<tr>
+<td><code>c_bpartner_id,name</code></td>
+<td><strong>fails the run</strong>: <code>none of required headers found: [created, isactive]</code></td>
+</tr>
+<tr>
+<td><code>name,created</code></td>
+<td><strong>fails the run</strong>: <code>required header missing: c_bpartner_id</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>columns</code> — every name must exist. <code>any-of</code> — at least one must.</li>
+<li>With <code>has_header: false</code>, "the header" is the <code>parser.columns</code> list you declared.</li>
+<li>An empty chunk passes: there is no header to check.</li>
+</ul>
+<h3 id="skip-empty-rows-blank-lines-in-the-export"><code>skip-empty-rows</code> — blank lines in the export</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">skip-empty-rows</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>Before:</p>
+<div class="highlight"><pre><span></span><code>code,name
+C1,Acme Corp
+,
+C2,Globex
+</code></pre></div>
+<p>After: <code>C1</code> and <code>C2</code>. The blank row (every cell null or whitespace) is counted in
+<code>records_skipped</code>, reason <code>PolicyExcluded("skip-empty-rows")</code> — <strong>not</strong> sent to the DLQ: a
+declared filter is not a quality failure.</p>
+<h3 id="filter-where-keep-only-the-rows-you-asked-for"><code>filter-where</code> — keep only the rows you asked for</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">filter-where</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">status</span><span class="p p-Indicator">,</span><span class="nt"> in</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ACTIVE</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">PENDING</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>status</code></th>
+<th><code>in: [ACTIVE, PENDING]</code></th>
+<th><code>equals: ACTIVE</code></th>
+<th><code>regex: "[0-9]+"</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ACTIVE</code></td>
+<td>kept</td>
+<td>kept</td>
+<td>dropped</td>
+</tr>
+<tr>
+<td><code>PENDING</code></td>
+<td>kept</td>
+<td>dropped</td>
+<td>dropped</td>
+</tr>
+<tr>
+<td><code>1042</code></td>
+<td>dropped</td>
+<td>dropped</td>
+<td>kept</td>
+</tr>
+<tr>
+<td><code>10a</code></td>
+<td>dropped</td>
+<td>dropped</td>
+<td>dropped — <code>regex</code> is a <strong>full</strong> match</td>
+</tr>
+<tr>
+<td><em>(null)</em></td>
+<td>dropped</td>
+<td>dropped</td>
+<td>dropped — a null compares as <code>""</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Declare any of <code>equals</code>, <code>in</code>, <code>regex</code>; several combine with <strong>AND</strong>.</li>
+<li>A dropped row is counted in <code>records_skipped</code>, reason <code>PolicyExcluded("filter-where")</code> — not
+  DLQ'd.</li>
+<li>A bad <code>regex</code> is refused when the run starts, naming the hook and the knob.</li>
+</ul>
+<h3 id="sort-by-order-within-the-chunk"><code>sort-by</code> — order within the chunk</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sort-by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">        </span><span class="c1"># max-rows: 100000 by default</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>before</th>
+<th>after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1000280</code>, <code>1000001</code>, <em>(null)</em>, <code>1000117</code></td>
+<td><em>(null)</em>, <code>1000001</code>, <code>1000117</code>, <code>1000280</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Lexicographic (text order — <code>9</code> sorts after <code>10</code>), in memory, <strong>within the 500-row chunk</strong>
+  — a file longer than that is sorted piecewise, never as a whole; on a local glob run a chunk
+  may even straddle two files.</li>
+<li>Nulls sort first, as empty strings.</li>
+<li>Over <code>max-rows</code> the run refuses: <code>sort-by max-rows exceeded: &lt;n&gt; &gt; &lt;max&gt; (input must be
+  pre-sorted or increase max-rows)</code>.</li>
+</ul>
+<h3 id="enrich-context-stamp-provenance-on-every-row"><code>enrich-context</code> — stamp provenance on every row</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">enrich-context</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> source_system</span><span class="p">:</span><span class="w"> </span><span class="nv">siebel</span><span class="p p-Indicator">,</span><span class="nt"> ingested_at</span><span class="p">:</span><span class="w"> </span><span class="s">"${now}"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Before:</p>
+<div class="highlight"><pre><span></span><code>code,name
+C1,Acme Corp
+</code></pre></div>
+<p>After:</p>
+<div class="highlight"><pre><span></span><code>code,name,source_system,ingested_at
+C1,Acme Corp,siebel,2026-08-20T14:03:11.482Z
+</code></pre></div>
+<ul>
+<li>Adds a constant column to every row of the chunk; <code>${now}</code> resolves once, to the ingestion
+  instant.</li>
+<li>An existing value in that column is <strong>never overwritten</strong>.</li>
+<li>It is also the cheapest way to hand a cell hook a test value — the
+  <a href="#one-manifest-every-transformer">full example</a> mints its dirty inputs this way.</li>
+</ul>
+<h2 id="row-hooks-one-record-in-0n-out">Row hooks — one record in, 0..N out</h2>
+<p>A row hook can drop, duplicate, or reshape rows.</p>
+<h3 id="map-columns-legacy-column-names-cust_nm"><code>map-columns</code> — legacy column names (<code>CUST_NM</code>)</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">row</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">map-columns</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">rename</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> CUST_NM</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> CUST_CITY</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">drop</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">internal_flag</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>Before:</p>
+<div class="highlight"><pre><span></span><code>CUST_NM,CUST_CITY,internal_flag
+Bénédict Martin,Montréal,X
+</code></pre></div>
+<p>After:</p>
+<div class="highlight"><pre><span></span><code>name,city
+Bénédict Martin,Montréal
+</code></pre></div>
+<ul>
+<li>Renames first, <strong>then</strong> drops — so <code>drop</code> names the column <em>as it is by then</em>: for a column
+  renamed in the same hook, its <strong>new</strong> name. Naming the old one removes nothing.</li>
+<li>A renamed column keeps its place even when the value is empty: the target column always
+  appears, so the table's shape does not depend on which row arrived first.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Six shapes are refused when the run starts — one is only counted</p>
+<p><code>lm apply</code> accepts these today; the run refuses them <strong>before its first row</strong> — the engine
+checks every hook's parameters once per chunk, even an empty one — naming the entry:</p>
+<ul>
+<li><code>CUST_NM:</code> with nothing after the colon.</li>
+<li>a target that is not a plain column name (letters, digits, underscore, not starting with
+  a digit).</li>
+<li>a target that is one of the seven hub columns (<code>id</code>, <code>tenant_id</code>, <code>_row_hash</code>,
+  <code>_ingested_at</code>, <code>_source</code>, <code>_run_id</code>, <code>_mapping_version</code>). Renaming <strong>away</strong> from one is
+  what this hook is for; renaming <em>into</em> one recreates the collision.</li>
+<li>two source columns renamed onto the <strong>same</strong> target — one would be lost.</li>
+<li>a <code>rename:</code> that is not a map (a list, a bare value).</li>
+<li>a <code>drop:</code> that is not a list — <code>drop: internal_flag</code> instead of <code>drop: [internal_flag]</code>.
+  The one that matters most: <strong>a drop that does nothing publishes the column you meant to
+  keep out.</strong></li>
+</ul>
+<p>One shape depends on the data, so it cannot be refused: <strong>the target already exists in the
+row.</strong> <code>rename: { customer_id: ref }</code> on a file that already has a <code>ref</code> column overwrites
+it. The rename wins and the run counts one <a href="#reference-cell-hooks">cell error</a> per row —
+if <code>cell_errors</code> climbs on a mapping that only renames, check the source's real header.</p>
+</div>
+<h3 id="coalesce-first-non-blank-of-several-columns"><code>coalesce</code> — first non-blank of several columns</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">row</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">coalesce</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">display_name</span><span class="p p-Indicator">,</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">trade_name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>display_name</code></th>
+<th><code>trade_name</code></th>
+<th><code>name</code></th>
+<th>→ <code>display_name</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(absent)</em></td>
+<td><code>Dupont</code></td>
+<td><code>DUPONT SARL</code></td>
+<td><code>Dupont</code></td>
+</tr>
+<tr>
+<td><em>(absent)</em></td>
+<td><em>(blank)</em></td>
+<td><code>DUPONT SARL</code></td>
+<td><code>DUPONT SARL</code></td>
+</tr>
+<tr>
+<td><code>Kept</code></td>
+<td><code>Dupont</code></td>
+<td><code>DUPONT SARL</code></td>
+<td><code>Kept</code> — a filled target is never touched</td>
+</tr>
+<tr>
+<td><em>(absent)</em></td>
+<td><em>(absent)</em></td>
+<td><em>(blank)</em></td>
+<td><em>(absent)</em> — nothing to take</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Copies the value <strong>as it stands in the row tier</strong> — before any cell hook. In the full example
+  <code>display_name</code> keeps <code>DUPONT SARL</code> while <code>name</code> goes on to be title-cased.</li>
+</ul>
+<h3 id="defaults-fill-blanks-in-several-columns"><code>defaults</code> — fill blanks in several columns</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">row</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">defaults</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> is_active</span><span class="p">:</span><span class="w"> </span><span class="s">"Y"</span><span class="p p-Indicator">,</span><span class="nt"> country</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>is_active</code></th>
+<th>→</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>N</code></td>
+<td><code>N</code> — never overwrites</td>
+</tr>
+<tr>
+<td><em>(blank)</em></td>
+<td><code>Y</code></td>
+</tr>
+<tr>
+<td><em>(absent)</em></td>
+<td><code>Y</code> — the column is created</td>
+</tr>
+</tbody>
+</table>
+<p>The cell-tier twin is <a href="#default-fill-one-blank-column"><code>default</code></a> (one column). Same rule,
+different tier — pick by where you need it in the order.</p>
+<h3 id="validate-row-rows-missing-mandatory-fields"><code>validate-row</code> — rows missing mandatory fields</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">row</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">validate-row</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> required</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Before:</p>
+<div class="highlight"><pre><span></span><code>code,name
+C1,Acme Corp
+C2,
+</code></pre></div>
+<p>After: <code>C1</code> only. <code>C2</code> (blank <code>name</code>) never reaches the target table — it is:</p>
+<ul>
+<li>counted in <code>records_skipped</code>;</li>
+<li>captured to the DLQ, reason <code>ValidationFailed</code>, message
+  <code>required column 'name' is missing or blank</code>;</li>
+<li>stored <strong>as it stood in the row tier</strong> — raw, before any cell hook (<code>mask</code> included) ran.
+  Replay or discard it via <a href="../../cli/lm-reference/"><code>lm dlq list</code></a> / <code>lm dlq get</code>.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title"><code>validate-row</code> after <code>split-row</code> is refused</p>
+<p><code>split-row</code> fans one source row into N fragments; a <code>validate-row</code> placed after it would
+drop fragments one at a time instead of once per source row and corrupt the run arithmetic
+(<code>records_out</code> could go negative). <code>lm validate</code> / <code>lm apply</code> refuse the manifest:</p>
+<blockquote>
+<p>validate-row after split-row is not supported — validation would drop fanned
+fragments and corrupt the run arithmetic. Validate before splitting.</p>
+</blockquote>
+</div>
+<h3 id="split-row-one-row-per-value-of-abc"><code>split-row</code> — one row per value of <code>a;b;c</code></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">row</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">split-row</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> by</span><span class="p">:</span><span class="w"> </span><span class="nv">tags</span><span class="p p-Indicator">,</span><span class="nt"> sep</span><span class="p">:</span><span class="w"> </span><span class="s">";"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Before:</p>
+<div class="highlight"><pre><span></span><code>id,tags
+1,a;b;c
+</code></pre></div>
+<p>After:</p>
+<div class="highlight"><pre><span></span><code>id,tags
+1,a
+1,b
+1,c
+</code></pre></div>
+<ul>
+<li>Parts are trimmed; every other column is copied onto each fragment.</li>
+<li><code>explode: &lt;column&gt;</code> does the same over a column that already holds a list.</li>
+<li>Its cell-tier cousin <a href="#split-parts-into-new-columns"><code>split</code></a> stays <strong>within</strong> the row.</li>
+</ul>
+<h3 id="aggregator-exists-but-csv-file-runs-refuse-it"><code>aggregator</code> — exists, but csv-file runs refuse it</h3>
+<p>Connector runs are chunked transactions with a fresh mapping state per chunk — the aggregator's
+cross-chunk buffer would be silently dropped at every chunk boundary. <code>lm validate</code> /
+<code>lm apply</code> refuse the manifest:</p>
+<blockquote>
+<p>aggregator is not supported on csv-file connector runs — each chunk commits separately,
+buffered rows would be silently lost at chunk boundaries</p>
+</blockquote>
+<p>Pre-aggregate in the source (a grouped export), or drop the hook.</p>
+<h2 id="cell-hooks-one-value-in-place">Cell hooks — one value, in place</h2>
+<p>Two parameter conventions:</p>
+<ul>
+<li><strong>Multi-column hooks</strong> take <code>columns: [a, b]</code>; omitting <code>columns</code> (or <code>columns: ["*"]</code>)
+  applies the hook to <strong>every column</strong> of the row.</li>
+<li><strong>Single-column hooks</strong> take <code>column: &lt;name&gt;</code> and refuse to guess.</li>
+</ul>
+<p>Cell hooks fail <strong>soft</strong>: the row is still written, nothing is dropped or dead-lettered, and
+<code>cell_errors</code> counts what a hook did not deliver as declared —
+<a href="#reference-cell-hooks">reading <code>cell_errors</code></a>.</p>
+<h3 id="clean-bom-stray-whitespace-control-characters"><code>clean</code> — BOM, stray whitespace, control characters</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">clean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">note</span><span class="p p-Indicator">],</span><span class="nt"> strip</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nt"> remove-control-chars</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nt"> normalize-unicode</span><span class="p">:</span><span class="w"> </span><span class="nv">NFC</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>﻿  hello\t</code> (a BOM, two spaces, a tab)</td>
+<td><code>hello</code></td>
+</tr>
+<tr>
+<td><code>Café</code> as <code>e</code> + combining accent</td>
+<td><code>Café</code> as one precomposed <code>é</code> (<code>NFC</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A leading BOM is <strong>always</strong> stripped; the three knobs are off by default.</li>
+<li><code>remove-control-chars</code> also removes tabs and newlines inside a value.</li>
+<li><code>normalize-unicode</code>: <code>NFC</code>, <code>NFD</code>, <code>NFKC</code> or <code>NFKD</code>. Use <code>NFC</code> when two exports spell the
+  same accent two ways and your keys stop matching.</li>
+</ul>
+<h3 id="fix-mojibake-accents-came-out-as-banadict"><code>fix-mojibake</code> — accents came out as <code>BÃ©nÃ©dict</code></h3>
+<p><strong>Mojibake</strong> is text written as UTF-8 and read back as Latin-1. This hook recovers it — and
+only when it recognizes the pattern.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">fix-mojibake</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BÃ©nÃ©dict Martin</code></td>
+<td><code>Bénédict Martin</code></td>
+</tr>
+<tr>
+<td><code>CÃ´te d'Azur</code></td>
+<td><code>Côte d'Azur</code></td>
+</tr>
+<tr>
+<td><code>Bénédict Martin</code></td>
+<td>unchanged — no mojibake pattern, a clean value is never touched</td>
+</tr>
+<tr>
+<td><code>BÃ©nÃ©dict €</code></td>
+<td><strong>unchanged</strong>, +1 <code>cell_errors</code> — declined, see below</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Different from the parser's encoding auto-detection (<a href="../csv/#parser">CSV &amp; files → Parser</a>),
+  which runs first, when the file is read. <code>fix-mojibake</code> fixes values that were <em>already</em>
+  stored garbled in the source system, not a wrong read of a clean file.</li>
+<li>A multi-line cell (a quoted postal address) is one value: garbled text on the second line is
+  repaired like the first.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">When the repair is declined — and how you find out</p>
+<p>The repair reads the garbled text back as the bytes it came from, which only works for
+characters Latin-1 could hold. A value that mixes mojibake with anything outside that range
+— Japanese, Cyrillic, Greek, <code>€</code>, an emoji — cannot be repaired without losing those
+characters, so it is <strong>not repaired at all</strong>:</p>
+<ul>
+<li>the value lands exactly as it arrived, garbled — not half-repaired, not quietly changed;</li>
+<li>the run counts one <code>cell_errors</code> for it;</li>
+<li>the fix is at the source: re-export with the encoding declared correctly. No hook can
+  recover a character the export never carried.</li>
+</ul>
+</div>
+<h3 id="decode-html-entities-amp-in-text"><code>decode-html-entities</code> — <code>&amp;amp;</code> in text</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">decode-html-entities</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">slogan</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Eau &amp;amp; Soleil</code></td>
+<td><code>Eau &amp; Soleil</code></td>
+</tr>
+<tr>
+<td><code>Coffee &amp;lt;hot&amp;gt;</code></td>
+<td><code>Coffee &lt;hot&gt;</code></td>
+</tr>
+<tr>
+<td><code>caf&amp;eacute;</code></td>
+<td><code>café</code> (the HTML4 entity set)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="replace-smart-quotes-curly-quotes-from-word-and-excel"><code>replace-smart-quotes</code> — curly quotes from Word and Excel</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">replace-smart-quotes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">slogan</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>“Eau &amp; Soleil” – depuis 1998…</code></td>
+<td><code>"Eau &amp; Soleil" - depuis 1998...</code></td>
+</tr>
+<tr>
+<td><code>l’été</code></td>
+<td><code>l'été</code></td>
+</tr>
+<tr>
+<td><code>«bonjour»</code></td>
+<td><code>"bonjour"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Also: en/em dash → <code>-</code>, ellipsis → <code>...</code>, non-breaking space → space.</p>
+<h3 id="strip-invisible-a-code-that-looks-equal-but-never-matches"><code>strip-invisible</code> — a code that "looks equal" but never matches</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">strip-invisible</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AB​CD</code> (a zero-width space inside)</td>
+<td><code>ABCD</code></td>
+</tr>
+<tr>
+<td><code>soft­hyphen</code></td>
+<td><code>softhyphen</code></td>
+</tr>
+</tbody>
+</table>
+<p>Removes every Unicode <em>format</em> character (<code>Cf</code>): zero-width space/joiner/non-joiner, BOM,
+word joiner, soft hyphen. The classic symptom: two codes that print identically and still fail
+a join.</p>
+<h3 id="remove-diacritics-ascii-only-identifiers"><code>remove-diacritics</code> — ASCII-only identifiers</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">remove-diacritics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">city</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Montréal</code></td>
+<td><code>Montreal</code></td>
+</tr>
+<tr>
+<td><code>ñoño</code></td>
+<td><code>nono</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="upper-lower-titlecase-case"><code>upper</code> / <code>lower</code> / <code>titlecase</code> — case</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">upper</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">legal_form</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lower</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">city</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">titlecase</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>hook</th>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>upper</code></td>
+<td><code>sarl</code></td>
+<td><code>SARL</code></td>
+</tr>
+<tr>
+<td><code>lower</code></td>
+<td><code>Montreal</code></td>
+<td><code>montreal</code></td>
+</tr>
+<tr>
+<td><code>titlecase</code></td>
+<td><code>DUPONT SARL</code></td>
+<td><code>Dupont Sarl</code></td>
+</tr>
+<tr>
+<td><code>titlecase</code></td>
+<td><code>MARTIN  DUPONT</code> (two spaces)</td>
+<td><code>Martin Dupont</code> — whitespace <strong>normalised</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Text cells only</strong>: a cell already holding a date, a number or binary data is left as it is,
+  so its column keeps its type.</li>
+<li>Locale-independent folding.</li>
+<li><code>titlecase</code> collapses runs of spaces, tabs and newlines to one space and drops trailing space.
+  If a column's spacing is meaningful, don't titlecase it.</li>
+</ul>
+<h3 id="truncate-hard-cut"><code>truncate</code> — hard cut</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">truncate</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> length</span><span class="p">:</span><span class="w"> </span><span class="nv">60</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a 75-character name</td>
+<td>its first 60 characters</td>
+</tr>
+<tr>
+<td>a 12-character name</td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table>
+<p>A negative <code>length</code> is refused when the run starts.</p>
+<h3 id="regex-replace-normalise-with-a-pattern"><code>regex-replace</code> — normalise with a pattern</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">regex-replace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> pattern</span><span class="p">:</span><span class="w"> </span><span class="s">"\\s+"</span><span class="p p-Indicator">,</span><span class="nt"> replacement</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="nv"> </span><span class="s">"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DUPONT   SARL</code></td>
+<td><code>DUPONT SARL</code></td>
+</tr>
+<tr>
+<td><code>DUPONT\tSARL</code></td>
+<td><code>DUPONT SARL</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>replaceAll</code> over the cell; <code>replacement</code> defaults to <code>""</code> (delete the match).</li>
+<li>In <code>replacement</code>, <code>$</code> and <code>\</code> are group references: a lone <code>$</code> or a group the pattern does
+  not have fails the run naming the hook — escape them (<code>\\$</code>).</li>
+<li>A bad pattern is refused when the run starts.</li>
+</ul>
+<h3 id="regex-extract-pull-a-piece-into-its-own-column"><code>regex-extract</code> — pull a piece into its own column</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">regex-extract</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<span class="w">      </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">".*\\b(SARL|SAS|EURL|SCI)\\b.*"</span>
+<span class="w">      </span><span class="nt">groups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> 1</span><span class="p">:</span><span class="w"> </span><span class="nv">legal_form</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>name</code></th>
+<th>→ <code>legal_form</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DUPONT SARL</code></td>
+<td><code>SARL</code></td>
+</tr>
+<tr>
+<td><code>Standard</code></td>
+<td><em>(null)</em> — no match, <strong>not</strong> counted</td>
+</tr>
+<tr>
+<td><em>(empty)</em></td>
+<td><em>(null)</em> — no cell, no extraction</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Tries a full match, then a find; each <code>groups</code> entry writes one capture group into a named
+  column (<code>0</code> is the whole match).</li>
+<li><strong>Every named column exists on every row</strong> — matched, missed, or empty — so the table's shape
+  never depends on which row arrived first. An all-null column is how you see the extraction
+  never happened.</li>
+<li>A miss is deliberately <strong>not</strong> counted in <code>cell_errors</code>: an optional field misses on every
+  row, and a count firing on a normal condition would bury the parse-hook failures that share
+  the same number.</li>
+<li>Refused when the run starts: a <code>groups</code> key that is not a number, is negative, or exceeds the
+  pattern's group count.</li>
+<li>Follow it with <a href="#default-fill-one-blank-column"><code>default</code></a> to give the misses a value.</li>
+</ul>
+<h3 id="default-fill-one-blank-column"><code>default</code> — fill one blank column</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">legal_form</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"NONE"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SARL</code></td>
+<td><code>SARL</code> — never overwrites</td>
+</tr>
+<tr>
+<td><em>(null or blank)</em></td>
+<td><code>NONE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Row-tier twin, several columns at once: <a href="#defaults-fill-blanks-in-several-columns"><code>defaults</code></a>.</p>
+<h3 id="lookup-translate-codes-with-an-inline-table"><code>lookup</code> — translate codes with an inline table</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lookup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">is_active</span><span class="p p-Indicator">,</span><span class="nt"> table</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="s">"Y"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"N"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">},</span><span class="nt"> on-missing</span><span class="p">:</span><span class="w"> </span><span class="nv">null</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th><code>on-missing: keep</code> <em>(default)</em></th>
+<th><code>null</code></th>
+<th><code>error</code></th>
+<th><code>INACTIVE</code> (any literal)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Y</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td><code>?</code></td>
+<td><em>(null)</em>, +1 <code>cell_errors</code></td>
+<td><strong>run fails</strong>: <code>lookup: no match for '?' in column 'is_active'</code></td>
+<td><code>INACTIVE</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>table</code> must be a map — a list or a scalar is refused when the run starts (it would make
+  every lookup miss in silence).</li>
+<li>Replacement values land as <strong>text</strong> (<code>true</code>, not a boolean).</li>
+</ul>
+<h3 id="parse-date-dates-are-31122019"><code>parse-date</code> — dates are <code>31/12/2019</code></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-date</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">signup_date</span><span class="p p-Indicator">,</span><span class="nt"> formats</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"dd/MM/yyyy"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"yyyy-MM-dd</span><span class="nv"> </span><span class="s">HH:mm:ss"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>31/12/2019</code></td>
+<td><code>2019-12-31</code> — a <strong>date</strong></td>
+</tr>
+<tr>
+<td><code>2004-10-18 23:42:39</code></td>
+<td><code>2004-10-18 23:42:39+00</code> — a <strong>timestamp</strong></td>
+</tr>
+<tr>
+<td><code>12/31/2019</code></td>
+<td><em>(null)</em>, +1 <code>cell_errors</code> — no format matched</td>
+</tr>
+<tr>
+<td>already a date</td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Formats are tried in order. A pattern with no <code>H</code>/<code>h</code>/<code>m</code>/<code>s</code> parses to a date; one with a
+  time component parses to a timestamp.</li>
+<li>Cheat sheet: <code>dd</code> = day, <code>MM</code> = month — capital <strong>M</strong>, lowercase <code>mm</code> means <em>minutes</em>, the
+  classic trap — <code>yyyy</code> = year. Add <code>H</code>/<code>h</code>/<code>m</code>/<code>s</code> only when the source carries a time.</li>
+</ul>
+<h3 id="parse-number-numbers-are-1-23456-or-123"><code>parse-number</code> — numbers are <code>1 234,56 €</code> or <code>(123)</code></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-number</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">balance</span><span class="p p-Indicator">,</span><span class="nt"> decimal-separator</span><span class="p">:</span><span class="w"> </span><span class="s">","</span><span class="p p-Indicator">,</span><span class="nt"> negatives-in-parens</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1 234,56 €</code></td>
+<td><code>1234.56</code></td>
+</tr>
+<tr>
+<td><code>(123)</code></td>
+<td><code>-123</code></td>
+</tr>
+<tr>
+<td><code>$1,234.50</code> with <code>decimal-separator: "."</code></td>
+<td><code>1234.50</code></td>
+</tr>
+<tr>
+<td><code>n/a</code></td>
+<td><em>(null)</em>, +1 <code>cell_errors</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Strips currency symbols (<code>$€£¥</code>) and spaces, then resolves which of <code>.</code>/<code>,</code> is the decimal
+  separator (<code>auto</code> by default). The result is a decimal.</li>
+</ul>
+<h3 id="parse-email-trim-lowercase-validate"><code>parse-email</code> — trim, lowercase, validate</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-email</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">contact_email</span><span class="p p-Indicator">,</span><span class="nt"> lower</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Contact@Example.COM</code></td>
+<td><code>contact@example.com</code></td>
+</tr>
+<tr>
+<td><code>contact at example</code></td>
+<td><em>(null)</em>, +1 <code>cell_errors</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="parse-phone-one-format-for-every-phone"><code>parse-phone</code> — one format for every phone</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-phone</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">phone</span><span class="p p-Indicator">,</span><span class="nt"> default-region</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">     </span><span class="c1"># default-region: US by default</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>06 12 34 56 78</code></td>
+<td><code>+33612345678</code></td>
+</tr>
+<tr>
+<td><code>+1 415 555 2671</code></td>
+<td><code>+14155552671</code> — a full international number ignores the region</td>
+</tr>
+<tr>
+<td><code>abc</code></td>
+<td><em>(null)</em>, +1 <code>cell_errors</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>default-region</code> is the country assumed for a number with no <code>+</code> prefix — set it to the
+source's country or every national number lands wrong.</p>
+<h3 id="mask-a-column-holds-cardpii-data"><code>mask</code> — a column holds card/PII data</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mask</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">card_number</span><span class="p p-Indicator">,</span><span class="nt"> keep-last</span><span class="p">:</span><span class="w"> </span><span class="nv">4</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">       </span><span class="c1"># keep-first: 0, mask-char: "*"</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>4556123498761234</code></td>
+<td><code>************1234</code></td>
+</tr>
+<tr>
+<td><code>contact@example.com</code> with <code>keep-first: 2, keep-last: 4</code></td>
+<td><code>co*************.com</code></td>
+</tr>
+<tr>
+<td><code>1234</code></td>
+<td><code>1234</code> — <strong>unmasked</strong>: not longer than <code>keep-first + keep-last</code></td>
+</tr>
+</tbody>
+</table>
+<p>Counts raw characters — spaces and separators in <code>4556 1234 9876 1234</code> count like digits.</p>
+<div class="admonition warning">
+<p class="admonition-title">Two things to know before trusting <code>mask</code> for PII</p>
+<ul>
+<li><strong>A value not longer than <code>keep-first + keep-last</code> passes through unmasked.</strong> If a column
+  must <strong>never</strong> land readable regardless of length, add a <code>regex-replace</code> whose pattern
+  matches the whole cell, as a hard backstop.</li>
+<li><strong>A row dead-lettered keeps its raw, unmasked value.</strong> <code>mask</code> is a cell hook — it only
+  touches rows that reach the cell tier. A row the reader rejects as malformed goes to the
+  DLQ <strong>before</strong> the mapping runs; a row <code>validate-row</code> drops is snapshotted <strong>before</strong> the
+  cell tier. Either way, what <a href="../../cli/lm-reference/"><code>lm dlq list</code></a> stores is unmasked.</li>
+</ul>
+</div>
+<h3 id="split-parts-into-new-columns"><code>split</code> — parts into new columns</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">tags</span><span class="p p-Indicator">,</span><span class="nt"> by</span><span class="p">:</span><span class="w"> </span><span class="s">";"</span><span class="p p-Indicator">,</span><span class="nt"> into</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">tag1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag3</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>tags</code></th>
+<th><code>tag1</code></th>
+<th><code>tag2</code></th>
+<th><code>tag3</code></th>
+<th><code>cell_errors</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>retail;online;b2b</code></td>
+<td><code>retail</code></td>
+<td><code>online</code></td>
+<td><code>b2b</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>retail;online</code></td>
+<td><code>retail</code></td>
+<td><code>online</code></td>
+<td><em>(null)</em></td>
+<td><strong>+1</strong> — fewer parts than declared</td>
+</tr>
+<tr>
+<td><code>a;b;c;d</code></td>
+<td><code>a</code></td>
+<td><code>b</code></td>
+<td><code>c</code></td>
+<td><strong>+1</strong> — <code>d</code> has nowhere to go</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Stays <strong>within</strong> the row; the original cell is untouched. The row-tier cousin
+  <a href="#split-row-one-row-per-value-of-abc"><code>split-row</code></a> duplicates rows instead.</li>
+<li>Parts are trimmed. Every name in <code>into</code> gets its column on every row (<code>null</code> when unfilled).</li>
+<li>A <strong>trailing separator produces a part</strong>: <code>A,B,,</code> split on <code>,</code> is four values.</li>
+<li><code>into-array: true</code> replaces the cell with an array instead. The column is typed <code>jsonb</code> when
+  the chunk that creates it carries at least one array — then <code>WHERE tags @&gt; '["A"]'</code> works and
+  <code>USING GIN (tags)</code> indexes it. Null-only in the creating chunk → typed <code>text</code>, never widened
+  afterwards, so later arrays land as JSON text.</li>
+</ul>
+<h3 id="to-uuid-an-id-column-holds-junk-like-na-or-0"><code>to-uuid</code> — an id column holds junk like <code>N/A</code> or <code>0</code></h3>
+<p><code>to-uuid</code> answers <strong>two separate questions</strong> with <strong>two separate knobs</strong> — mixing them up is
+how a made-up identifier ends up looking exactly like a real one.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to-uuid</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customer_id</span>
+<span class="w">      </span><span class="nt">generate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># an EMPTY cell gets a fresh id</span>
+<span class="w">      </span><span class="nt">on-invalid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keep</span><span class="w">        </span><span class="c1"># a cell holding "N/A" is left alone for you to look at</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>the cell holds</th>
+<th><code>generate</code></th>
+<th><code>on-invalid</code></th>
+<th>result</th>
+<th><code>cell_errors</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a valid UUID</td>
+<td>anything</td>
+<td>anything</td>
+<td>unchanged</td>
+<td>—</td>
+</tr>
+<tr>
+<td>nothing (empty)</td>
+<td><code>false</code> <em>(default)</em></td>
+<td>anything</td>
+<td>stays empty</td>
+<td>—</td>
+</tr>
+<tr>
+<td>nothing (empty)</td>
+<td><code>true</code></td>
+<td>anything</td>
+<td>a fresh id</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>N/A</code></td>
+<td>anything</td>
+<td><code>null</code> <em>(default)</em></td>
+<td>emptied</td>
+<td><strong>+1</strong></td>
+</tr>
+<tr>
+<td><code>N/A</code></td>
+<td>anything</td>
+<td><code>generate</code></td>
+<td>a fresh id <strong>in place of</strong> <code>N/A</code></td>
+<td><strong>+1</strong></td>
+</tr>
+<tr>
+<td><code>N/A</code></td>
+<td>anything</td>
+<td><code>keep</code></td>
+<td><code>N/A</code>, untouched</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>A column that does not exist yet counts as empty — <code>generate: true</code> on <code>row_uuid</code> mints one
+per row.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>on-invalid: generate</code> invents an identifier — use it only for a surrogate key</p>
+<p>The minted id replaces a value your source really sent. It joins to <strong>nothing</strong> in any
+other system, and downstream nobody can tell it apart from an id that genuinely arrived.
+Fine when you are deliberately building a surrogate key for rows whose real ids are
+unusable; a trap in every other case — which is why it is not the default and why each
+minted id increments <code>cell_errors</code>.</p>
+<p>Reaching for it because a <em>few</em> rows are dirty? Use <code>keep</code> first, run once, and look at what
+those rows actually contain — <code>on-invalid</code> applies to the whole column.</p>
+</div>
+<h3 id="kotlin-the-escape-hatch"><code>kotlin</code> — the escape hatch</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cell</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kotlin</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath:hooks/samples/normalize-date.kts</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> defaultCountry</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">    </span><span class="c1"># optional; the script reads it as `context`</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>signup_date</code> in</th>
+<th>out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>31/12/2019</code></td>
+<td><code>2019-12-31</code></td>
+</tr>
+<tr>
+<td><code>2019-12-31</code></td>
+<td>unchanged — the sample script only rewrites <code>DD/MM/YYYY</code></td>
+</tr>
+</tbody>
+</table>
+<p>Details in <a href="#kotlin-escape-hatch">Kotlin escape hatch</a> below.</p>
+<h2 id="one-manifest-every-transformer">One manifest, every transformer</h2>
+<p>Everything above, in one real manifest that ran tonight against an S3 bucket: a headerless,
+tab-separated business-partner export (four columns), with every other input <strong>minted by
+<code>enrich-context</code></strong> so each hook has something to bite. It declares every transformer the
+csv-file connector offers except <code>aggregator</code> (refused on chunked runs).</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 60-s3-every-transformer.yaml — one real manifest that runs EVERY transformer the csv-file</span>
+<span class="c1"># connector offers (all but `aggregator`, which the validator refuses on chunked csv runs).</span>
+<span class="c1">#   lm validate -f docs/connectors/csv/60-s3-every-transformer.yaml</span>
+<span class="c1">#   lm apply    -f docs/connectors/csv/60-s3-every-transformer.yaml</span>
+<span class="c1">#   lm connector run s3-c-bpartner-clean</span>
+<span class="c1">#</span>
+<span class="c1"># The source is a headerless, tab-separated ERP export with four columns. Every other column is</span>
+<span class="c1"># minted by enrich-context so that each hook has something to bite: a dirty e-mail, a phone,</span>
+<span class="c1"># a "1 234,56 €" amount, a "31/12/2019" date for the Kotlin script, tags to split, a channel to</span>
+<span class="c1"># fan out, mojibake, HTML entities, smart quotes, an invisible character. Reads billing/ from the</span>
+<span class="c1"># bucket and leaves the files in place. Walk-through: docs/connectors/transformers.md.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-c-bpartner-clean</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-file</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">s3-scenario</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transport</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">    </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik-exports</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">billing/</span>
+<span class="w">    </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">    </span><span class="nt">suffix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.csv</span>
+<span class="w">    </span><span class="nt">access_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_ACCESS_KEY_ID</span>
+<span class="w">    </span><span class="nt">secret_key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS_SECRET_ACCESS_KEY</span>
+
+<span class="w">  </span><span class="nt">parser</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">delimiter</span><span class="p">:</span><span class="w"> </span><span class="s">"\t"</span>
+<span class="w">    </span><span class="nt">has_header</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">created</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">isactive</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
+
+<span class="w">  </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># ── tier 1: dataset — the whole chunk, once ─────────────────────────────────────────</span>
+<span class="w">    </span><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">require-headers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">],</span><span class="nt"> any-of</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">created</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">isactive</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">skip-empty-rows</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">filter-where</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">,</span><span class="nt"> regex</span><span class="p">:</span><span class="w"> </span><span class="s">"[0-9]+"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sort-by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">enrich-context</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">ingested_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">erp-export-s3</span>
+<span class="w">          </span><span class="nt">loaded_at</span><span class="p">:</span><span class="w"> </span><span class="s">"${now}"</span>
+<span class="w">          </span><span class="nt">contact_email</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="nv">  </span><span class="s">Contact@Example.COM</span><span class="nv"> </span><span class="s">"</span>
+<span class="w">          </span><span class="nt">phone_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"06</span><span class="nv"> </span><span class="s">12</span><span class="nv"> </span><span class="s">34</span><span class="nv"> </span><span class="s">56</span><span class="nv"> </span><span class="s">78"</span>
+<span class="w">          </span><span class="nt">balance_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"1</span><span class="nv"> </span><span class="s">234,56</span><span class="nv"> </span><span class="s">€"</span>
+<span class="w">          </span><span class="nt">signup_date</span><span class="p">:</span><span class="w"> </span><span class="s">"31/12/2019"</span>
+<span class="w">          </span><span class="nt">tags_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"retail;online;b2b"</span>
+<span class="w">          </span><span class="nt">channel_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"web;store"</span>
+<span class="w">          </span><span class="nt">region_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"CÃ´te</span><span class="nv"> </span><span class="s">d'Azur"</span>
+<span class="w">          </span><span class="nt">slogan_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"“Eau</span><span class="nv"> </span><span class="s">&amp;amp;</span><span class="nv"> </span><span class="s">Soleil”</span><span class="nv"> </span><span class="s">–</span><span class="nv"> </span><span class="s">depuis</span><span class="nv"> </span><span class="s">1998…"</span>
+<span class="w">          </span><span class="nt">city_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"Montréal"</span>
+<span class="w">          </span><span class="nt">code_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"AB​CD"</span>
+<span class="w">          </span><span class="nt">note_raw</span><span class="p">:</span><span class="w"> </span><span class="s">"﻿</span><span class="nv">  </span><span class="s">hello\t"</span>
+<span class="w">          </span><span class="nt">junk</span><span class="p">:</span><span class="w"> </span><span class="s">"dropped</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">map-columns"</span>
+<span class="w">    </span><span class="c1"># ── tier 2: row — one record, may emit 0..N rows ────────────────────────────────────</span>
+<span class="w">    </span><span class="nt">row</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">map-columns</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">rename</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> created</span><span class="p">:</span><span class="w"> </span><span class="nv">created_at</span><span class="p p-Indicator">,</span><span class="nt"> isactive</span><span class="p">:</span><span class="w"> </span><span class="nv">is_active</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="nt">drop</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">junk</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">coalesce</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">display_name</span><span class="p p-Indicator">,</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">trade_name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># trade_name never exists → raw name, BEFORE titlecase</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">defaults</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> is_active</span><span class="p">:</span><span class="w"> </span><span class="s">"Y"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">validate-row</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> required</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">c_bpartner_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">             </span><span class="c1"># must sit BEFORE split-row</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">split-row</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> by</span><span class="p">:</span><span class="w"> </span><span class="nv">channel_raw</span><span class="p p-Indicator">,</span><span class="nt"> sep</span><span class="p">:</span><span class="w"> </span><span class="s">";"</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">                       </span><span class="c1"># one row per channel: ×2</span>
+<span class="w">    </span><span class="c1"># ── tier 3: cell — one value, in listed order ───────────────────────────────────────</span>
+<span class="w">    </span><span class="nt">cell</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">clean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">note_raw</span><span class="p p-Indicator">],</span><span class="nt"> strip</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nt"> remove-control-chars</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="nt"> normalize-unicode</span><span class="p">:</span><span class="w"> </span><span class="nv">NFC</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">fix-mojibake</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">region_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">decode-html-entities</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">slogan_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">replace-smart-quotes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">slogan_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">strip-invisible</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">remove-diacritics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">city_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lower</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">city_raw</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">regex-replace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> pattern</span><span class="p">:</span><span class="w"> </span><span class="s">"\\s+"</span><span class="p p-Indicator">,</span><span class="nt"> replacement</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="nv"> </span><span class="s">"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">regex-extract</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<span class="w">          </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">".*\\b(SARL|SASU|SAS|SA|EURL|SCI|SNC|SCP|MAIRIE|COMMUNE)\\b.*"</span>
+<span class="w">          </span><span class="nt">groups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> 1</span><span class="p">:</span><span class="w"> </span><span class="nv">legal_form</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">legal_form</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"NONE"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">upper</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">legal_form</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">titlecase</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">name</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">truncate</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> length</span><span class="p">:</span><span class="w"> </span><span class="nv">60</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-date</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">created_at</span><span class="p p-Indicator">,</span><span class="nt"> formats</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"yyyy-MM-dd</span><span class="nv"> </span><span class="s">HH:mm:ss"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lookup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">is_active</span><span class="p p-Indicator">,</span><span class="nt"> table</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="s">"Y"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"N"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">},</span><span class="nt"> on-missing</span><span class="p">:</span><span class="w"> </span><span class="nv">null</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-email</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">contact_email</span><span class="p p-Indicator">,</span><span class="nt"> lower</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">regex-extract</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">contact_email</span><span class="p p-Indicator">,</span><span class="nt"> pattern</span><span class="p">:</span><span class="w"> </span><span class="s">".*@(.+)"</span><span class="p p-Indicator">,</span><span class="nt"> groups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> 1</span><span class="p">:</span><span class="w"> </span><span class="nv">email_domain</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mask</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">contact_email</span><span class="p p-Indicator">,</span><span class="nt"> keep-first</span><span class="p">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nt"> keep-last</span><span class="p">:</span><span class="w"> </span><span class="nv">4</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-phone</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">phone_raw</span><span class="p p-Indicator">,</span><span class="nt"> default-region</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-number</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">balance_raw</span><span class="p p-Indicator">,</span><span class="nt"> decimal-separator</span><span class="p">:</span><span class="w"> </span><span class="s">","</span><span class="p p-Indicator">,</span><span class="nt"> negatives-in-parens</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">tags_raw</span><span class="p p-Indicator">,</span><span class="nt"> by</span><span class="p">:</span><span class="w"> </span><span class="s">";"</span><span class="p p-Indicator">,</span><span class="nt"> into</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">tag1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag3</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to-uuid</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">row_uuid</span><span class="p p-Indicator">,</span><span class="nt"> generate</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">                 </span><span class="c1"># column absent → empty → minted</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kotlin</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath:hooks/samples/normalize-date.kts</span><span class="w">          </span><span class="c1"># "31/12/2019" → "2019-12-31"</span>
+<span class="w">          </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> defaultCountry</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-date</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">signup_date</span><span class="p p-Indicator">,</span><span class="nt"> formats</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"yyyy-MM-dd"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># after the script: a real date</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/csv/60-s3-every-transformer.yaml
+✓ docs/connectors/csv/60-s3-every-transformer.yaml — valid
+</code></pre></div>
+<h3 id="one-source-row-column-by-column">One source row, column by column</h3>
+<p>One line of the file (tab-separated, no header). The export is a customer's, so the partner's
+name is changed here; every other value is traced as it ran:</p>
+<div class="highlight"><pre><span></span><code>1000117 "DUPONT SARL"   "2004-10-18 00:00:00"   "N"
+</code></pre></div>
+<p>What lands in <code>connector.t_s3_c_bpartner_clean</code> — <strong>twice</strong>, because <code>split-row</code> fans
+<code>web;store</code> into two rows — as <code>SELECT</code> shows it:</p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>arrives as</th>
+<th>lands as</th>
+<th>done by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c_bpartner_id</code></td>
+<td><code>1000117</code></td>
+<td><code>1000117</code></td>
+<td>passes <code>filter-where</code> (<code>[0-9]+</code>), ordered by <code>sort-by</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>DUPONT SARL</code></td>
+<td><code>Dupont Sarl</code></td>
+<td><code>clean</code> → <code>fix-mojibake</code> → <code>regex-replace</code> → <code>titlecase</code> → <code>truncate</code></td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>—</td>
+<td><code>DUPONT SARL</code></td>
+<td><code>coalesce</code> copied <code>name</code> in the row tier, <strong>before</strong> <code>titlecase</code></td>
+</tr>
+<tr>
+<td><code>legal_form</code></td>
+<td>—</td>
+<td><code>SARL</code></td>
+<td><code>regex-extract</code> on <code>name</code>, then <code>upper</code>; a name with no legal form gets <code>NONE</code> from <code>default</code></td>
+</tr>
+<tr>
+<td><code>created</code> → <code>created_at</code></td>
+<td><code>2004-10-18 00:00:00</code></td>
+<td><code>2004-10-18 00:00:00+00</code> (timestamp)</td>
+<td><code>map-columns</code> rename, <code>parse-date</code></td>
+</tr>
+<tr>
+<td><code>isactive</code> → <code>is_active</code></td>
+<td><code>N</code></td>
+<td><code>false</code></td>
+<td><code>map-columns</code> rename, <code>defaults</code> (<code>Y</code> when blank), <code>lookup</code></td>
+</tr>
+<tr>
+<td><code>channel_raw</code></td>
+<td><code>web;store</code></td>
+<td><code>web</code> on one row, <code>store</code> on the other</td>
+<td><code>split-row</code></td>
+</tr>
+<tr>
+<td><code>contact_email</code></td>
+<td><code>Contact@Example.COM</code></td>
+<td><code>co*************.com</code></td>
+<td><code>parse-email</code> (trim + lower), then <code>mask</code> 2/4</td>
+</tr>
+<tr>
+<td><code>email_domain</code></td>
+<td>—</td>
+<td><code>example.com</code></td>
+<td><code>regex-extract</code> — placed <strong>before</strong> <code>mask</code>, or it would see stars</td>
+</tr>
+<tr>
+<td><code>phone_raw</code></td>
+<td><code>06 12 34 56 78</code></td>
+<td><code>+33612345678</code></td>
+<td><code>parse-phone</code>, <code>default-region: FR</code></td>
+</tr>
+<tr>
+<td><code>balance_raw</code></td>
+<td><code>1 234,56 €</code></td>
+<td><code>1234.5600</code></td>
+<td><code>parse-number</code></td>
+</tr>
+<tr>
+<td><code>signup_date</code></td>
+<td><code>31/12/2019</code></td>
+<td><code>2019-12-31</code> (date)</td>
+<td><code>kotlin</code> script, then <code>parse-date</code></td>
+</tr>
+<tr>
+<td><code>tags_raw</code></td>
+<td><code>retail;online;b2b</code></td>
+<td>unchanged, plus <code>tag1</code>/<code>tag2</code>/<code>tag3</code> = <code>retail</code>/<code>online</code>/<code>b2b</code></td>
+<td><code>split</code></td>
+</tr>
+<tr>
+<td><code>region_raw</code></td>
+<td><code>CÃ´te d'Azur</code></td>
+<td><code>Côte d'Azur</code></td>
+<td><code>fix-mojibake</code></td>
+</tr>
+<tr>
+<td><code>slogan_raw</code></td>
+<td><code>“Eau &amp;amp; Soleil” – depuis 1998…</code></td>
+<td><code>"Eau &amp; Soleil" - depuis 1998...</code></td>
+<td><code>decode-html-entities</code>, <code>replace-smart-quotes</code></td>
+</tr>
+<tr>
+<td><code>city_raw</code></td>
+<td><code>Montréal</code></td>
+<td><code>montreal</code></td>
+<td><code>remove-diacritics</code>, <code>lower</code></td>
+</tr>
+<tr>
+<td><code>code_raw</code></td>
+<td><code>AB​CD</code> (zero-width space inside)</td>
+<td><code>ABCD</code></td>
+<td><code>strip-invisible</code></td>
+</tr>
+<tr>
+<td><code>note_raw</code></td>
+<td>a BOM, <code>hello</code>, a tab</td>
+<td><code>hello</code></td>
+<td><code>clean</code></td>
+</tr>
+<tr>
+<td><code>row_uuid</code></td>
+<td>—</td>
+<td><code>c91c9560-6f8e-4572-89be-3a1397586a21</code> — a fresh one per row</td>
+<td><code>to-uuid</code>, <code>generate: true</code></td>
+</tr>
+<tr>
+<td><code>ingested_from</code>, <code>loaded_at</code></td>
+<td>—</td>
+<td><code>erp-export-s3</code>, <code>2026-09-06T18:10:17.899174761Z</code></td>
+<td><code>enrich-context</code></td>
+</tr>
+<tr>
+<td><code>junk</code></td>
+<td><code>dropped by map-columns</code></td>
+<td><em>(no column)</em></td>
+<td><code>map-columns</code> drop</td>
+</tr>
+</tbody>
+</table>
+<p>Three placements to notice — each is an ordering decision, not a coincidence:</p>
+<ul>
+<li><code>validate-row</code> sits <strong>before</strong> <code>split-row</code> (the validator refuses the other order).</li>
+<li><code>regex-extract</code> on <code>contact_email</code> sits <strong>before</strong> <code>mask</code> — after it, the domain is stars.</li>
+<li><code>default: NONE</code> sits <strong>after</strong> <code>regex-extract</code> — a miss leaves <code>legal_form</code> null, and the
+  default is what turns that null into a value.</li>
+</ul>
+<h3 id="the-run-as-lm-shows-it">The run, as <code>lm</code> shows it</h3>
+<div class="highlight"><pre><span></span><code>$ lm run get 53ec702e
+ID        CONNECTOR            ENDPOINT  STATUS     IN     OUT    SKIPPED  DEAD-LETTERS  STARTED           ENDED
+53ec702e  s3-c-bpartner-clean  default   Completed  19019  19014  5        5             2026-09-06 20:09  2026-09-06 20:10
+⚠ 5 rows quarantined — see: lm dlq list --run 53ec702e-4c92-4eb6-877d-f66f5ea383f8
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm dlq list --run 53ec702e-4c92-4eb6-877d-f66f5ea383f8
+ID        CONNECTOR            RUN       REASON           ATTEMPTS  MESSAGE
+c47ecf87  s3-c-bpartner-clean  53ec702e  MalformedSource  1         billing/C_BPartner_Format_malformed.csv:10 — java.io.IOExc…
+8870766c  s3-c-bpartner-clean  53ec702e  MalformedSource  1         billing/C_BPartner_Format_malformed.csv:7 — Index for head…
+9c3d0c40  s3-c-bpartner-clean  53ec702e  MalformedSource  1         billing/C_BPartner_Format_malformed.csv:5 — Record has 5 v…
+dee41893  s3-c-bpartner-clean  53ec702e  MalformedSource  1         billing/C_BPartner_Format_malformed.csv:4 — Index for head…
+50548d10  s3-c-bpartner-clean  53ec702e  MalformedSource  1         billing/C_BPartner_Format_malformed.csv:2 — Record has 5 v…
+</code></pre></div>
+<p>How to read it:</p>
+<ul>
+<li><strong><code>IN 19019</code></strong> — every record the reader produced from the two files under <code>billing/</code>: the
+  export, and a small malformed one dropped beside it on purpose.</li>
+<li><strong><code>SKIPPED 5</code> = <code>DEAD-LETTERS 5</code></strong> — five malformed records (a fifth column, a missing one,
+  an unclosed quote). The <strong>reader</strong> rejected them, so they never reached the mapping: reason
+  <code>MalformedSource</code>, stored raw. Not one hook in the manifest dropped a row.</li>
+<li><strong><code>OUT 19014</code></strong> — the source rows that landed. The table holds <strong>38 028</strong> rows: <code>split-row</code>
+  doubled each one, and the run counts source rows, so <code>IN = OUT + SKIPPED</code> still holds.</li>
+<li><strong>No <code>cell_errors</code> alert</strong> — every parse hook read every value. The line
+  <code>⚠ N cell(s) a hook did not deliver as declared</code> appears only when the count is above zero.</li>
+</ul>
+<h2 id="reference-cell-hooks">Reference — cell hooks</h2>
+<p><code>cell_errors</code> counts the cells a hook did not deliver as declared. A cell reaches that count in
+one of <strong>four shapes</strong>:</p>
+<ul>
+<li><strong>emptied</strong> — a hook could not read the value, so the cell was written <code>null</code>: <code>parse-date</code>,
+  <code>parse-number</code>, <code>parse-email</code>, <code>parse-phone</code>, <code>lookup</code> with <code>on-missing: null</code>, <code>to-uuid</code> in
+  its default <code>on-invalid: null</code>.</li>
+<li><strong>left as it arrived</strong> — <code>fix-mojibake</code> <strong>declined</strong> (the repair would have lost more than it
+  fixed); <code>split</code> did split, but the value had more or fewer parts than <code>into</code> declares.</li>
+<li><strong>replaced</strong> — the cell holds a value your source never sent: only <code>to-uuid</code> with
+  <code>on-invalid: generate</code>, and only because you asked for it.</li>
+<li><strong>overwritten</strong> — <code>map-columns</code> renamed a column onto a name the row already used. The only
+  shape produced outside the <code>cell:</code> tier.</li>
+</ul>
+<p>One per cell, readable once the run ends:</p>
+<ul>
+<li><code>lm run get &lt;id&gt;</code> prints a stderr alert — <code>⚠ N cell(s) a hook did not deliver as declared —
+  the rows were still written</code> — only when the count is above zero. The alert does not say
+  which shape: look at which hooks the mapping declares.</li>
+<li><code>lm run get &lt;id&gt; -o json</code> always carries <code>cellErrors</code> (0 on a clean run, or on a hub older
+  than this counter); <code>-o yaml</code> carries it as <code>cellerrors</code> (all lowercase, like
+  <code>recordsskipped</code>).</li>
+<li>The TUI's run describe panel (select a run under <code>:runs</code>, press <code>d</code>) shows a <code>cell_errors:</code>
+  line right after <code>records_skipped:</code>.</li>
+<li>It counts <strong>cells</strong>, not rows, so it is deliberately absent from the <code>lm run</code> table and the
+  TUI's <code>RECORDS in/out/skip</code> cell — those complete <code>records_in = records_out +
+  records_skipped</code>, and a cell count has nothing to add to that arithmetic.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Params (default)</th>
+<th>One line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clean</code></td>
+<td><code>columns</code>; <code>strip</code> (false); <code>remove-control-chars</code> (false); <code>normalize-unicode</code> (off; <code>NFC</code>/<code>NFD</code>/<code>NFKC</code>/<code>NFKD</code>)</td>
+<td>always strips a leading BOM; then optional trim, control-char removal, Unicode normalization</td>
+</tr>
+<tr>
+<td><code>fix-mojibake</code></td>
+<td><code>columns</code></td>
+<td><code>BÃ©nÃ©dict</code> → <code>Bénédict</code>; declines (+1 <code>cell_errors</code>, value untouched) when a non-Latin-1 character would be lost</td>
+</tr>
+<tr>
+<td><code>decode-html-entities</code></td>
+<td><code>columns</code></td>
+<td><code>&amp;amp;</code> → <code>&amp;</code> (HTML4 entity set)</td>
+</tr>
+<tr>
+<td><code>replace-smart-quotes</code></td>
+<td><code>columns</code></td>
+<td>curly quotes/guillemets → ASCII quotes, en/em dash → <code>-</code>, ellipsis → <code>...</code>, NBSP → space</td>
+</tr>
+<tr>
+<td><code>strip-invisible</code></td>
+<td><code>columns</code></td>
+<td>removes every Unicode <code>Cf</code> character (ZWSP, ZWJ, BOM, soft hyphen…)</td>
+</tr>
+<tr>
+<td><code>remove-diacritics</code></td>
+<td><code>columns</code></td>
+<td><code>Café</code> → <code>Cafe</code></td>
+</tr>
+<tr>
+<td><code>upper</code> / <code>lower</code></td>
+<td><code>columns</code></td>
+<td>case, text cells only, locale-independent</td>
+</tr>
+<tr>
+<td><code>titlecase</code></td>
+<td><code>columns</code></td>
+<td><code>DUPONT SARL</code> → <code>Dupont Sarl</code>; text cells only; <strong>normalises whitespace</strong></td>
+</tr>
+<tr>
+<td><code>truncate</code></td>
+<td><code>column</code>; <code>length</code> (unlimited)</td>
+<td>hard cut at <code>length</code> characters; negative refused</td>
+</tr>
+<tr>
+<td><code>regex-replace</code></td>
+<td><code>column</code>; <code>pattern</code>; <code>replacement</code> (<code>""</code>)</td>
+<td><code>replaceAll</code> over the cell; <code>$</code>/<code>\</code> in <code>replacement</code> are group references</td>
+</tr>
+<tr>
+<td><code>regex-extract</code></td>
+<td><code>column</code>; <code>pattern</code>; <code>groups</code> (map group-index → column)</td>
+<td>capture groups into named columns; a miss writes <code>null</code>, <strong>not</strong> counted; bad <code>groups</code> keys refused at start</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td><code>column</code>; <code>value</code></td>
+<td>fills a null or blank cell; never overwrites</td>
+</tr>
+<tr>
+<td><code>lookup</code></td>
+<td><code>column</code>; <code>table</code> (inline map); <code>on-missing</code> (<code>keep</code>; or <code>null</code> / <code>error</code> / any literal)</td>
+<td>replaces via the map; on a miss: keep, null (+1), fail the run, or the literal</td>
+</tr>
+<tr>
+<td><code>parse-date</code></td>
+<td><code>column</code>; <code>formats</code> (list of Java <code>DateTimeFormatter</code> patterns)</td>
+<td>first matching format wins; <code>H/h/m/s</code> → timestamp, else date; no match → <code>null</code> +1</td>
+</tr>
+<tr>
+<td><code>parse-number</code></td>
+<td><code>column</code>; <code>decimal-separator</code> (<code>auto</code>; or <code>","</code>/<code>"."</code>); <code>negatives-in-parens</code> (false)</td>
+<td>strips <code>$€£¥</code> and spaces, <code>(123)</code> → <code>-123</code>; decimal out; failure → <code>null</code> +1</td>
+</tr>
+<tr>
+<td><code>parse-email</code></td>
+<td><code>column</code>; <code>lower</code> (false)</td>
+<td>trim, optional lowercase, validate; invalid → <code>null</code> +1</td>
+</tr>
+<tr>
+<td><code>parse-phone</code></td>
+<td><code>column</code>; <code>default-region</code> (<code>US</code>)</td>
+<td>E.164 (<code>+33612345678</code>); failure → <code>null</code> +1</td>
+</tr>
+<tr>
+<td><code>mask</code></td>
+<td><code>column</code>; <code>keep-first</code> (0); <code>keep-last</code> (0); <code>mask-char</code> (<code>*</code>)</td>
+<td>masks the middle; a value not longer than <code>keep-first + keep-last</code> is left untouched</td>
+</tr>
+<tr>
+<td><code>split</code></td>
+<td><code>column</code>; <code>by</code> (<code>,</code>); <code>into</code> (list) or <code>into-array</code> (false)</td>
+<td>parts into named columns (or an array); part-count mismatch → +1</td>
+</tr>
+<tr>
+<td><code>to-uuid</code></td>
+<td><code>column</code>; <code>generate</code> (false); <code>on-invalid</code> (<code>null</code>)</td>
+<td><code>generate</code> fills an <strong>empty</strong> cell; <code>on-invalid</code> decides a non-UUID — <a href="#to-uuid-an-id-column-holds-junk-like-na-or-0">every case</a></td>
+</tr>
+<tr>
+<td><code>kotlin</code></td>
+<td><code>script</code> (required, <code>classpath:</code> only); <code>context</code> (map)</td>
+<td>the escape hatch — <a href="#kotlin-escape-hatch">below</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference-row-hooks">Reference — row hooks</h2>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Params (default)</th>
+<th>One line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map-columns</code></td>
+<td><code>rename</code> (map old → new); <code>drop</code> (list)</td>
+<td>renames, then drops</td>
+</tr>
+<tr>
+<td><code>coalesce</code></td>
+<td><code>column</code>; <code>from</code> (list of source columns)</td>
+<td>when the target is null/blank, the first non-blank source value</td>
+</tr>
+<tr>
+<td><code>defaults</code></td>
+<td>a map <code>column: value</code></td>
+<td>fills every listed column that is null or blank</td>
+</tr>
+<tr>
+<td><code>validate-row</code></td>
+<td><code>required</code> (list of columns)</td>
+<td>drops the row: <code>records_skipped</code> + DLQ (<code>ValidationFailed</code>, raw payload); refused after <code>split-row</code></td>
+</tr>
+<tr>
+<td><code>split-row</code></td>
+<td><code>by</code> (column) + <code>sep</code> (<code>,</code>) — or <code>explode</code> (column holding a list)</td>
+<td>one row per part, the other columns copied</td>
+</tr>
+<tr>
+<td><code>aggregator</code></td>
+<td><code>emit-on-change</code>; <code>keep-first</code>; <code>merge</code></td>
+<td>groups consecutive rows — <strong>refused on csv-file runs</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference-dataset-hooks">Reference — dataset hooks</h2>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Params (default)</th>
+<th>One line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>require-headers</code></td>
+<td><code>columns</code> (all must exist); <code>any-of</code> (at least one)</td>
+<td>fails the run: <code>required header missing: &lt;col&gt;</code> / <code>none of required headers found: [...]</code></td>
+</tr>
+<tr>
+<td><code>skip-empty-rows</code></td>
+<td>—</td>
+<td>drops all-blank rows; <code>records_skipped</code>, <code>PolicyExcluded("skip-empty-rows")</code>, no DLQ</td>
+</tr>
+<tr>
+<td><code>filter-where</code></td>
+<td><code>column</code>; <code>equals</code>; <code>in</code> (list); <code>regex</code> (full match)</td>
+<td>keeps rows matching <strong>every</strong> criterion; null compares as <code>""</code>; drops → <code>records_skipped</code>, <code>PolicyExcluded("filter-where")</code>, no DLQ</td>
+</tr>
+<tr>
+<td><code>sort-by</code></td>
+<td><code>columns</code> (list); <code>max-rows</code> (100000)</td>
+<td>lexicographic sort within the chunk, nulls first; over the cap the run refuses</td>
+</tr>
+<tr>
+<td><code>enrich-context</code></td>
+<td>a map <code>column: value</code>; <code>${now}</code> = the ingestion instant</td>
+<td>adds constant columns; existing values are not overwritten</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kotlin-escape-hatch">Kotlin escape hatch</h2>
+<p>When no built-in fits, a <code>kotlin</code> cell hook runs a <code>.kts</code> script over the whole row:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cell</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kotlin</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath:hooks/samples/normalize-date.kts</span>
+<span class="w">        </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> defaultCountry</span><span class="p">:</span><span class="w"> </span><span class="nv">FR</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">    </span><span class="c1"># optional; the script reads it as `context`</span>
+</code></pre></div>
+<p>The script that ships with the platform, the one the full example runs:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// normalize-date.kts — a cell hook: rewrite legacy "DD/MM/YYYY" into ISO "YYYY-MM-DD".</span>
+<span class="c1">// KotlinScriptHost injects 'bindings' with a mutable "cells" map (the current row's columns).</span>
+<span class="nd">@Suppress</span><span class="p">(</span><span class="s">"UNCHECKED_CAST"</span><span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">cells</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bindings</span><span class="o">[</span><span class="s">"cells"</span><span class="o">]</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">MutableMap</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kt">Any?</span><span class="o">&gt;</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cells</span><span class="o">[</span><span class="s">"signup_date"</span><span class="o">]</span><span class="w"> </span><span class="k">as?</span><span class="w"> </span><span class="kt">String</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">raw</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">Regex</span><span class="p">(</span><span class="s">"""\d{2}/\d{2}/\d{4}"""</span><span class="p">).</span><span class="na">matches</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="p">(</span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="nv">m</span><span class="p">,</span><span class="w"> </span><span class="nv">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">cells</span><span class="o">[</span><span class="s">"signup_date"</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"</span><span class="si">$</span><span class="n">y</span><span class="s">-</span><span class="si">$</span><span class="n">m</span><span class="s">-</span><span class="si">$</span><span class="n">d</span><span class="s">"</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The script gets <code>bindings["cells"]</code> (the mutable row map) and <code>bindings["context"]</code> (a copy
+  of the hook's <code>context:</code> values, rebuilt for every row). Changes to <code>cells</code> are visible to the
+  hooks that follow and to the writer; changes to <code>context</code> reach nothing — treat it as
+  read-only, the platform does not enforce it.</li>
+<li><strong>Full JVM trust</strong> — no sandbox, no timeout, no memory cap. A script failure fails the run.</li>
+<li>Scripts live on the <strong>platform classpath</strong>: <code>classpath:</code> refs only; a <code>file:</code> path is
+  rejected (<code>only classpath: scripts supported in v1</code>). Same trust boundary as the
+  developer-facing lifecycle/action hooks documented beside the code
+  (<code>lumnik-hub/src/main/java/io/lumnik/hub/hook/README.md</code>).</li>
+<li>Runnable example: <code>docs/connectors/csv/50-kotlin-row-hook.yaml</code>.</li>
+</ul>
+<h2 id="rest-the-transform-enum">REST: the <code>transform:</code> enum</h2>
+<p>REST/GraphQL/SOAP endpoints do not use <code>spec.mapping</code>. Their transformation point is the
+<code>promote:</code> block of a hybrid target — each promoted column takes an optional <code>transform:</code></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from_epoch</code></td>
+<td>Unix epoch <strong>seconds</strong> → timestamp (UTC); for milliseconds, divide upstream</td>
+</tr>
+<tr>
+<td><code>parse_iso8601</code></td>
+<td>ISO-8601 string → timestamp (UTC when the text carries no offset)</td>
+</tr>
+<tr>
+<td><code>to_lower</code> / <code>to_upper</code></td>
+<td>case conversion</td>
+</tr>
+<tr>
+<td><code>trim</code></td>
+<td>whitespace trim</td>
+</tr>
+<tr>
+<td><code>to_json_string</code></td>
+<td>serializes the extracted value to a JSON string</td>
+</tr>
+</tbody>
+</table>
+<p><code>parse_iso8601</code> accepts the shapes an ERP actually exports, not only the strict one:</p>
+<table>
+<thead>
+<tr>
+<th>Source text</th>
+<th>Stored instant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2008-04-18T00:00:00</code></td>
+<td><code>2008-04-18T00:00:00Z</code> — no offset means UTC</td>
+</tr>
+<tr>
+<td><code>2008-04-18 00:00:00</code></td>
+<td><code>2008-04-18T00:00:00Z</code> — PostgreSQL's space separator</td>
+</tr>
+<tr>
+<td><code>2008-04-18</code></td>
+<td><code>2008-04-18T00:00:00Z</code> — a date alone is midnight</td>
+</tr>
+<tr>
+<td><code>2026-08-01T14:30:00+02:00</code></td>
+<td><code>2026-08-01T12:30:00Z</code> — an explicit offset is honoured</td>
+</tr>
+</tbody>
+</table>
+<p>Anything else fails the run naming the column and the transform — a timestamp that cannot be read
+is not silently nulled. These are the same shapes a <a href="../../apps/views/">view filter</a> accepts on the
+same column, so a filter typed against the value on screen matches the row that was ingested.</p>
+<p>See the <a href="../rest/">REST connector</a> for the <code>promote:</code> block itself.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rows missing, but the DLQ is empty</td>
+<td><code>filter-where</code> or <code>skip-empty-rows</code> excluded them by declared policy — counted in <code>records_skipped</code>, not DLQ'd; <code>validate-row</code> drops, by contrast, DO reach the DLQ (<code>ValidationFailed</code>)</td>
+<td>check <code>SKIPPED</code> in <code>lm run get</code> (or the TUI's <code>:runs</code> RECORDS <code>in/out/skip</code>); confirm which hook in <code>spec.mapping</code> is doing the dropping</td>
+</tr>
+<tr>
+<td><code>DEAD-LETTERS</code> &gt; 0 with reason <code>MalformedSource</code></td>
+<td>the <strong>reader</strong> rejected the row (wrong column count, unclosed quote) before any hook ran</td>
+<td><code>lm dlq get &lt;id&gt;</code> shows the raw line; fix the export or the <code>parser:</code> block — no mapping hook can see that row</td>
+</tr>
+<tr>
+<td>run fails: <code>unknown &lt;tier&gt; hook: &lt;name&gt;</code></td>
+<td>typo in a hook name, or the hook listed under the wrong tier</td>
+<td>check the reference tables above for the exact name and its tier</td>
+</tr>
+<tr>
+<td>mapping block seems to have no effect</td>
+<td>applied via the one-shot <code>lm csv ingest</code>, which never runs <code>spec.mapping</code></td>
+<td>apply a <a href="../csv/"><code>csv-file</code> connector manifest</a> and run it instead</td>
+</tr>
+<tr>
+<td><code>only classpath: scripts supported in v1</code></td>
+<td>a <code>kotlin</code> hook's <code>script:</code> points at a <code>file:</code> path</td>
+<td>move the script under the platform classpath and reference it as <code>classpath:...</code></td>
+</tr>
+<tr>
+<td>a parsed column is blank for some rows, but the row itself landed</td>
+<td>a cell hook couldn't read that value and nulled it by design — written, not dropped</td>
+<td>check <code>cell_errors</code>: <code>lm run get &lt;id&gt;</code> (stderr alert when &gt; 0, or <code>-o json</code>/<code>-o yaml</code>), or the TUI describe panel (<code>:runs</code>, select the run, <code>d</code>)</td>
+</tr>
+<tr>
+<td>a <code>regex-extract</code> column is null on every row</td>
+<td>the pattern never matched — a miss is not counted, the empty column is the signal</td>
+<td>test the pattern on a real value; remember the match is tried in full first, then as a find</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../csv/">CSV &amp; files</a> — the envelope <code>spec.mapping</code> lives in.</li>
+<li><code>docs/connectors/csv/</code> in the repository — the runnable manifests, including the full example.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

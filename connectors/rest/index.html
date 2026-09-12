@@ -1,0 +1,3956 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/rest/">
+      
+      
+        <link rel="prev" href="../jdbc/">
+      
+      
+        <link rel="next" href="pagination/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>REST - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rest" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              REST
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-connector-one-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One connector, one API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request headers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-source-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the source misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the source misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-page-cap-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry, page cap, rate limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-outage-fails-the-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An outage fails the run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-declared-total-a-witness-on-the-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The declared total — a witness on the count
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-a-connector-before-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check a connector before running it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draft-an-endpoint-from-a-live-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft an endpoint from a live path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-manifest-from-an-openapi-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generate a manifest from an OpenAPI spec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-a-stuck-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reset a stuck cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-a-typed-column-later" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add a typed column later
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-connector-one-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One connector, one API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request headers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-source-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the source misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the source misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-page-cap-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry, page cap, rate limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-outage-fails-the-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An outage fails the run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-declared-total-a-witness-on-the-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The declared total — a witness on the count
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-a-connector-before-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check a connector before running it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draft-an-endpoint-from-a-live-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Draft an endpoint from a live path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-manifest-from-an-openapi-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generate a manifest from an OpenAPI spec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-a-stuck-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reset a stuck cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-a-typed-column-later" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add a typed column later
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rest">REST</h1>
+<blockquote>
+<p>Ingest any HTTP/JSON API: point at the base URL, declare the endpoints and how they page,
+apply. The rows land as typed columns plus the untouched JSON payload.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td><code>rest-generic</code></td>
+</tr>
+<tr>
+<td><strong>Protocol</strong></td>
+<td>HTTP/JSON (+ the GraphQL and SOAP request shapes)</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td><code>ext.&lt;connector&gt;_&lt;endpoint&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Schedulable</strong></td>
+<td>cron</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>Every endpoint declares its own <code>method</code>, and <code>GET</code> is what a source usually needs; the <code>POST</code>
+shape exists because GraphQL puts its query in a body. The engine sends what the manifest
+declares and nothing else — it never discovers a write route on its own.</p>
+<h2 id="quickstart">Quickstart</h2>
+<div class="admonition note">
+<p class="admonition-title">Every screen on this page reads a demo API that ships with the repo</p>
+<p>One Python file, no dependencies, 2 400 fictional ACME partners under ten path dialects.
+Start it in a terminal of its own, and put its three credentials in the hub's registry:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>docs/connectors/rest/demo/acme-api.py
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_BASIC_PW<span class="w">        </span><span class="c1"># demo-pass</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_BEARER_TOKEN<span class="w">    </span><span class="c1"># demo-token</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_API_KEY<span class="w">         </span><span class="c1"># demo-key</span>
+</code></pre></div>
+<p>The manifests point at <code>http://host.docker.internal:8099</code>, because the hub runs in a
+container and <code>localhost</code> inside it is that container. What each dialect imitates, and
+which ones misbehave on purpose: <a href="demo-api/">The demo API</a>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-quickstart.yaml — one endpoint, a preset instead of a pagination block.</span>
+<span class="c1">#</span>
+<span class="c1"># `pagination: {kind: spring-page}` expands at apply time into the real strategy, read out of</span>
+<span class="c1"># SpringPagePreset:</span>
+<span class="c1">#   kind: page · page_param: page · size_param: size · start_page: 0</span>
+<span class="c1">#   total_pages_path: $.totalPages · response_path: $.content</span>
+<span class="c1"># Everything a Spring Data `Page` emits is covered, so `size` is the only field worth</span>
+<span class="c1"># overriding — the strategy's own default is 50, which turns 2 400 partners into 48 requests.</span>
+<span class="c1">#</span>
+<span class="c1"># The password is never in this file. `password_env` names an entry the hub resolves at run</span>
+<span class="c1"># time: the `lm secret` registry first, then its own environment.</span>
+<span class="c1">#   lm secret set ACME_BASIC_PW        # the demo API answers to demo-user / demo-pass</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 rows in ext.acme_partners.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-partners</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span><span class="w">   </span><span class="c1"># BasicAuthProviderFactory has NO inline password field</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partners</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/spring/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">spring-page</span><span class="p p-Indicator">,</span><span class="nt"> size</span><span class="p">:</span><span class="w"> </span><span class="nv">500</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_partners</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt">         path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt">         type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">,</span><span class="nt">         path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.city"</span><span class="p p-Indicator">,</span><span class="nt">         type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">credit_limit</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.credit_limit"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">bigint</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">updated_at</span><span class="p p-Indicator">,</span><span class="nt">   path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.updated_at"</span><span class="p p-Indicator">,</span><span class="nt">   type</span><span class="p">:</span><span class="w"> </span><span class="nv">timestamptz</span><span class="p p-Indicator">,</span><span class="nt"> transform</span><span class="p">:</span><span class="w"> </span><span class="nv">parse_iso8601</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/rest/demo/10-quickstart.yaml
+✓ docs/connectors/rest/demo/10-quickstart.yaml — valid
+$ lm apply -f docs/connectors/rest/demo/10-quickstart.yaml
+{"name":"acme-partners","connectorId":"c5a84b8e-2921-445e-ae1c-b65e897f80ba","endpointsApplied":1}
+</code></pre></div>
+<p>Before running anything, ask the source the first question a run would ask:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-partners
+ENDPOINT  METHOD  STATUS  ITEMS  VERDICT
+partners  GET     200     500    ok
+</code></pre></div>
+<p><code>ITEMS</code> is what the endpoint's own pagination strategy read out of that one page — 500, the
+<code>size</code> this manifest asked for. Nothing was written. Now run it:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-partners
+run scheduled: 36661fb9-398f-4fae-be8c-fb9890072b2a
+</code></pre></div>
+<p>"Scheduled" is not "done" — the run ledger is where the result lands:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-partners
+ID        CONNECTOR      ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+36661fb9  acme-partners  partners  Completed  2400  2400  0        0             2026-09-10 09:54  2026-09-10 09:54
+</code></pre></div>
+<p><code>STARTED</code> / <code>ENDED</code> print in <strong>your terminal's</strong> time zone (these screens: Paris, UTC+2). The
+hub stores UTC, and <code>schedule</code> is evaluated in UTC.</p>
+<p>What landed in <code>ext.acme_partners</code> — the promoted columns, beside the whole payload:</p>
+<div class="highlight"><pre><span></span><code> external_id |           name            |   city    | credit_limit |       updated_at       
+-------------+---------------------------+-----------+--------------+------------------------
+ 1000        | Hydraulique Lyon 1000     | Lyon      |          500 | 2026-01-01 00:00:00+00
+ 1001        | Roulements Bruxelles 1001 | Bruxelles |          637 | 2026-01-01 00:01:00+00
+ 1002        | Fixations Milano 1002     | Milano    |          774 | 2026-01-01 00:02:00+00
+ 1003        | Pneumatique Porto 1003    | Porto     |          911 | 2026-01-01 00:03:00+00
+(4 rows)
+</code></pre></div>
+<ul>
+<li><strong><code>promote</code> is a projection, not a filter.</strong> Every field the source returned is in <code>data</code>
+  (JSONB); the promoted ones are copied out into typed columns you can index and join on.</li>
+<li><strong><code>unique_key</code> is what makes a re-run safe.</strong> It becomes <code>external_id</code>, unique per tenant, and
+  every write is an upsert — see <a href="#storage-layout">Storage layout</a>.</li>
+<li><strong>The password is never in the manifest.</strong> <code>password_env</code> names an entry the hub resolves at
+  run time: the <code>lm secret</code> registry first, its own environment second.</li>
+</ul>
+<h2 id="the-manifest">The manifest</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.example.com</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">bearer</span><span class="p p-Indicator">,</span><span class="nt"> token_env</span><span class="p">:</span><span class="w"> </span><span class="nv">EXAMPLE_TOKEN</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">default_rate_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100/s</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"0</span><span class="nv"> </span><span class="s">6</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span><span class="w">          </span><span class="c1"># optional cron, evaluated in UTC by the hub scheduler</span>
+<span class="w">  </span><span class="nt">headers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">X-Api-Version</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-01"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">charges</span><span class="w">                </span><span class="c1"># kebab-case, unique in the connector</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span><span class="w">                </span><span class="c1"># GET | POST | PUT | PATCH | DELETE</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/v1/charges</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">stripe</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">incremental</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> mode</span><span class="p">:</span><span class="w"> </span><span class="nv">full</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">          </span><span class="c1"># optional, this is the default</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.example_charges</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$.id</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">amount</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">$.amount</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">bigint</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>The path-shaped fields (<code>cursor_path</code>, <code>response_path</code>, <code>unique_key</code>, <code>link_path</code>, …) are
+JSONPath expressions read against the response body: <code>$</code> is the root, so <code>$.data[-1:].id</code> is
+"the <code>id</code> of the last element of <code>data</code>".</p>
+<p>Each <code>promote</code> entry may carry a <code>transform:</code>, applied as the value is written — the full list
+is in <a href="../transformers/#rest-the-transform-enum">Transformers</a>. <code>parse_iso8601</code> is the one most
+manifests need: it turns the timestamp the API prints into a real <code>timestamptz</code>.</p>
+<p>Omit <code>schedule</code> to run only on demand with <code>lm connector run</code>.</p>
+<h2 id="one-connector-one-api">One connector, one API</h2>
+<p>One connector is one API, whatever number of endpoints it exposes — and two endpoints of the
+same API may page by entirely different conventions:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-two-endpoints.yaml — one connector is one API, whatever number of endpoints it exposes.</span>
+<span class="c1">#</span>
+<span class="c1"># Both endpoints below read the same 2 400 partners from the same server, through two</span>
+<span class="c1"># conventions that have nothing in common:</span>
+<span class="c1">#</span>
+<span class="c1">#   /v1/partners   opaque cursor  — ?starting_after=&lt;id&gt;, $.has_more says whether to continue</span>
+<span class="c1">#   /drf/partners  follow a link  — $.next carries the whole next URL, until it is null</span>
+<span class="c1">#</span>
+<span class="c1"># Preset `stripe` expands to kind: cursor (cursor_param starting_after, cursor_path</span>
+<span class="c1"># $.data[-1:].id, has_more_path $.has_more, response_path $.data); preset `drf-page` expands to</span>
+<span class="c1"># kind: body-link (link_path $.next, response_path $.results). Neither sends a page-size</span>
+<span class="c1"># parameter — see the page-size note in rest.md — so `page_size` rides in the DRF endpoint's</span>
+<span class="c1"># own `path:`, which the request builder extends with `&amp;`.</span>
+<span class="c1">#</span>
+<span class="c1"># The credential is declared once, at connector level, and both endpoints use it.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 rows in each of the two tables.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-saas</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bearer</span>
+<span class="w">    </span><span class="nt">token_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BEARER_TOKEN</span><span class="w">   </span><span class="c1"># lm secret set ACME_BEARER_TOKEN   → demo-token</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cursor-partners</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/v1/partners?limit=500</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">stripe</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_cursor_partners</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.city"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">link-partners</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/drf/partners?page_size=500</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">drf-page</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_link_partners</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.city"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-saas
+ID        CONNECTOR  ENDPOINT         STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+a9fd81d6  acme-saas  link-partners    Completed  2400  2400  0        0             2026-09-10 09:54  2026-09-10 09:54
+dff877b2  acme-saas  cursor-partners  Completed  2400  2400  0        0             2026-09-10 09:54  2026-09-10 09:54
+</code></pre></div>
+<p>Two rows, because <strong>the ledger records one run per endpoint</strong>. Both read the same 2 400
+partners through conventions that share nothing — <code>stripe</code> and <code>drf-page</code>, two of the
+<a href="pagination/#presets">presets</a> that name the framework behind an API.</p>
+<h2 id="auth">Auth</h2>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bearer</code></td>
+<td><code>token_env: VAR_NAME</code> (preferred), or <code>token_value: "..."</code> (dev only)</td>
+</tr>
+<tr>
+<td><code>basic</code></td>
+<td><code>username</code> + <code>password_env: VAR_NAME</code></td>
+</tr>
+<tr>
+<td><code>api-key</code></td>
+<td><code>in: header\|query</code>, <code>name</code>, <code>value_env: VAR_NAME</code></td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>no credentials (the default when <code>auth:</code> is omitted)</td>
+</tr>
+</tbody>
+</table>
+<p>Every auth <code>*_env</code> field resolves an <a href="../../admin-console-guide/"><code>lm secret</code></a> <strong>name first</strong>,
+then falls back to an environment variable / JVM system property of that name on the hub. Set
+the value before <code>lm apply</code>:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_BASIC_PW<span class="w">     </span><span class="c1"># prompts at the keyboard; what you type is not shown</span>
+</code></pre></div>
+<ul>
+<li><code>basic</code> and <code>api-key</code> have <strong>no inline field</strong>: the value comes from <code>password_env</code> /
+  <code>value_env</code>, or not at all.</li>
+<li><code>bearer</code> accepts <code>token_value</code>, but it is <strong>ignored whenever <code>token_env</code> is also set</strong> — the
+  env name wins outright, and if nothing resolves under it the run fails on the auth probe
+  rather than falling back to the inline value. Declare one or the other, never both.</li>
+</ul>
+<p>A credential that does not resolve is named, before any run:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-badauth
+ENDPOINT  METHOD  STATUS  ITEMS  VERDICT
+partners  GET     -       0      Basic password unavailable (env=ACME_NOT_SET_PW)
+Error: 1 of 1 enabled endpoint(s) did not answer with readable data
+</code></pre></div>
+<p>OAuth2 (client_credentials, authorization_code), HMAC and mTLS are dedicated future projects.</p>
+<h2 id="pagination">Pagination</h2>
+<p>Every endpoint declares how the source hands back its next page. Most APIs follow a convention
+that already has a name, so the usual answer is one line:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">pagination</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> kind</span><span class="p">:</span><span class="w"> </span><span class="nv">spring-page</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">        </span><span class="c1"># Spring Data Page — seven fields under one word</span>
+</code></pre></div>
+<p>Eleven presets name the framework that shaped the API — Spring Data (<code>Page</code>, <code>Slice</code>,
+HATEOAS), Micronaut, Django REST, FastAPI, NestJS, JSON:API, Sequelize, Stripe. When none of
+them fits, six strategies are written out by hand: <code>cursor</code>, <code>page</code>, <code>offset</code>, <code>link-header</code>,
+<code>body-link</code> and <code>relay</code>.</p>
+<p><strong>→ <a href="pagination/">Pagination</a></strong> — the catalogue, the fields of each strategy, where the
+cursor is injected, and the two traps that cost the most time: page size on the strategies that
+send none, and <code>kind: custom</code>, which applies cleanly and dies on the second page.</p>
+<h2 id="request-headers">Request headers</h2>
+<p>Connector-level only — <code>spec.headers[]</code> goes out on <strong>every</strong> request:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">headers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">X-Api-Version</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-01"</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">       </span><span class="c1"># static</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">X-Client-Id</span><span class="p p-Indicator">,</span><span class="nt">   value_env</span><span class="p">:</span><span class="w"> </span><span class="nv">CLIENT_ID</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># from the environment</span>
+</code></pre></div>
+<ul>
+<li>Each entry needs <code>name</code> + <strong>exactly one</strong> of <code>value</code> / <code>value_env</code>.</li>
+<li><code>value_env</code> resolves the OS environment first, then a JVM system property. It does <strong>not</strong>
+  read the <code>lm secret</code> registry — unlike every auth <code>*_env</code> field above. A header credential has
+  to be a real environment variable (or system property) where the hub runs.</li>
+<li>A <code>value_env</code> that resolves to nothing <strong>drops the header silently</strong>: no warning, no refusal
+  at apply. The request goes out without it, and upstream reports that as a puzzling 400 or 401
+  naming something else entirely.</li>
+<li>Headers are applied <strong>before</strong> auth — an auth-injected header wins a name clash.</li>
+<li>Endpoint-level <code>headers</code> are refused at apply:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ lm apply -f bad-headers.yaml
+✗ bad-headers.yaml — 1 error(s), 0 warning(s)
+
+  ERROR    spec.endpoints[0].headers
+          per-endpoint headers are not supported in this release; declare headers at spec.headers
+          → Move the headers block up to spec.headers (connector level)
+
+Fix errors above before running 'lm apply -f bad-headers.yaml'.
+Error: validation failed: 1 error(s)
+</code></pre></div>
+<p>The declared headers are part of the pre-flight too — <code>lm source rest test</code> composes the
+request a run composes. <code>/hdr/partners</code> answers 400 to anything without <code>X-Api-Version</code>, and
+the <code>acme-witness</code> connector carries it in <code>spec.headers</code> — its manifest is under
+<a href="#the-declared-total-a-witness-on-the-count">The declared total</a>:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-witness
+ENDPOINT    METHOD  STATUS  ITEMS  VERDICT
+incomplete  GET     200     500    ok
+versioned   GET     200     500    ok
+</code></pre></div>
+<h2 id="incremental-sync">Incremental sync</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">incremental</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span><span class="w">              </span><span class="c1"># re-fetch every page (default)</span>
+<span class="w">  </span><span class="c1"># OR</span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermark</span><span class="w">         </span><span class="c1"># send the stored watermark as a query parameter,</span>
+<span class="w">  </span><span class="nt">param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_since</span><span class="w">    </span><span class="c1">#   e.g. ?updated_since=&lt;watermark&gt;</span>
+<span class="w">  </span><span class="nt">watermark_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$.updated_at</span><span class="w">   </span><span class="c1"># new watermark = MAX of this JSONPath over the items read</span>
+</code></pre></div>
+<blockquote>
+<p><code>mode: api_cursor</code> (API-native cursor persistence) is <strong>deferred — not implemented</strong>;
+declaring it today behaves like <code>full</code>.</p>
+</blockquote>
+<p>Cursor state lives in <code>connector.connector_cursor</code>, one row per endpoint, and survives runs.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 40-watermark.yaml — reading only what moved since last time.</span>
+<span class="c1">#</span>
+<span class="c1"># `mode: full` re-fetches every page on every run. `mode: watermark` sends the stored high-water</span>
+<span class="c1"># mark as a query parameter on the first request of the run, and the API returns only what is</span>
+<span class="c1"># newer:  GET /offset/partners?updated_since=2026-01-02T15:59:00Z&amp;offset=0&amp;limit=500</span>
+<span class="c1">#</span>
+<span class="c1"># The new mark is the MAX of `watermark_path` across the items actually read. Here that is</span>
+<span class="c1"># $.updated_at, whose ISO shape sorts lexicographically — which is why a plain string</span>
+<span class="c1"># comparison is enough for the demo API to filter on it.</span>
+<span class="c1">#</span>
+<span class="c1"># ── Why the first run is not the interesting one ─────────────────────────────────────────</span>
+<span class="c1"># Run 1: nothing stored, so no parameter is sent — a full read, 2 400 rows.</span>
+<span class="c1"># Run 2: the parameter goes out and only newer rows come back — here the single row sharing</span>
+<span class="c1">#        the maximal instant, because the demo API filters inclusively, as most APIs do. It is</span>
+<span class="c1">#        re-upserted on its unique key, so it counts as records_out and the table does not</span>
+<span class="c1">#        grow. Run 2 reading 2 400 again would mean the watermark never persisted.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The staged promotion, which is the subtle part ───────────────────────────────────────</span>
+<span class="c1"># The mark is NOT advanced page by page. A crash mid-pagination would otherwise leave it past</span>
+<span class="c1"># pages that were never fetched — silent, permanent data loss. The stored value keeps its</span>
+<span class="c1"># pre-run reading throughout while a candidate carries the running MAX, and only the final</span>
+<span class="c1"># chunk promotes it.</span>
+<span class="c1">#</span>
+<span class="c1">#   lm endpoint reset-cursor acme-incremental/partners     # the next run is full again</span>
+<span class="c1">#</span>
+<span class="c1"># A watermark is only as incremental as the column behind it: pointed at a column the source</span>
+<span class="c1"># does not touch on update, it re-reads everything forever and reports it as new.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: run 1 = 2 400 in / 2 400 out. Run 2 = 1 in / 1 out, and the table still 2 400.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-incremental</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partners</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/offset/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">offset_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">limit_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">limit</span>
+<span class="w">        </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.data"</span>
+<span class="w">        </span><span class="c1"># No total_path here on purpose: an incremental endpoint returns a filtered slice, and</span>
+<span class="w">        </span><span class="c1"># the source's unfiltered $.total is not the number it should be checked against.</span>
+<span class="w">      </span><span class="nt">incremental</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermark</span>
+<span class="w">        </span><span class="nt">param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_since</span><span class="w">        </span><span class="c1"># the query parameter the API filters on</span>
+<span class="w">        </span><span class="nt">watermark_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.updated_at"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_incremental_partners</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt">       path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt">       type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">updated_at</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.updated_at"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">timestamptz</span><span class="p p-Indicator">,</span><span class="nt"> transform</span><span class="p">:</span><span class="w"> </span><span class="nv">parse_iso8601</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Run it twice, and read the ledger:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-incremental
+ID        CONNECTOR         ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+f45d0235  acme-incremental  partners  Completed  1     1     0        0             2026-09-10 09:55  2026-09-10 09:55
+85c35101  acme-incremental  partners  Completed  2400  2400  0        0             2026-09-10 09:55  2026-09-10 09:55
+</code></pre></div>
+<p>Run 1 had nothing stored, so no parameter went out: 2 400 rows. Run 2 sent the mark, which the
+demo API prints in its own log — the surest place to see what actually left the hub:</p>
+<div class="highlight"><pre><span></span><code>10/Sep/2026 10:09:59  "GET /offset/partners?updated_since=2026-01-02T15%3A59%3A00Z&amp;offset=0&amp;limit=500 HTTP/1.1" 200 -
+</code></pre></div>
+<p>One row came back, the one sharing that instant, because the demo API filters inclusively as
+most APIs do. It was re-upserted on its unique key; the table still holds 2 400.</p>
+<p>The mark is <strong>not</strong> advanced page by page. A crash mid-pagination would otherwise leave it past
+pages that were never fetched, and those rows would never be read again. The stored value keeps
+its pre-run reading for the whole run while a candidate carries the running MAX, and only the
+final chunk promotes it.</p>
+<p><code>lm endpoint reset-cursor acme-incremental/partners</code> clears it; the next run is a full read
+again. The command prints nothing and exits 0.</p>
+<p>A watermark is only as incremental as the column behind it: pointed at a column the source does
+not touch on update, it re-reads everything on every run and reports it all as new.</p>
+<h2 id="storage-layout">Storage layout</h2>
+<p>Nothing to set up: each endpoint's table is created on the first run. This section is reference,
+for when you need it.</p>
+<div class="highlight"><pre><span></span><code>                                           Table "ext.acme_partners"
+    Column    |           Type           | Collation | Nullable |                    Default                    
+--------------+--------------------------+-----------+----------+-----------------------------------------------
+ id           | bigint                   |           | not null | nextval('ext.acme_partners_id_seq'::regclass)
+ tenant_id    | bigint                   |           | not null | 
+ external_id  | text                     |           | not null | 
+ name         | text                     |           |          | 
+ city         | text                     |           |          | 
+ credit_limit | bigint                   |           |          | 
+ updated_at   | timestamp with time zone |           |          | 
+ row_hash     | text                     |           |          | 
+ data         | jsonb                    |           | not null | 
+ indexed_at   | timestamp with time zone |           |          | now()
+ connector_id | uuid                     |           | not null | 
+ endpoint_id  | uuid                     |           | not null | 
+Indexes:
+    "acme_partners_pkey" PRIMARY KEY, btree (id)
+    "acme_partners_tenant_id_external_id_key" UNIQUE CONSTRAINT, btree (tenant_id, external_id)
+    "idx_acme_partners_data_gin" gin (data jsonb_path_ops)
+Policies:
+    POLICY "tenant_isolation"
+      USING ((tenant_id = (NULLIF(current_setting('app.current_tenant'::text, true), ''::text))::bigint))
+</code></pre></div>
+<p>The promoted columns are the four in the middle — <code>name</code>, <code>city</code>, <code>credit_limit</code>, <code>updated_at</code>.</p>
+<ul>
+<li><code>unique_key</code> from the manifest becomes <code>external_id</code>; <code>UNIQUE (tenant_id, external_id)</code> plus
+  <code>ON CONFLICT DO UPDATE</code> is what makes a re-run idempotent.</li>
+<li><strong>A re-run rewrites every row it reads.</strong> <code>OUT</code> counts them and <code>SKIPPED</code> stays <code>0</code> — this
+  family has no skip-on-unchanged step, so the witness that nothing duplicated is the table's
+  row count, not the skip column.</li>
+<li><code>data</code> holds the whole payload, indexed with a GIN index for JSONB path queries.</li>
+<li><code>row_hash</code> is lineage rather than a gate: the same hash keys the RAG side's chunk dedup, so a
+  row that came back unchanged is not embedded a second time.</li>
+<li>The row-level security policy is what keeps one tenant's rows invisible to another.</li>
+</ul>
+<p>Adding a <code>promote</code> entry later and re-applying makes the next run do <code>ALTER TABLE ADD COLUMN</code>;
+the column arrives empty and fills as rows are read again — see
+<a href="#add-a-typed-column-later">Add a typed column later</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Deleting a REST connector deletes its data</p>
+<p><code>lm connector delete</code> drops the connector's registered <code>ext.*</code> tables, and every RAG chunk
+the connector produced dies with it — the same erasure gesture as the other connector
+families. To empty one endpoint's rows <strong>without</strong> deleting the connector, use
+<code>lm endpoint purge &lt;connector&gt;/&lt;endpoint&gt;</code>, which asks you to type <code>purge</code> before it does.</p>
+</div>
+<h2 id="when-the-source-misbehaves">When the source misbehaves</h2>
+<p>Three ways a source can make a run lie, and what the engine does about each: it retries what is
+worth retrying, it refuses to read an error body as data, and — where the source publishes a
+count — it checks the run against that number.</p>
+<h3 id="retry-page-cap-rate-limit">Retry, page cap, rate limit</h3>
+<ul>
+<li><strong>Retry</strong> — a fixed policy, not a manifest knob: up to <strong>5 attempts</strong> per request on HTTP
+  <code>429, 500, 502, 503, 504, 408</code> and on network errors; exponential backoff <code>1s → 2s → 4s → …</code>
+  capped at <strong>60s</strong>, ±10% jitter; a numeric <code>Retry-After</code> header overrides the computed delay.
+  Any other status is returned as-is, no retry.</li>
+<li><strong>Page cap</strong> — the pagination loop stops after <strong>10 000 pages</strong> per endpoint per run, a
+  runaway-loop guard.</li>
+<li><strong>Rate limit</strong> — <code>default_rate_limit</code> (default <code>100/s</code>) is a <code>count/window</code> string; the window
+  is an optional integer + unit <code>s|m|h</code> (<code>100/s</code>, <code>100/5m</code>, <code>1000/h</code>). It is declared once at
+  connector level — one token bucket per connector, shared by all its endpoints. With several
+  endpoints on one connector, set it to the <strong>strictest</strong> endpoint's documented limit: a laxer
+  value lets the busier endpoints starve it.</li>
+</ul>
+<h3 id="an-outage-fails-the-run">An outage fails the run</h3>
+<p>What happens after the retries are spent is the part worth seeing. <code>/down/partners</code> answers 500
+to everything; <code>/flaky/partners</code> answers 429 then 503 before serving each page:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 60-source-down.yaml — what a run does when the source is simply down.</span>
+<span class="c1">#</span>
+<span class="c1"># `/down/partners` answers 500 to everything. The retry policy spends its five attempts, and</span>
+<span class="c1"># then the run must FAIL: an outage that lands as a clean empty sync pages nobody, and the</span>
+<span class="c1"># next run reads a table it believes to be current.</span>
+<span class="c1">#</span>
+<span class="c1"># The guard refuses a FINAL non-2xx, not a retried one — `/flaky/partners` below answers 429</span>
+<span class="c1"># then 503 before serving each page, and its endpoint completes in full.</span>
+<span class="c1">#</span>
+<span class="c1">#   curl http://127.0.0.1:8099/admin/reset     # before re-running: the flaky counters persist</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: `down` Failed with the upstream status in the message, `flaky` Completed with 2 400.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-outage</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">down</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/down/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">offset_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">limit_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">limit</span>
+<span class="w">        </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.data"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_outage_down</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flaky</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/flaky/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">offset_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">limit_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">limit</span>
+<span class="w">        </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.data"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_outage_flaky</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-outage
+ID        CONNECTOR    ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+ea13f93f  acme-outage  flaky     Completed  2400  2400  0        0             2026-09-10 09:56  2026-09-10 09:57
+5fbf784f  acme-outage  down      Failed     0     0     0        0             2026-09-10 09:56  2026-09-10 09:57
+
+$ lm run get 5fbf784f
+✖ run failed: upstream returned HTTP 500 (transient) — refusing to ingest its body as data: {"error": "this endpoint is down and stays down"}
+</code></pre></div>
+<p>An outage <strong>fails the run</strong>. It is not reported as a successful empty sync: an error body is not
+data, however well-formed it is, and a green run over zero rows is how a total outage gets
+indexed as "nothing changed today". The guard refuses a <strong>final</strong> non-2xx, not a retried one —
+which is why the flaky endpoint, on the same connector, completes with all 2 400 rows.</p>
+<p>The pre-flight sends <strong>one</strong> request and does not retry, so a flaky source shows red there while
+its run goes green:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-outage
+ENDPOINT  METHOD  STATUS  ITEMS  VERDICT
+down      GET     500     0      HTTP 500
+flaky     GET     429     0      HTTP 429
+Error: 2 of 2 enabled endpoint(s) did not answer with readable data
+</code></pre></div>
+<p>A refusal does not stop the walk — every enabled endpoint is tried, so one command gives the
+whole picture — and the command exits non-zero if any of them did not answer.</p>
+<h3 id="the-declared-total-a-witness-on-the-count">The declared total — a witness on the count</h3>
+<p>A run that loses rows ends exactly like a complete one: the last page simply says "no more".
+It lands green, and the count it reports agrees with itself while being wrong. Where the source
+publishes how many rows the extract holds, <code>total_path</code> turns that number into a check.</p>
+<p><code>/liar/partners</code> serves 2 300 of its 2 400 partners and still declares <code>"total": 2400</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 50-total-witness.yaml — the row count the source publishes, used as a witness.</span>
+<span class="c1">#</span>
+<span class="c1"># `/liar/partners` serves 2 300 of its 2 400 partners and still declares `"total": 2400`. The</span>
+<span class="c1"># pagination ends the way a complete read ends — no error, no short page the strategy can see —</span>
+<span class="c1"># so without `total_path` this run lands Completed with 2 300 rows and agrees with itself.</span>
+<span class="c1">#</span>
+<span class="c1"># With `total_path` pointed at that number, the run compares what it returned against what the</span>
+<span class="c1"># source declared, and fails naming both figures. That comparison is exact and reads both ways,</span>
+<span class="c1"># which is why it must point at a ROW count published by the source — never at a page count,</span>
+<span class="c1"># never at an estimate.</span>
+<span class="c1">#</span>
+<span class="c1"># The second endpoint is the same shape against `/hdr/partners`, which answers 400 to any</span>
+<span class="c1"># request without `X-Api-Version` — the declarative header at spec level below. Headers are</span>
+<span class="c1"># connector-level only; a `headers:` key on an endpoint is refused at apply.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: `liar` FAILS on the mismatch, `hdr` completes with 2 400.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-witness</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">headers</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">X-Api-Version</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-01"</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># sent on EVERY request of this connector</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomplete</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/liar/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">offset_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">limit_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">limit</span>
+<span class="w">        </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.data"</span>
+<span class="w">        </span><span class="nt">total_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.total"</span><span class="w">       </span><span class="c1"># the witness</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_witness_incomplete</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">versioned</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/hdr/partners</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">offset_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">offset</span>
+<span class="w">        </span><span class="nt">limit_param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">limit</span>
+<span class="w">        </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.data"</span>
+<span class="w">        </span><span class="nt">total_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.total"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_witness_versioned</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-witness
+ID        CONNECTOR     ENDPOINT    STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+58e98b1b  acme-witness  versioned   Completed  2400  2400  0        0             2026-09-10 09:56  2026-09-10 09:56
+0da02bdc  acme-witness  incomplete  Failed     2000  2000  0        0             2026-09-10 09:56  2026-09-10 09:56
+
+$ lm run get 0da02bdc
+✖ run failed: Endpoint 564a9026-736c-4843-8be6-e029e6231cf4: the source declared 2400 rows but this run returned 2300 — refusing to report a partial extract as a complete one
+</code></pre></div>
+<p>The two numbers in that screen are both right and mean different things: <code>2300</code> is what
+pagination returned, <code>IN 2000</code> is what had been written when the check fired at the end of the
+walk. <code>ext.acme_witness_incomplete</code> holds exactly those 2 000 rows — <strong>a failed run is not
+rolled back</strong>, so the table keeps what arrived before the refusal. The next successful run
+upserts over it.</p>
+<p><code>total_path</code> is optional on <code>page</code>, <code>offset</code> and <code>body-link</code>, and it does two jobs: it lets
+<code>offset</code> stop as soon as every row is in, and it checks the run when pagination ends.</p>
+<p>Three cases go unchecked on purpose, because the two figures are not comparable:</p>
+<ul>
+<li><strong>no <code>total_path</code></strong> — nothing was published, so nothing is claimed;</li>
+<li><strong>incremental (<code>watermark</code>) endpoints</strong> — the run filters by design and returns fewer rows
+  than the source's unfiltered total;</li>
+<li><strong>a total that changes between pages</strong> — rows were written or deleted while you were reading.
+  A live source has lost nothing, and the run stands.</li>
+</ul>
+<p><strong>You may already have it without typing it.</strong> The <code>drf-limit-offset</code> and <code>sequelize</code> presets
+expand to <code>total_path: $.count</code>, and an endpoint that set <code>total_path</code> purely to stop paging
+early is now checked by it too. Both of those sources publish an exact count, so nothing should
+change — but if a run of yours starts failing on this message after an upgrade, that is where it
+came from, and removing <code>total_path</code> restores the old behaviour.</p>
+<p>Two ways to point it at the wrong number. Neither fails predictably — they fail on the day the
+two figures happen to differ, and the red says nothing about the manifest:</p>
+<ul>
+<li><strong>a page count.</strong> <code>total_pages_path</code> counts pages, and a page that comes back short leaves the
+  page count perfectly right while rows go missing. Point <code>total_path</code> at rows.</li>
+<li><strong>an estimate.</strong> Some APIs publish an approximate count (a planner statistic rather than a
+  <code>COUNT(*)</code>). The comparison is exact and reads both directions — fewer rows than declared <em>and</em>
+  more — so an estimate belongs nowhere near <code>total_path</code>. Leave it unset instead.</li>
+</ul>
+<p>A witness you cannot trust is worse than none: it spends the operator's attention on the
+manifest instead of on the source.</p>
+<h2 id="cli">CLI</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>&lt;file.yaml&gt;
+lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>&lt;file.yaml&gt;
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>&lt;connector&gt;
+lm<span class="w"> </span>endpoint<span class="w"> </span>enable<span class="p">|</span>disable<span class="p">|</span>reset-cursor<span class="p">|</span>purge<span class="w"> </span>&lt;connector&gt;/&lt;endpoint&gt;
+lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span><span class="nb">test</span><span class="w"> </span>&lt;connector&gt;<span class="w">                      </span><span class="c1"># pre-flight every enabled endpoint, no write</span>
+lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span>probe<span class="w"> </span>&lt;connector&gt;<span class="w"> </span>--endpoint<span class="w"> </span>&lt;path&gt;<span class="w">   </span><span class="c1"># sample one path, draft its endpoint block</span>
+lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span>from-openapi<span class="w"> </span>&lt;url&gt;<span class="w"> </span>--name<span class="w"> </span>N<span class="w"> </span>--scope<span class="w"> </span>S<span class="w"> </span>-o<span class="w"> </span>FILE
+</code></pre></div>
+<h2 id="tui">TUI</h2>
+<ul>
+<li><code>:sources</code> — the <code>KIND</code> column shows rest/jdbc/csv; Enter on a REST connector drills into
+  <code>:endpoints</code></li>
+<li><code>:endpoints</code> — NAME/METHOD/PATH/SCHEDULE/LAST_RUN/STATUS; Enter → <code>:runs</code> filtered</li>
+</ul>
+<p>Full reference: <a href="../../cli/lm-reference/">CLI &amp; TUI</a>.</p>
+<h2 id="how-to">How to…</h2>
+<h3 id="check-a-connector-before-running-it">Check a connector before running it</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span><span class="nb">test</span><span class="w"> </span>&lt;connector&gt;
+</code></pre></div>
+<p><strong>Result:</strong> for each enabled endpoint, the hub sends the one request a run would send first —
+same method, same path, same declarative headers, same auth, same pagination — and reports what
+came back. Nothing is written. A <code>200</code> with <code>0</code> items means the response arrived but nothing
+matched <code>response_path</code>: the shape that otherwise lands as a run that completes having ingested
+nothing. Disabled endpoints are skipped and counted on stderr, and <code>-o json</code> adds the URL that
+was called and a bounded excerpt of what came back:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-saas -o json
+note: skipped 1 disabled endpoint(s)
+[
+  {
+    "endpoint": "cursor-partners",
+    "method": "GET",
+    "url": "http://host.docker.internal:8099/v1/partners?limit=500",
+    "status": 200,
+    "ok": true,
+    "items": 500,
+    "detail": "",
+    "sample": "{\"data\": [{\"id\": 1000, \"name\": \"Hydraulique Lyon 1000\", \"city\": \"Lyon\", \"country\": \"FR\", \"credit_limit\": 500, \"updated_at\": \"2026-01-01T00:00:00Z\"}, {\"id\": 1001, \"name\": \"Roulements Bruxelles 1001\", \"…"
+  }
+]
+</code></pre></div>
+<p>The <code>url</code> is the request as it was composed — the place a wrong <code>path:</code> or a missing query
+parameter shows up before a run does.</p>
+<h3 id="draft-an-endpoint-from-a-live-path">Draft an endpoint from a live path</h3>
+<p><code>probe</code> samples <strong>one path on a connector you already have</strong> and writes the endpoint block it
+would take to ingest it. The connector supplies the base URL and the credential, so nothing
+secret goes on the command line:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest probe acme-partners --endpoint /spring/partners
+# Auto-generated by RestProber (no LLM augmentation in v1)
+- id: spring-partners
+  method: GET
+  path: /spring/partners
+  pagination: { kind: page }
+  target:
+    kind: hybrid
+    table: ext.acme_partners_spring_partners
+    unique_key: $.id
+    promote:
+      - { name: id, path: $.id, type: bigint }
+      - { name: name, path: $.name, type: text }
+      - { name: city, path: $.city, type: text }
+      - { name: country, path: $.country, type: text }
+      - { name: credit_limit, path: $.credit_limit, type: bigint }
+      - { name: updated_at, path: $.updated_at, type: text }
+</code></pre></div>
+<p><strong>Result:</strong> an endpoint <strong>fragment</strong>, not a whole manifest — paste it under the <code>spec.endpoints:</code>
+of the connector you probed, review it, then <code>lm apply</code>. The pagination kind is read off the
+response envelope and is a guess: an envelope it does not recognise comes back as
+<code>kind: unknown</code> for you to fill in. The promote list covers the scalar fields of the first
+record only.</p>
+<p>The refusals say what happened upstream rather than failing blank:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest probe acme-partners --endpoint /open/nope
+Error: API error 502: upstream returned HTTP 404 (permanent) — refusing to ingest its body as data: {"error": "unknown resource", "known": ["down", "drf", "flaky", "hdr", "liar", "link", "offset", "open", "spring", "v1"], "resource": "/open/nope"}
+
+$ lm source rest probe demo-invoices --endpoint /x
+Error: "demo-invoices" is not a rest-generic connector (type: "jdbc-generic") — `lm source rest probe` samples a REST source
+</code></pre></div>
+<p>(<code>demo-invoices</code> is the <a href="../jdbc/">JDBC page</a>'s connector — any non-REST one answers the same.)</p>
+<h3 id="generate-a-manifest-from-an-openapi-spec">Generate a manifest from an OpenAPI spec</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span>from-openapi<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>stripe<span class="w"> </span>--scope<span class="w"> </span>billing<span class="w"> </span>--output<span class="w"> </span>stripe.yaml
+</code></pre></div>
+<p><strong>Result:</strong> a manifest scaffold with the endpoints the spec declares — review auth, pagination
+and target before <code>lm apply</code>. A URL that holds no spec is refused rather than yielding an empty
+scaffold:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest from-openapi http://127.0.0.1:8099/spring/partners --name x --scope billing -o x.yaml
+Error: API error 502: no OpenAPI spec could be read at http://127.0.0.1:8099/spring/partners — unreachable, not a spec, or not parseable
+</code></pre></div>
+<h3 id="reset-a-stuck-cursor">Reset a stuck cursor</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>endpoint<span class="w"> </span>reset-cursor<span class="w"> </span>&lt;connector&gt;/&lt;endpoint&gt;
+</code></pre></div>
+<p><strong>Result:</strong> the stored watermark is cleared and the next <code>lm connector run</code> is a full read.
+The command prints nothing.</p>
+<h3 id="add-a-typed-column-later">Add a typed column later</h3>
+<p>Add an entry to the endpoint's <code>target.promote</code> list and re-apply:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">promote</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">$.name</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">$.city</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># new column</span>
+</code></pre></div>
+<p><strong>Result:</strong> <code>lm apply</code> registers the new entry and changes nothing in the database; the <strong>next
+run</strong> does the <code>ALTER TABLE ADD COLUMN</code>, and the column arrives empty. The values land as rows
+are next read and upserted — a <code>full</code> endpoint fills all of them on that same run, a <code>watermark</code>
+endpoint only the rows that move, unless you <code>lm endpoint reset-cursor</code> first.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not sure the credential is valid</td>
+<td>—</td>
+<td><code>lm source rest test &lt;connector&gt;</code> — one request per enabled endpoint, nothing written; an unresolved secret is named in <code>VERDICT</code></td>
+</tr>
+<tr>
+<td>Run completed, <code>IN</code> is 0</td>
+<td>the response arrived but nothing matched <code>response_path</code></td>
+<td><code>lm source rest test &lt;connector&gt;</code> shows <code>200</code> with <code>0</code> items; check <code>response_path</code> against the body</td>
+</tr>
+<tr>
+<td>Run failed on <code>the source declared N rows</code></td>
+<td><code>total_path</code> points at a number the run did not match</td>
+<td>it is doing its job — check the source; if it points at a page count or an estimate, see <a href="#the-declared-total-a-witness-on-the-count">The declared total</a></td>
+</tr>
+<tr>
+<td><code>429 Too Many Requests</code> from the API</td>
+<td><code>default_rate_limit</code> exceeds what the API tolerates</td>
+<td>lower it (<code>100/s</code> → <code>50/s</code>); it is one bucket for the whole connector</td>
+</tr>
+<tr>
+<td>Sync stops picking up new rows</td>
+<td>the stored watermark is stale or points at a column the source does not touch</td>
+<td><code>lm endpoint reset-cursor &lt;connector&gt;/&lt;endpoint&gt;</code> → the next run is a full read</td>
+</tr>
+<tr>
+<td>A run reads far more pages than expected</td>
+<td><code>cursor</code>, <code>body-link</code> and <code>link-header</code> send no size parameter</td>
+<td>put the size in the endpoint's <code>path:</code> — see <a href="pagination/#strategies">the page-size warning</a></td>
+</tr>
+<tr>
+<td><code>lm apply</code> refused with an unknown transform</td>
+<td>a <code>promote</code> entry's <code>transform:</code> is not one of the supported values</td>
+<td>see <a href="../transformers/">Transformers</a></td>
+</tr>
+<tr>
+<td>Need to wipe an endpoint's rows</td>
+<td>—</td>
+<td><code>lm endpoint purge &lt;connector&gt;/&lt;endpoint&gt;</code> — it asks you to type <code>purge</code> to confirm (<code>--force</code> skips that)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="pagination/">Pagination</a> — presets, strategies, cursor binding</li>
+<li><a href="demo-api/">The demo API</a> — the source every screen here reads</li>
+<li><a href="../">Overview</a></li>
+<li><a href="../graphql/">GraphQL</a> — the GraphQL request shape on this engine</li>
+<li><a href="../soap/">SOAP</a> — the SOAP request shape on this engine</li>
+<li><a href="../transformers/">Transformers</a></li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

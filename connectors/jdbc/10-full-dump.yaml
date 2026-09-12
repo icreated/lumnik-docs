@@ -1,0 +1,32 @@
+# 10-full-dump.yaml — the whole table, once, then only what is inserted after it.
+#
+# `mode: full` pages through the table by primary key and remembers the last key it read.
+# The next run continues past that key: new rows arrive, rows changed in place do not.
+# Switch this same connector to `20-watermark.yaml` to pick up changes too.
+#
+# The source tables are created by data/demo-source.sql in the hub's own PostgreSQL, so the
+# page can be replayed with nothing but the self-host stack. LUMNIK_READONLY_DB_PASSWORD is
+# already exported where the hub runs; a real base names its own variable.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-invoices
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  defaults:
+    schema: demo
+
+  source:
+    tables:
+      - name: invoices
+        mode: full
+        pk_columns: [invoice_id]
+
+  target: {}

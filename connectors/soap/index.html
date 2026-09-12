@@ -1,0 +1,3935 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/soap/">
+      
+      
+        <link rel="prev" href="../graphql/">
+      
+      
+        <link rel="next" href="../kafka/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>SOAP - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#soap" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SOAP
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#body-templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body templating
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body templating">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-credential-the-secret-registry-does-not-serve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The credential the secret registry does not serve
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-querypage-loop-stops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the QueryPage loop stops
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-service-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the service misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the service misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-fault-fails-the-run-and-is-never-retried" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Fault fails the run — and is never retried
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-same-500-without-a-fault-is-retried" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The same 500, without a Fault, is retried
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-front-door-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the front door refuses
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-the-mark-rides-the-url-not-the-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental — the mark rides the URL, not the body
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connector-level-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector-level headers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-it-at-your-own-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point it at your own service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-a-second-collection-from-the-same-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read a second collection from the same service
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#body-templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body templating
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Body templating">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-credential-the-secret-registry-does-not-serve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The credential the secret registry does not serve
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-querypage-loop-stops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the QueryPage loop stops
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-service-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the service misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the service misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-fault-fails-the-run-and-is-never-retried" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Fault fails the run — and is never retried
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-same-500-without-a-fault-is-retried" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The same 500, without a Fault, is retried
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-front-door-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the front door refuses
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-the-mark-rides-the-url-not-the-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental — the mark rides the URL, not the body
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connector-level-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector-level headers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-it-at-your-own-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point it at your own service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-a-second-collection-from-the-same-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read a second collection from the same service
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="soap">SOAP</h1>
+<blockquote>
+<p>Ingest a legacy SOAP service (Siebel, SAP PI) by putting the <code>&lt;soap:Body&gt;</code> in the manifest —
+a request shape on the REST engine (<code>connector_type</code> stays <code>rest-generic</code>), with QueryPage
+pagination.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td><code>rest-generic</code> (shape <code>soap</code>)</td>
+</tr>
+<tr>
+<td><strong>Protocol</strong></td>
+<td>SOAP 1.1 over POST</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td><code>ext.*</code> hybrid</td>
+</tr>
+<tr>
+<td><strong>Schedulable</strong></td>
+<td>cron</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>Auth, retry, rate limiting and the hybrid JSONB + typed storage are all shared with
+<a href="../rest/">REST</a>. This page covers what is different: the body template, QueryPage pagination,
+and the error channel that is not the HTTP status.</p>
+<h2 id="quickstart">Quickstart</h2>
+<div class="admonition note">
+<p class="admonition-title">Every screen on this page reads a demo service that ships with the repo</p>
+<p>The same Python file the REST page uses answers SOAP on <code>POST /&lt;service&gt;/start.swe</code> — eight
+services over the same 2 400 fictional ACME partners, in XML. Start it in a terminal of its
+own, and put the one credential these manifests need in the hub's registry:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>docs/connectors/rest/demo/acme-api.py
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_BASIC_PW<span class="w">        </span><span class="c1"># demo-pass</span>
+</code></pre></div>
+<p>The manifests point at <code>http://host.docker.internal:8099</code>, because the hub runs in a
+container and <code>localhost</code> inside it is that container. What each service imitates, and
+which ones misbehave on purpose: <a href="../rest/demo-api/">The demo API</a>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 90-soap-querypage.yaml — the Siebel QueryPage shape, on the same engine as every REST file here.</span>
+<span class="c1">#</span>
+<span class="c1"># `connector_type` stays rest-generic. What `kind: soap` changes is the request: a POST carrying</span>
+<span class="c1"># a templated &lt;soap:Body&gt; inside a SOAP 1.1 envelope, an XML answer, and a cursor that is a ROW</span>
+<span class="c1"># OFFSET woven into that body rather than a query parameter.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The hard rule ─────────────────────────────────────────────────────────────────────────</span>
+<span class="c1"># `kind: soap` and `pagination.kind: soap` require each other, in both directions. `kind` picks</span>
+<span class="c1"># the request builder (envelope, templating, POST + SOAPAction); `pagination.kind` picks the XML</span>
+<span class="c1"># parser and the offset arithmetic. Either half alone pairs a builder with a parser that does</span>
+<span class="c1"># not understand it — an empty run that looks successful, which is why the refusal is at apply.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The two placeholders ──────────────────────────────────────────────────────────────────</span>
+<span class="c1">#   {{page_size}}  → pagination.page_size, verbatim</span>
+<span class="c1">#   {{cursor}}     → the row offset: 0 on the first request, +page_size per page</span>
+<span class="c1">#</span>
+<span class="c1"># ── What the paths must look like ─────────────────────────────────────────────────────────</span>
+<span class="c1"># The demo service answers with ns:-prefixed elements (&lt;ns:Customer&gt;&lt;ns:Id&gt;) — every path below</span>
+<span class="c1"># is written WITHOUT the prefix, because the parser strips them before matching. And a SOAP</span>
+<span class="c1"># `response_path` is a PLAIN DOTTED PATH: no [*], no .. — it names the repeated element itself</span>
+<span class="c1"># so the parser can force it into a list.</span>
+<span class="c1">#</span>
+<span class="c1"># ── XML has no types ──────────────────────────────────────────────────────────────────────</span>
+<span class="c1"># Every leaf arrives as a string. `credit_limit` becomes a decimal and `updated_at` a</span>
+<span class="c1"># timestamptz because the promote ladder says so, not because the source announced anything.</span>
+<span class="c1">#</span>
+<span class="c1">#   lm secret set ACME_BASIC_PW        # the demo API answers to demo-user / demo-pass</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 rows in ext.acme_soap_partners, walked 500 at a time.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partners</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/siebel/start.swe</span>
+<span class="w">      </span><span class="nt">soap_action</span><span class="p">:</span><span class="w"> </span><span class="s">"document/urn:acme:CustomerQueryPage"</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">          </span><span class="no">&lt;ListOfCustomer&gt;&lt;Customer&gt;&lt;Id query="*"/&gt;&lt;Name query="*"/&gt;&lt;/Customer&gt;&lt;/ListOfCustomer&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_partners</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt">         path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt">        type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">city</span><span class="p p-Indicator">,</span><span class="nt">         path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.City"</span><span class="p p-Indicator">,</span><span class="nt">        type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">credit_limit</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.CreditLimit"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">decimal</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">updated_at</span><span class="p p-Indicator">,</span><span class="nt">   path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.UpdatedAt"</span><span class="p p-Indicator">,</span><span class="nt">   type</span><span class="p">:</span><span class="w"> </span><span class="nv">timestamptz</span><span class="p p-Indicator">,</span><span class="nt"> transform</span><span class="p">:</span><span class="w"> </span><span class="nv">parse_iso8601</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/rest/demo/90-soap-querypage.yaml
+✓ docs/connectors/rest/demo/90-soap-querypage.yaml — valid
+$ lm apply -f docs/connectors/rest/demo/90-soap-querypage.yaml
+{"name":"acme-soap","connectorId":"b0a39e2f-29b3-43ed-be20-2526d23bc06c","endpointsApplied":1}
+</code></pre></div>
+<p>Before running anything, ask the service the first question a run would ask:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-soap
+ENDPOINT  METHOD  STATUS  ITEMS  VERDICT
+partners  POST    200     500    ok
+</code></pre></div>
+<p><code>METHOD</code> reads <code>POST</code>: the pre-flight composes the request a run composes — envelope, body
+template, <code>SOAPAction</code> and all — so a SOAP endpoint is knocked on the way a run knocks. One
+page, 500 customers, nothing written.</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-soap
+run scheduled: df8459f5-ec4c-4269-bd87-ea8f046c3f08
+$ lm run list --connector acme-soap
+ID        CONNECTOR  ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+df8459f5  acme-soap  partners  Completed  2400  2400  0        0             2026-09-10 17:54  2026-09-10 17:54
+</code></pre></div>
+<p>What landed in <code>ext.acme_soap_partners</code> — the promoted columns, beside the whole payload:</p>
+<div class="highlight"><pre><span></span><code> external_id |           name            |   city    | credit_limit |       updated_at       
+-------------+---------------------------+-----------+--------------+------------------------
+ 1000        | Hydraulique Lyon 1000     | Lyon      |          500 | 2026-01-01 00:00:00+00
+ 1001        | Roulements Bruxelles 1001 | Bruxelles |          637 | 2026-01-01 00:01:00+00
+ 1002        | Fixations Milano 1002     | Milano    |          774 | 2026-01-01 00:02:00+00
+</code></pre></div>
+<p>Those are the same three partners the <a href="../rest/#quickstart">REST quickstart</a> read out of JSON,
+and that is the point: what changed is the envelope, not the table. <code>credit_limit</code> is a numeric
+column and <code>updated_at</code> a <code>timestamptz</code> because the <code>promote</code> ladder said so — <strong>XML carries no
+types</strong>, and every leaf arrived as a string. The table itself is the shared
+<a href="../rest/#storage-layout">storage layout</a>.</p>
+<h2 id="the-manifest">The manifest</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Where</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind: soap</code></td>
+<td>endpoint</td>
+<td>yes</td>
+<td>Picks the request builder — and demands <code>pagination.kind: soap</code></td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>endpoint</td>
+<td>yes</td>
+<td>The POST target, appended to <code>base_url</code> (e.g. <code>/eai_enu/start.swe</code>)</td>
+</tr>
+<tr>
+<td><code>body</code></td>
+<td>endpoint</td>
+<td>yes</td>
+<td>The <strong>inner</strong> <code>&lt;soap:Body&gt;</code> XML — the hub wraps the SOAP 1.1 envelope</td>
+</tr>
+<tr>
+<td><code>soap_action</code></td>
+<td>endpoint</td>
+<td>no</td>
+<td>Sent as the <code>SOAPAction</code> header (an empty quoted string when absent)</td>
+</tr>
+<tr>
+<td><code>header</code></td>
+<td>endpoint</td>
+<td>no</td>
+<td>The inner <code>&lt;soap:Header&gt;</code> XML — same substitution as <code>body</code></td>
+</tr>
+<tr>
+<td><code>pagination.kind: soap</code></td>
+<td>endpoint</td>
+<td>yes</td>
+<td>Picks the XML parser and the offset arithmetic</td>
+</tr>
+<tr>
+<td><code>page_size</code></td>
+<td>pagination</td>
+<td>yes</td>
+<td>Rows per page, injected as <code>{{page_size}}</code> — <strong>explicit, no default</strong></td>
+</tr>
+<tr>
+<td><code>response_path</code></td>
+<td>pagination</td>
+<td>yes</td>
+<td>A <strong>plain dotted path</strong> to the repeated element</td>
+</tr>
+<tr>
+<td><code>last_page_path</code> / <code>has_more_path</code></td>
+<td>pagination</td>
+<td>no</td>
+<td>One stop signal — see <a href="#where-the-querypage-loop-stops">Where the QueryPage loop stops</a></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>endpoint</td>
+<td>yes</td>
+<td>The same hybrid target as REST: <code>table</code>, <code>unique_key</code>, <code>promote</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>method</code> is implicit: always <code>POST</code>, with <code>Content-Type: text/xml; charset=utf-8</code>. The engine
+sends SOAP <strong>1.1</strong> envelopes only — a service that requires SOAP 1.2
+(<code>application/soap+xml</code>) is not supported in this release.</p>
+<p><code>page_size</code> is deliberately defaultless. It is not just the loop's stride: it is substituted
+into the body as <code>{{page_size}}</code>. A default that did not match what the service actually
+returns would skip or duplicate rows — the arithmetic and the request would disagree about the
+same number.</p>
+<h2 id="how-it-works">How it works</h2>
+<ul>
+<li>The rendered body is wrapped in a <code>&lt;soap:Envelope&gt;</code> and POSTed to <code>base_url + path</code>.</li>
+<li><code>{{cursor}}</code> is a <strong>row offset</strong>: <code>0</code> on the first request, <code>+page_size</code> per page. There is no
+  next-page link and no total to read — QueryPage advances by arithmetic.</li>
+<li>The XML answer is parsed into a tree, and <strong>namespace prefixes are stripped</strong>
+  (<code>ns1:Customer</code> → <code>Customer</code>) before any path is matched. That is why every path in the
+  manifest above is written without a prefix while the service answers with them.</li>
+<li>The terminal segment of <code>response_path</code> is <strong>force-listed</strong>: one <code>&lt;Customer&gt;</code> or fifty, the
+  run reads a list. XML has no arrays, and without that coercion a page holding a single element
+  parses as an object and is lost without a word. (Limit: <em>intermediate</em> repeated segments are
+  not coerced.)</li>
+<li>The parser is <strong>XXE-hardened</strong> — DTDs and external entities are disabled.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">A SOAP endpoint does not chunk — size it accordingly</p>
+<p>Every other reader in this family follows the pagination chain one chunk at a time. SOAP
+cannot: its resume state lives inside the strategy and cannot be rebuilt from a cursor, so
+a run fetches <strong>all</strong> its pages in one pass and holds the whole payload in memory. The
+quickstart's 2 400 partners cost five requests inside a single fetch. <code>lm run get &lt;id&gt; -o
+json</code> still reports <code>"chunkCount": 2</code> — the fetch, then the chunk that recognises its own
+run on the cursor and ends the stream without asking for anything.</p>
+</div>
+<h2 id="body-templating">Body templating</h2>
+<p>Four placeholders are resolved on every request — in <code>body:</code> <strong>and</strong> <code>header:</code> alike:</p>
+<table>
+<thead>
+<tr>
+<th>Placeholder</th>
+<th>Resolves to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{page_size}}</code></td>
+<td><code>pagination.page_size</code>, verbatim</td>
+</tr>
+<tr>
+<td><code>{{cursor}}</code></td>
+<td>the row offset of the page being fetched</td>
+</tr>
+<tr>
+<td><code>{{secret:NAME}}</code> / <code>{{env:NAME}}</code></td>
+<td>the hub's <strong>process environment</strong> — see below</td>
+</tr>
+</tbody>
+</table>
+<p>An <strong>unresolved placeholder fails the run before the request is sent</strong>: a template is never put
+on the wire with a literal <code>{{...}}</code> inside it, and the value is never echoed in the error.
+Anything else — <code>{{watermark}}</code>, a typo — is refused the same way.</p>
+<h3 id="the-credential-the-secret-registry-does-not-serve">The credential the secret registry does not serve</h3>
+<p>This is the one thing on this page that will surprise you. <code>{{secret:NAME}}</code> and <code>{{env:NAME}}</code>
+are synonyms, and <strong>both</strong> resolve from the hub's own process environment (an OS variable, or a
+JVM system property as a dev/test fallback). The DB-backed <code>lm secret</code> registry is <em>not</em>
+consulted — unlike <code>password_env</code> and <code>value_env</code>, which read that registry first.</p>
+<p>Legacy EAI services often want their session token inside the envelope, where no auth provider
+can put it. That is what <code>header:</code> is for:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 94-soap-session.yaml — the credential that does not travel in a header.</span>
+<span class="c1">#</span>
+<span class="c1"># Legacy EAI services often want their session token INSIDE the envelope, in &lt;soap:Header&gt;,</span>
+<span class="c1"># where no auth provider can put it. That is what the endpoint's own `header:` template is for —</span>
+<span class="c1"># same substitution as `body:`, same placeholders, same fail-fast.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The placeholder that is NOT `lm secret` ───────────────────────────────────────────────</span>
+<span class="c1"># This is the one thing in this corpus that will surprise you, and it is worth reading twice:</span>
+<span class="c1">#</span>
+<span class="c1">#   {{secret:NAME}} and {{env:NAME}} both resolve from the HUB'S PROCESS ENVIRONMENT</span>
+<span class="c1">#   (an OS env var, or a JVM system property as a dev/test fallback).</span>
+<span class="c1">#   The DB-backed `lm secret` registry is NOT consulted.</span>
+<span class="c1">#</span>
+<span class="c1"># Every other credential here goes the other way: `password_env` / `value_env` read `lm secret`</span>
+<span class="c1"># first and the hub's environment second. Here there is no first — and the two placeholder</span>
+<span class="c1"># spellings are synonyms.</span>
+<span class="c1">#</span>
+<span class="c1"># So `lm secret set ACME_SESSION_TOKEN ...` does nothing for this manifest. The hub runs in a</span>
+<span class="c1"># container, which means the variable has to exist in THAT container:</span>
+<span class="c1">#</span>
+<span class="c1">#   docker compose -f docker-compose.selfhost.yml \</span>
+<span class="c1">#                  -f docs/connectors/rest/demo/soap-session.override.yml up -d hub</span>
+<span class="c1">#</span>
+<span class="c1"># That override file sits beside this one and adds exactly one variable to the hub service;</span>
+<span class="c1"># `deploy/selfhost/up.sh` puts the stack back the way it was.</span>
+<span class="c1">#</span>
+<span class="c1"># An unresolved placeholder FAILS THE RUN before the request is sent — the template never goes</span>
+<span class="c1"># on the wire with a literal {{...}} inside it, and the value is never echoed in the error.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect (token exported in the container): 2 400 rows.</span>
+<span class="c1"># Expect (token absent): a run that fails fast naming the placeholder, NOT a 401 — the refusal</span>
+<span class="c1"># happens in the hub, before the service is ever asked.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap-session</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="c1"># Transport auth is still HTTP Basic — the session token is a SECOND credential, carried in</span>
+<span class="w">  </span><span class="c1"># the envelope. Both are needed, and they resolve through two different registries.</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partners</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/session/start.swe</span>
+<span class="w">      </span><span class="nt">soap_action</span><span class="p">:</span><span class="w"> </span><span class="s">"document/urn:acme:CustomerQueryPage"</span>
+<span class="w">      </span><span class="nt">header</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;SessionToken&gt;{{env:ACME_SESSION_TOKEN}}&lt;/SessionToken&gt;</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_session</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Applied without the variable, the refusal happens <strong>in the hub</strong> — the service is never asked:</p>
+<div class="highlight"><pre><span></span><code>$ lm source rest test acme-soap-session
+ENDPOINT  METHOD  STATUS  ITEMS  VERDICT
+partners  GET     -       0      unresolved secret/env placeholder: ACME_SESSION_TOKEN
+Error: 1 of 1 enabled endpoint(s) did not answer with readable data
+</code></pre></div>
+<p><code>STATUS -</code> is the column that matters: no request was composed at all, so nothing was sent. The
+<code>METHOD</code> column falls back to the endpoint row's stored default and prints <code>GET</code> on an endpoint
+this command only ever POSTs to — read <code>STATUS -</code> first.</p>
+<p><code>lm secret set ACME_SESSION_TOKEN …</code> would change nothing here. The variable has to exist where
+the hub process runs, which for the container stack means one override file — it adds that
+single variable to the hub service and changes nothing else:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="se">\</span>
+<span class="w">               </span>-f<span class="w"> </span>docs/connectors/rest/demo/soap-session.override.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>hub
+</code></pre></div>
+<p>Nothing about the manifest changes. The same endpoint, before and after, in one ledger:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-soap-session
+ID        CONNECTOR          ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+61e70fbd  acme-soap-session  partners  Completed  2400  2400  0        0             2026-09-10 18:12  2026-09-10 18:12
+eaefa10b  acme-soap-session  partners  Failed     0     0     0        0             2026-09-10 17:57  2026-09-10 17:57
+</code></pre></div>
+<h2 id="where-the-querypage-loop-stops">Where the QueryPage loop stops</h2>
+<p>QueryPage has no total and no next link. It stops on exactly <strong>one</strong> signal, chosen by
+configuration and never tried in sequence:</p>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>The loop continues</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>last_page_path</code></td>
+<td>only while the flag reads explicitly <code>false</code></td>
+</tr>
+<tr>
+<td>else <code>has_more_path</code></td>
+<td>only while the flag reads explicitly <code>true</code></td>
+</tr>
+<tr>
+<td>neither</td>
+<td>until a page comes back shorter than <code>page_size</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both flag rules are asymmetric about absence on purpose: a missing, null or unreadable flag
+<strong>stops</strong>. A loop that kept going on a flag it could not read would hammer a legacy service
+forever — offset arithmetic gives it no natural end. (Flags arrive as XML strings;
+<code>"true"</code>/<code>"false"</code> are read as booleans.)</p>
+<p>The quickstart covers <code>last_page_path</code>. Here are the other two, plus the trap underneath all of
+them:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 91-soap-stop-signals.yaml — the three ways a QueryPage loop is allowed to end, side by side.</span>
+<span class="c1">#</span>
+<span class="c1"># SOAP pagination has no total and no next link. It advances by offset arithmetic and stops on</span>
+<span class="c1"># exactly ONE signal, chosen by configuration and never tried in sequence:</span>
+<span class="c1">#</span>
+<span class="c1">#   last_page_path set → continue ONLY while the flag reads explicitly "false"</span>
+<span class="c1">#   else has_more_path → continue ONLY while the flag reads explicitly "true"</span>
+<span class="c1">#   else               → stop on the first page shorter than page_size</span>
+<span class="c1">#</span>
+<span class="c1"># Both flag rules are asymmetric with respect to absence, on purpose: a missing, null or</span>
+<span class="c1"># unreadable flag STOPS. A loop that kept going on a flag it could not read would hammer a</span>
+<span class="c1"># legacy service forever — offset arithmetic gives it no natural end.</span>
+<span class="c1">#</span>
+<span class="c1"># `90` covers last_page_path. This file covers the other two, plus the trap underneath all of</span>
+<span class="c1"># them.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The trap: XML has no arrays ───────────────────────────────────────────────────────────</span>
+<span class="c1"># &lt;ListOfCustomer&gt; holding fifty &lt;Customer&gt; elements parses as a list. The SAME wrapper holding</span>
+<span class="c1"># ONE &lt;Customer&gt; parses as an object — and an engine that iterates blindly loses that row</span>
+<span class="c1"># without a word. The `tail` endpoint exists to make it observable: the /tail service serves a</span>
+<span class="c1"># truncated 201-row dataset and the page size is 100, so its final page carries exactly one.</span>
+<span class="c1">#</span>
+<span class="c1">#   201 rows → the force-list works.</span>
+<span class="c1">#   200 rows → the last page was silently dropped.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 (more-records), 2 400 (short-page), 201 (single-element-tail).</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap-stops</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># ── has_more_path — the SAP PI flavour: "there are more", not "this is the last" ────────</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">more-records</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sap/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">has_more_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.MoreRecords"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_moreflag</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">    </span><span class="c1"># ── no flag at all — the service announces nothing, the short page is the only signal ───</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">short-page</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mute/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">700</span><span class="w">          </span><span class="c1"># 2 400 = 3 x 700 + 300 — the fourth page is the short one</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_shortpage</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">    </span><span class="c1"># ── the single-element last page — 201 rows, or the force-list is broken ────────────────</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">single-element-tail</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tail/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">          </span><span class="c1"># 201 rows = 100 + 100 + ONE</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_tail</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-soap-stops
+ID        CONNECTOR        ENDPOINT             STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+00ea7a5c  acme-soap-stops  single-element-tail  Completed  201   201   0        0             2026-09-10 17:54  2026-09-10 17:54
+f5011cb7  acme-soap-stops  short-page           Completed  2400  2400  0        0             2026-09-10 17:54  2026-09-10 17:54
+507ad6e8  acme-soap-stops  more-records         Completed  2400  2400  0        0             2026-09-10 17:54  2026-09-10 17:54
+</code></pre></div>
+<p><strong>201, not 200.</strong> The <code>/tail</code> service serves a truncated 201-row dataset against a page size of
+100, so its last page carries exactly one <code>&lt;Customer&gt;</code>. That row is the force-list's witness: it
+is the one an engine that iterates blindly drops, and no error is raised when it does. Whenever
+you meet a SOAP source, the count of a truncated read is the check worth running.</p>
+<h2 id="when-the-service-misbehaves">When the service misbehaves</h2>
+<h3 id="a-fault-fails-the-run-and-is-never-retried">A Fault fails the run — and is never retried</h3>
+<p>SOAP, like GraphQL, has an error channel that is not the HTTP status, and stacks use it two
+ways: <code>&lt;soap:Fault&gt;</code> on HTTP 500, which is what SOAP 1.1 prescribes, and the same Fault on HTTP
+200, which plenty of gateways send. Both must fail the run — the second is the dangerous one,
+because an engine that trusts the status reads a body with no rows in it and reports a clean,
+empty, successful sync.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 92-soap-fault.yaml — the run that MUST fail, and the twin of 80-graphql-errors.yaml.</span>
+<span class="c1">#</span>
+<span class="c1"># SOAP, like GraphQL, has an error channel that is not the HTTP status — and stacks use it two</span>
+<span class="c1"># different ways:</span>
+<span class="c1">#</span>
+<span class="c1">#   HTTP 500 + &lt;soap:Fault&gt;   what the SOAP 1.1 book prescribes</span>
+<span class="c1">#   HTTP 200 + &lt;soap:Fault&gt;   what a good many gateways and .NET services actually send</span>
+<span class="c1">#</span>
+<span class="c1"># Both must fail the run. The second is the dangerous one: an engine that trusts the status</span>
+<span class="c1"># reads a body with no rows in it and reports a clean, empty, successful sync.</span>
+<span class="c1">#</span>
+<span class="c1"># ── And the part that is NOT symmetric with a plain 5xx ───────────────────────────────────</span>
+<span class="c1"># A Fault is a BUSINESS error: the service answered, and its answer is "no". Retrying it is</span>
+<span class="c1"># waiting for a different answer to the same wrong question. So the fault check runs INSIDE the</span>
+<span class="c1"># retry boundary and refuses first — a fault is never retried, even though it arrives on the</span>
+<span class="c1"># 500 the shared policy calls transient. Read this file against 93, which is the same status</span>
+<span class="c1"># from the same server with the opposite handling.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: BOTH endpoints Failed, 0 records_out, the run message naming the faultstring.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap-fault</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fault-on-500</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/fault/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_fault500</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fault-on-200</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/fault200/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_fault200</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-soap-fault
+ID        CONNECTOR        ENDPOINT      STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+a4b52877  acme-soap-fault  fault-on-500  Failed  0   0    0        0             2026-09-10 17:55  2026-09-10 17:55
+2e52e76a  acme-soap-fault  fault-on-200  Failed  0   0    0        0             2026-09-10 17:55  2026-09-10 17:55
+
+$ lm run get a4b52877
+ID        CONNECTOR        ENDPOINT      STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+a4b52877  acme-soap-fault  fault-on-500  Failed  0   0    0        0             2026-09-10 17:55  2026-09-10 17:55
+✖ run failed: SOAP Fault: SBL-DAT-00500: no such Business Component 'Customer'
+</code></pre></div>
+<p>The message carries the service's own <code>faultstring</code>, verbatim. The refusal is total: no partial
+ingestion, nothing dead-lettered — a query the service would not answer produced no rows to
+quarantine — and neither endpoint's <code>ext.*</code> table was created at all.</p>
+<p>A Fault is a <strong>business</strong> error: the service answered, and its answer is "no". Retrying it is
+waiting for a different answer to the same wrong question, so the fault check runs <em>inside</em> the
+retry boundary and refuses first. In the demo API's log, that run is one request per endpoint —
+not five.</p>
+<h3 id="the-same-500-without-a-fault-is-retried">The same 500, without a Fault, is retried</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 93-soap-retry.yaml — the other error channel, on the same status code.</span>
+<span class="c1">#</span>
+<span class="c1"># The /flaky service answers 500 twice per page window and then serves the page. The body of</span>
+<span class="c1"># those 500s is XML, but it carries NO &lt;soap:Fault&gt; — it is an infrastructure hiccup, not an</span>
+<span class="c1"># answer. The shared REST retry policy applies unchanged: 5 attempts, transient on exactly</span>
+<span class="c1"># 429, 500, 502, 503, 504, 408.</span>
+<span class="c1">#</span>
+<span class="c1"># Read this file against 92. Same server, same 500, opposite outcome — and the body is the only</span>
+<span class="c1"># thing that differs. That is the whole design: the status says "something went wrong", the</span>
+<span class="c1"># body says whose fault it is.</span>
+<span class="c1">#</span>
+<span class="c1"># ── Before running ────────────────────────────────────────────────────────────────────────</span>
+<span class="c1">#   curl http://127.0.0.1:8099/admin/reset</span>
+<span class="c1">#</span>
+<span class="c1"># The failure counters are per page window and they persist. Without a reset, a second run finds</span>
+<span class="c1"># the failures already burnt in, retries nothing, and goes green for the wrong reason.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Completed with 2 400 rows, and visibly slower than 91's short-page endpoint over the</span>
+<span class="c1"># same data — three requests per window instead of one, plus the backoff between them.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap-retry</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flaky</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/flaky/start.swe</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">800</span><span class="w">         </span><span class="c1"># 3 windows x 3 requests — enough retries to see, few to wait for</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_flaky</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>The <code>/flaky</code> service answers 500 twice per page window before serving the page, and the body of
+those 500s carries no Fault — an infrastructure hiccup, not an answer. The shared REST policy
+applies unchanged: five attempts, transient on exactly <code>429, 500, 502, 503, 504, 408</code> (plus
+network errors); every other status is permanent.</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-soap-retry
+ID        CONNECTOR        ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+bcbf2d82  acme-soap-retry  flaky     Completed  2400  2400  0        0             2026-09-10 17:55  2026-09-10 17:55
+</code></pre></div>
+<p>Completed, all 2 400 rows — and the demo API's own terminal is where you see what it cost:</p>
+<div class="highlight"><pre><span></span><code>10/Sep/2026 17:55:34  "POST /flaky/start.swe HTTP/1.1" 500 -
+10/Sep/2026 17:55:35  "POST /flaky/start.swe HTTP/1.1" 500 -
+10/Sep/2026 17:55:37  "POST /flaky/start.swe HTTP/1.1" 200 -
+10/Sep/2026 17:55:37  "POST /flaky/start.swe HTTP/1.1" 500 -
+10/Sep/2026 17:55:38  "POST /flaky/start.swe HTTP/1.1" 500 -
+10/Sep/2026 17:55:40  "POST /flaky/start.swe HTTP/1.1" 200 -
+</code></pre></div>
+<p>Three requests per window, with the backoff visible between them. Read those two runs together:
+same server, same status code, opposite handling — <strong>the body is the only thing that differs</strong>.
+The status says something went wrong; the body says whose fault it is.</p>
+<div class="admonition warning">
+<p class="admonition-title">Reset the counters before re-running</p>
+<p><code>curl http://127.0.0.1:8099/admin/reset</code>. The demo API's failure counters are per page
+window and they persist: a second run finds them already burnt in, retries nothing, and goes
+green for the wrong reason.</p>
+</div>
+<h3 id="what-the-front-door-refuses">What the front door refuses</h3>
+<p><code>kind: soap</code> and <code>pagination.kind: soap</code> require each other, in both directions. <code>kind</code> picks
+the request builder; <code>pagination.kind</code> picks the XML parser and the offset arithmetic. Either
+half alone pairs a builder with a parser that cannot read it — not a crash, an empty run that
+looks successful, which is why this is refused at the front door:</p>
+<div class="highlight"><pre><span></span><code>$ lm apply -f bad-soap.yaml
+✗ bad-soap.yaml — 2 error(s), 0 warning(s)
+
+  ERROR    spec.endpoints[0].pagination.kind
+          kind=soap endpoints require pagination.kind=soap
+          → Use: pagination: { kind: soap, response_path: ... }
+
+  ERROR    spec.endpoints[1].pagination.kind
+          pagination.kind=soap requires endpoints[].kind=soap
+          → Set kind: soap on the endpoint
+
+Fix errors above before running 'lm apply -f bad-soap.yaml'.
+Error: validation failed: 2 error(s)
+</code></pre></div>
+<p>And a SOAP <code>response_path</code> cannot be a projection. Everywhere else in this family <code>[*]</code> is the
+normal way to write one; here the parser has to <em>walk</em> those segments to reach the repeated
+element and coerce it into a list. An operator makes that walk impossible — the path would still
+match, and the run would still succeed, minus every page whose last element stood alone:</p>
+<div class="highlight"><pre><span></span><code>$ lm apply -f bad-paths.yaml
+✗ bad-paths.yaml — 2 error(s), 0 warning(s)
+
+  ERROR    spec.endpoints[0].pagination.response_path
+          SOAP response_path must be a plain dotted path (e.g. $.Body.Out.List.Item) — JsonPath operators ([*], ..) bypass the force-list and cause silent single-element data loss
+          → Remove operators; use a plain dotted path like $.Body.Out.ListOfItems.Item
+
+  ERROR    spec.endpoints[1].pagination.page_size
+          page_size is required when pagination.kind = soap
+</code></pre></div>
+<h2 id="incremental-the-mark-rides-the-url-not-the-body">Incremental — the mark rides the URL, not the body</h2>
+<p><code>incremental: { mode: watermark }</code> works on a SOAP endpoint: the stored mark goes out on the
+first request of a run and the new one is the MAX of <code>watermark_path</code> over everything the run
+read.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 95-soap-watermark.yaml — incremental over SOAP, and the seam it lands on.</span>
+<span class="c1">#</span>
+<span class="c1"># `incremental: watermark` is not a REST-only block: the engine sends the stored mark on the</span>
+<span class="c1"># FIRST request of a run, under the parameter named by `incremental.param`, and computes the new</span>
+<span class="c1"># one as the MAX of `watermark_path` over everything the run read.</span>
+<span class="c1">#</span>
+<span class="c1"># ── The seam, and it is worth knowing before you promise a customer an incremental SOAP feed ─</span>
+<span class="c1"># The request here is a POST whose payload is a templated XML body — and the mark does NOT go</span>
+<span class="c1"># into that body. There is no {{watermark}} placeholder: the template knows four, and those are</span>
+<span class="c1"># page_size, cursor, secret:NAME and env:NAME. The mark rides in the URL QUERY STRING, bolted</span>
+<span class="c1"># onto the POST:</span>
+<span class="c1">#</span>
+<span class="c1">#   POST /siebel/start.swe?updated_since=2026-01-02T15:59:00Z</span>
+<span class="c1">#</span>
+<span class="c1"># which is what the demo service reads. A real SOAP service would almost certainly want that</span>
+<span class="c1"># filter as an element inside the body, and this release gives no way to put it there. A body</span>
+<span class="c1"># carrying &lt;UpdatedSince&gt;{{watermark}}&lt;/UpdatedSince&gt; APPLIES cleanly — the validator does not</span>
+<span class="c1"># inspect templates — and then fails every run with `unknown placeholder: watermark`.</span>
+<span class="c1">#</span>
+<span class="c1">#   lm connector run acme-soap-incremental      # run 1 — the full 2 400</span>
+<span class="c1">#   lm connector run acme-soap-incremental      # run 2 — only what shares the maximal instant</span>
+<span class="c1">#   lm endpoint reset-cursor acme-soap-incremental/partners</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: run 1 = 2 400 in / 2 400 out. Run 2 = 1 in / 1 out — the boundary is inclusive, so the</span>
+<span class="c1"># row holding the maximal instant comes back and is re-upserted on its unique key.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-soap-incremental</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://host.docker.internal:8099</span>
+
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-user</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_BASIC_PW</span>
+
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partners</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/siebel/start.swe</span>
+<span class="w">      </span><span class="nt">soap_action</span><span class="p">:</span><span class="w"> </span><span class="s">"document/urn:acme:CustomerQueryPage"</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">incremental</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermark</span>
+<span class="w">        </span><span class="nt">param</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_since</span><span class="w">          </span><span class="c1"># a query parameter on the POST — not a body element</span>
+<span class="w">        </span><span class="nt">watermark_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.UpdatedAt"</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.acme_soap_incremental</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt">       path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt">      type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">updated_at</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.UpdatedAt"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">timestamptz</span><span class="p p-Indicator">,</span><span class="nt"> transform</span><span class="p">:</span><span class="w"> </span><span class="nv">parse_iso8601</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-soap-incremental
+ID        CONNECTOR              ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+94bd6b1a  acme-soap-incremental  partners  Completed  1     1     0        0             2026-09-10 17:56  2026-09-10 17:56
+fa948c13  acme-soap-incremental  partners  Completed  2400  2400  0        0             2026-09-10 17:56  2026-09-10 17:56
+</code></pre></div>
+<p>Run 1 reads 2 400 and stores the maximal <code>UpdatedAt</code>; run 2 sends it and reads the single row
+sharing that instant — inclusive, like most sources, and re-upserted on its unique key.</p>
+<div class="admonition warning">
+<p class="admonition-title">Know this before you promise a customer an incremental SOAP feed</p>
+<p>The mark is <strong>not</strong> woven into the body. There is no <code>{{watermark}}</code> placeholder — the
+table above is the whole list, and anything else fails the run. The mark rides in the URL
+query string, bolted onto the POST, which is what the demo service reads:</p>
+<div class="highlight"><pre><span></span><code>10/Sep/2026 17:56:49  "POST /siebel/start.swe?updated_since=2026-01-02T15%3A59%3A00Z HTTP/1.1" 200 -
+</code></pre></div>
+<p>A real SOAP service will almost certainly want that filter as an element inside the body
+instead, and this release gives no way to put it there. When it does, filter in the body
+with a literal and leave <code>incremental</code> at <code>full</code>.</p>
+</div>
+<h2 id="connector-level-headers">Connector-level headers</h2>
+<p><a href="../rest/#request-headers"><code>spec.headers[]</code></a> applies to SOAP endpoints too — the entries ride
+every page of the QueryPage loop. They are applied <strong>before</strong> auth (an auth-injected header wins
+a name clash), and <code>Content-Type</code> and <code>SOAPAction</code> are set by the engine, so don't redeclare
+them. Endpoint-level <code>headers</code> are refused at apply, exactly as for REST.</p>
+<h2 id="how-to">How to…</h2>
+<h3 id="point-it-at-your-own-service">Point it at your own service</h3>
+<p>The manifest the TUI's <code>:new</code> picker hands you for <code>soap</code> is a Siebel EAI endpoint with nothing
+demo about it:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Siebel CustomerQueryPage over SOAP, exposed as a canonical hub table.</span>
+<span class="c1"># kind: soap is a request-shape on the HTTP engine (connector_type stays rest-generic).</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">siebel-customers</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rest-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">crm</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">customers</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">siebel</span><span class="p p-Indicator">]</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://siebel.example.com</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">siebel_svc</span><span class="w">          </span><span class="c1"># literal username (the basic block reads `username`, not an env)</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SIEBEL_PWD</span><span class="w">      </span><span class="c1"># env var name holding the password</span>
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customers</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/eai_enu/start.swe</span>
+<span class="w">      </span><span class="nt">soap_action</span><span class="p">:</span><span class="w"> </span><span class="s">"document/urn:crmod:...:CustomerQueryPage"</span>
+<span class="w">      </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">&lt;CustomerQueryPage_Input&gt;</span>
+<span class="w">          </span><span class="no">&lt;PageSize&gt;{{page_size}}&lt;/PageSize&gt;</span>
+<span class="w">          </span><span class="no">&lt;StartRowNum&gt;{{cursor}}&lt;/StartRowNum&gt;</span>
+<span class="w">          </span><span class="no">&lt;ListOfCustomer&gt;&lt;Customer&gt;&lt;Id query="*"/&gt;&lt;Name query="*"/&gt;&lt;/Customer&gt;&lt;/ListOfCustomer&gt;</span>
+<span class="w">        </span><span class="no">&lt;/CustomerQueryPage_Input&gt;</span>
+<span class="w">      </span><span class="nt">pagination</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">soap</span>
+<span class="w">        </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">        </span><span class="nt">last_page_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.LastPage"</span>
+<span class="w">        </span><span class="nt">response_path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid</span>
+<span class="w">        </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ext.siebel_customers</span>
+<span class="w">        </span><span class="nt">unique_key</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Id"</span>
+<span class="w">        </span><span class="nt">promote</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">name</span><span class="p p-Indicator">,</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="s">"$.Name"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p><strong>Result:</strong> <code>lm apply -f siebel-customers.yaml</code> registers it; <code>lm source rest test
+siebel-customers</code> knocks once before you commit to a run. Change four things and it is yours:
+<code>base_url</code>, the <code>path</code> your EAI listener publishes, the operation names inside <code>body:</code> and the
+<code>response_path</code> that names its repeated element.</p>
+<h3 id="read-a-second-collection-from-the-same-service">Read a second collection from the same service</h3>
+<p>Add a second endpoint with its own <code>body:</code> (a different QueryPage operation), its own
+<code>response_path</code> and its own table. One connector, one service, one credential; the ledger
+records one run per endpoint, exactly as the
+<a href="#where-the-querypage-loop-stops">stop-signals connector</a> shows with three.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run fails instantly with <code>unresolved secret/env placeholder</code></td>
+<td>the name is not in the <strong>hub's</strong> process environment</td>
+<td>export it where the hub runs — the <code>lm secret</code> registry is not consulted for templates</td>
+</tr>
+<tr>
+<td>Run fails on HTTP 500 with no retry</td>
+<td>a <code>&lt;soap:Fault&gt;</code> is a business error, and is never retried</td>
+<td>read the <code>faultstring</code> in <code>lm run get</code>; fix the request or the permission it needs</td>
+</tr>
+<tr>
+<td>Run completed with <code>IN</code> 0</td>
+<td><code>response_path</code> does not match the answer</td>
+<td>remember the namespace strip — write the path <strong>without</strong> prefixes; <code>lm source rest test</code> prints the item count from one page</td>
+</tr>
+<tr>
+<td>A run reads one row fewer than the source holds</td>
+<td><code>response_path</code> carries <code>[*]</code> or <code>..</code>, or an intermediate segment repeats</td>
+<td>use a plain dotted path; the last page holding a single element is where the loss shows</td>
+</tr>
+<tr>
+<td>Pagination stops after one page</td>
+<td>the flag is missing, null or unreadable — which stops, by design</td>
+<td>check <code>last_page_path</code> / <code>has_more_path</code> against the real answer, or set neither and rely on the short page</td>
+</tr>
+<tr>
+<td>Pre-flight prints <code>METHOD GET</code> on a SOAP endpoint</td>
+<td>no request was composed — read <code>STATUS -</code></td>
+<td>the verdict column carries the real reason</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../rest/">REST</a> — the engine underneath (auth providers, retry, rate limit, storage layout)</li>
+<li><a href="../graphql/">GraphQL</a> — the other request shape on that engine</li>
+<li><a href="../rest/demo-api/">The demo API</a> — the services these screens read</li>
+<li><a href="../">Overview</a></li>
+<li>The WOW walkthrough ingests a fake Siebel over this connector — <a href="../../wow/">see it end to end</a></li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

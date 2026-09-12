@@ -1,0 +1,29 @@
+# 30-rename-reserved-column.yaml — a source table whose primary key is called `id`.
+#
+# The hub adds seven columns of its own to every table it creates, `id` among them, so a
+# source column of that name is refused at write time rather than silently dropped. `rename:`
+# is the fix: the source column lands under another name in the hub table. Nothing is renamed
+# on the source — the connection stays read-only.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-price-list
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  source:
+    tables:
+      - name: price_list
+        schema: demo
+        mode: full
+        pk_columns: [id]
+        rename:
+          id: price_list_id
+
+  target: {}

@@ -1,0 +1,40 @@
+# 45-s3-headerless-archive.yaml — a headerless, tab-separated ERP export under an S3 prefix,
+# archived to another bucket once its rows are committed.
+#   lm validate -f docs/connectors/csv/45-s3-headerless-archive.yaml
+#   lm apply    -f docs/connectors/csv/45-s3-headerless-archive.yaml
+#   lm connector run s3-c-bpartner
+#
+# No `endpoint:` → real AWS; set `region` to the region the bucket lives in (the default is eu-west-3).
+# `access_key_env` / `secret_key_env` name secrets held by the platform
+# (`lm secret set AWS_ACCESS_KEY_ID -`), never the values.
+# `has_header: false` makes `parser.columns` mandatory — the names, in file order.
+# `after_process: archive` moves each file to `archive_bucket`/`archive_prefix` only after a later
+# committed cursor proves its rows landed; the next run then finds nothing new and reads 0 rows.
+# Walk-through: docs/connectors/csv.md.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: s3-c-bpartner
+  connector_type: csv-file
+  scopes: [s3-scenario]
+
+spec:
+  transport:
+    kind: s3
+    bucket: lumnik-exports
+    prefix: billing/
+    region: us-east-1
+    suffix: .csv
+    access_key_env: AWS_ACCESS_KEY_ID
+    secret_key_env: AWS_SECRET_ACCESS_KEY
+    archive_bucket: lumnik-archive
+    archive_prefix: archive/
+
+  parser:
+    delimiter: "\t"
+    has_header: false
+    columns: [c_bpartner_id, name, created, isactive]
+
+  after_process: archive
+
+  target: {}

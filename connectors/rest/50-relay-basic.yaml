@@ -1,0 +1,61 @@
+# 50-relay-basic.yaml — GraphQL Relay-style edges/pageInfo pagination with HTTP Basic auth.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/rest/50-relay-basic.yaml
+#   lm connector run rest-relay
+#
+# How Relay pagination works
+# ---------------------------
+# GraphQL APIs commonly use the Relay cursor spec:
+#   data.edges[*].node  — the records
+#   data.pageInfo.endCursor   — cursor to pass as `?after=<cursor>` on the next request
+#   data.pageInfo.hasNextPage — boolean: true → more pages available
+#
+# The connector extracts the endCursor via `cursor_path` and advances via `cursor_param`
+# until `has_more_path` is false.  `cursor_binding: query` means the cursor is appended
+# as a query parameter (vs. a body field for POST-based GraphQL).
+#
+# Auth: basic — the platform sends `Authorization: Basic base64(username:password)`.
+# The password is held by `REST_DEMO_BASIC_PW` (same env var as 20-page-basic.yaml).
+#
+# Pagination: relay — GraphQL Relay cursor spec (edges/pageInfo).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: rest-relay
+  connector_type: rest-generic
+  scopes: [demo]
+
+spec:
+  base_url: http://localhost:8081
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: REST_DEMO_BASIC_PW  # same credential as 20-page-basic.yaml
+
+  endpoints:
+    - id: nodes
+      path: /v1/relay
+      method: GET
+
+      # ── Pagination ─────────────────────────────────────────────────────────
+      pagination:
+        kind: relay
+        cursor_param: after                          # query param carrying the cursor
+        cursor_path: "$.data.pageInfo.endCursor"     # JSONPath: where to read the next cursor
+        has_more_path: "$.data.pageInfo.hasNextPage" # JSONPath boolean: true → advance
+        cursor_binding: query                        # 'query' = cursor goes in the query string
+        response_path: "$.data.edges[*].node"        # JSONPath: unwrap the node objects
+
+      # ── Hybrid target table ────────────────────────────────────────────────
+      target:
+        kind: hybrid
+        table: ext.rest_relay
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+      incremental:
+        mode: full

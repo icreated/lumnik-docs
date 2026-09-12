@@ -1,0 +1,29 @@
+# 60-composite-key.yaml — a table whose primary key is two columns.
+#
+# `pk_columns` is the paging key and it is read WHOLE: the reader orders by (order_id, line_no)
+# and resumes on the pair, so no order is split by a chunk boundary. The order of the entries is
+# the paging order — reverse it and the stored cursor becomes foreign, and the table restarts.
+#
+# What has to hold is that the key is unique TOGETHER. `order_id` alone is not: 700 lines over
+# 100 orders, seven lines each. demo.order_lines is created by data/demo-source.sql.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: demo-lines
+  connector_type: jdbc-generic
+  scopes: [billing]
+
+spec:
+  connection:
+    url: jdbc:postgresql://postgres:5432/lumnik
+    user: lumnik_readonly
+    password_env: LUMNIK_READONLY_DB_PASSWORD
+
+  source:
+    tables:
+      - name: order_lines
+        schema: demo
+        mode: full
+        pk_columns: [order_id, line_no]
+
+  target: {}

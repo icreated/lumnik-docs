@@ -1,0 +1,31 @@
+# 40-s3-prefix.yaml — pull every .csv under an S3 (or S3-compatible, e.g. MinIO) prefix.
+#   lm apply -f docs/connectors/csv/40-s3-prefix.yaml
+#   lm connector run csv-s3
+#
+# `access_key_env` / `secret_key_env` name environment variables holding the credentials (resolved
+# via secret store → system property → env). For AWS, omit `endpoint`; for MinIO set it explicitly.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-s3
+  connector_type: csv-file
+  scopes: [demo]
+
+spec:
+  transport:
+    kind: s3
+    endpoint: http://localhost:9000   # the docker-compose 'minio' service; omit for real AWS
+    region: us-east-1
+    bucket: lumnik-demo
+    prefix: csv/
+    suffix: .csv
+    access_key_env: AWS_ACCESS_KEY_ID
+    secret_key_env: AWS_SECRET_ACCESS_KEY
+
+  parser:
+    has_header: true
+
+  after_process: none
+
+  target: {}

@@ -1,0 +1,99 @@
+# 60-s3-every-transformer.yaml — one real manifest that runs EVERY transformer the csv-file
+# connector offers (all but `aggregator`, which the validator refuses on chunked csv runs).
+#   lm validate -f docs/connectors/csv/60-s3-every-transformer.yaml
+#   lm apply    -f docs/connectors/csv/60-s3-every-transformer.yaml
+#   lm connector run s3-c-bpartner-clean
+#
+# The source is a headerless, tab-separated ERP export with four columns. Every other column is
+# minted by enrich-context so that each hook has something to bite: a dirty e-mail, a phone,
+# a "1 234,56 €" amount, a "31/12/2019" date for the Kotlin script, tags to split, a channel to
+# fan out, mojibake, HTML entities, smart quotes, an invisible character. Reads billing/ from the
+# bucket and leaves the files in place. Walk-through: docs/connectors/transformers.md.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: s3-c-bpartner-clean
+  connector_type: csv-file
+  scopes: [s3-scenario]
+
+spec:
+  transport:
+    kind: s3
+    bucket: lumnik-exports
+    prefix: billing/
+    region: us-east-1
+    suffix: .csv
+    access_key_env: AWS_ACCESS_KEY_ID
+    secret_key_env: AWS_SECRET_ACCESS_KEY
+
+  parser:
+    delimiter: "\t"
+    has_header: false
+    columns: [c_bpartner_id, name, created, isactive]
+
+  after_process: none
+
+  mapping:
+    # ── tier 1: dataset — the whole chunk, once ─────────────────────────────────────────
+    dataset:
+      - require-headers: { columns: [c_bpartner_id, name], any-of: [created, isactive] }
+      - skip-empty-rows: {}
+      - filter-where: { column: c_bpartner_id, regex: "[0-9]+" }
+      - sort-by: { columns: [c_bpartner_id] }
+      - enrich-context:
+          ingested_from: erp-export-s3
+          loaded_at: "${now}"
+          contact_email: "  Contact@Example.COM "
+          phone_raw: "06 12 34 56 78"
+          balance_raw: "1 234,56 €"
+          signup_date: "31/12/2019"
+          tags_raw: "retail;online;b2b"
+          channel_raw: "web;store"
+          region_raw: "CÃ´te d'Azur"
+          slogan_raw: "“Eau &amp; Soleil” – depuis 1998…"
+          city_raw: "Montréal"
+          code_raw: "AB​CD"
+          note_raw: "﻿  hello\t"
+          junk: "dropped by map-columns"
+    # ── tier 2: row — one record, may emit 0..N rows ────────────────────────────────────
+    row:
+      - map-columns:
+          rename: { created: created_at, isactive: is_active }
+          drop: [junk]
+      - coalesce: { column: display_name, from: [trade_name, name] }   # trade_name never exists → raw name, BEFORE titlecase
+      - defaults: { is_active: "Y" }
+      - validate-row: { required: [c_bpartner_id, name] }             # must sit BEFORE split-row
+      - split-row: { by: channel_raw, sep: ";" }                       # one row per channel: ×2
+    # ── tier 3: cell — one value, in listed order ───────────────────────────────────────
+    cell:
+      - clean: { columns: [name, note_raw], strip: true, remove-control-chars: true, normalize-unicode: NFC }
+      - fix-mojibake: { columns: [name, region_raw] }
+      - decode-html-entities: { columns: [slogan_raw] }
+      - replace-smart-quotes: { columns: [slogan_raw] }
+      - strip-invisible: { columns: [code_raw] }
+      - remove-diacritics: { columns: [city_raw] }
+      - lower: { columns: [city_raw] }
+      - regex-replace: { column: name, pattern: "\\s+", replacement: " " }
+      - regex-extract:
+          column: name
+          pattern: ".*\\b(SARL|SASU|SAS|SA|EURL|SCI|SNC|SCP|MAIRIE|COMMUNE)\\b.*"
+          groups: { 1: legal_form }
+      - default: { column: legal_form, value: "NONE" }
+      - upper: { columns: [legal_form] }
+      - titlecase: { columns: [name] }
+      - truncate: { column: name, length: 60 }
+      - parse-date: { column: created_at, formats: ["yyyy-MM-dd HH:mm:ss"] }
+      - lookup: { column: is_active, table: { "Y": true, "N": false }, on-missing: null }
+      - parse-email: { column: contact_email, lower: true }
+      - regex-extract: { column: contact_email, pattern: ".*@(.+)", groups: { 1: email_domain } }
+      - mask: { column: contact_email, keep-first: 2, keep-last: 4 }
+      - parse-phone: { column: phone_raw, default-region: FR }
+      - parse-number: { column: balance_raw, decimal-separator: ",", negatives-in-parens: true }
+      - split: { column: tags_raw, by: ";", into: [tag1, tag2, tag3] }
+      - to-uuid: { column: row_uuid, generate: true }                 # column absent → empty → minted
+      - kotlin:
+          script: classpath:hooks/samples/normalize-date.kts          # "31/12/2019" → "2019-12-31"
+          context: { defaultCountry: FR }
+      - parse-date: { column: signup_date, formats: ["yyyy-MM-dd"] }   # after the script: a real date
+
+  target: {}

@@ -1,0 +1,4432 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/jdbc/">
+      
+      
+        <link rel="prev" href="../csv/">
+      
+      
+        <link rel="next" href="../rest/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>JDBC - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jdbc" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              JDBC
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-one-table-three-commands-a-look-at-the-ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart — one table, three commands, a look at the ledger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-modes-full-and-watermark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two modes — full and watermark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two modes — full and watermark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-watermark-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The watermark manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-same-table-five-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The same table, five runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-one-to-declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which one to declare
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-password-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the password comes from
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-one-entry-per-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source — one entry per table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source — one entry per table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-table-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-table keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunking-is-fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunking is fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hub-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The hub table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#column-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seven-reserved-column-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seven reserved column names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-row-per-version-never-an-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One row per version, never an update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletes-are-never-propagated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deletes are never propagated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexes-on-the-hub-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes on the hub table
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursors-resume-restart-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursors — resume, restart, reset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cursors — resume, restart, reset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-restarts-a-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What restarts a table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restarting-a-table-on-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restarting a table on purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-flow-lm-source-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided flow — lm source jdbc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Guided flow — lm source jdbc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discover
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a view
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_15_4" id="__nav_15_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_15_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-one-table-three-commands-a-look-at-the-ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart — one table, three commands, a look at the ledger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-modes-full-and-watermark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two modes — full and watermark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two modes — full and watermark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-watermark-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The watermark manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-same-table-five-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The same table, five runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-one-to-declare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which one to declare
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-password-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the password comes from
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-one-entry-per-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source — one entry per table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Source — one entry per table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-table-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-table keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunking-is-fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunking is fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hub-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub table
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The hub table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#column-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seven-reserved-column-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seven reserved column names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-row-per-version-never-an-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One row per version, never an update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletes-are-never-propagated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deletes are never propagated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexes-on-the-hub-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes on the hub table
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cursors-resume-restart-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cursors — resume, restart, reset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cursors — resume, restart, reset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-restarts-a-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What restarts a table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restarting-a-table-on-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restarting a table on purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guided-flow-lm-source-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guided flow — lm source jdbc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Guided flow — lm source jdbc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discover
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a view
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jdbc">JDBC</h1>
+<blockquote>
+<p>Read tables from a live PostgreSQL database into hub tables — the whole table once, then
+only what changed, on a schedule.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td><code>jdbc-generic</code></td>
+</tr>
+<tr>
+<td><strong>Dialect</strong></td>
+<td>postgres</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td><code>connector.t_&lt;table&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Schedulable</strong></td>
+<td>cron</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>The connection is read-only: every query this connector issues is a <code>SELECT</code>, and nothing in
+it inserts, updates, deletes or alters anything on the source.</p>
+<h2 id="quickstart-one-table-three-commands-a-look-at-the-ledger">Quickstart — one table, three commands, a look at the ledger</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-full-dump.yaml — the whole table, once, then only what is inserted after it.</span>
+<span class="c1">#</span>
+<span class="c1"># `mode: full` pages through the table by primary key and remembers the last key it read.</span>
+<span class="c1"># The next run continues past that key: new rows arrive, rows changed in place do not.</span>
+<span class="c1"># Switch this same connector to `20-watermark.yaml` to pick up changes too.</span>
+<span class="c1">#</span>
+<span class="c1"># The source tables are created by data/demo-source.sql in the hub's own PostgreSQL, so the</span>
+<span class="c1"># page can be replayed with nothing but the self-host stack. LUMNIK_READONLY_DB_PASSWORD is</span>
+<span class="c1"># already exported where the hub runs; a real base names its own variable.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-invoices</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invoices</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">invoice_id</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>Every screen on this page reads a source that lives in the hub's <strong>own</strong> PostgreSQL — four
+tables and a view — so the page can be replayed with nothing but the
+<a href="../../deploy/">self-host stack</a>. Create them first:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-i<span class="w"> </span>lumnik-postgres-1<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>lumnik<span class="w"> </span>-d<span class="w"> </span>lumnik<span class="w"> </span>&lt;<span class="w"> </span>docs/connectors/jdbc/data/demo-source.sql
+</code></pre></div>
+<details class="note">
+<summary>What that script creates</summary>
+<div class="highlight"><pre><span></span><code><span class="c1">-- demo-source.sql — the source tables the JDBC page's screens read.</span>
+<span class="c1">--</span>
+<span class="c1">-- They live in the hub's OWN PostgreSQL so the page can be replayed with nothing but the</span>
+<span class="c1">-- self-host stack (`deploy/selfhost/up.sh`). A real integration points at the ERP instead;</span>
+<span class="c1">-- nothing else in the manifests changes.</span>
+<span class="c1">--</span>
+<span class="c1">--   docker exec -i lumnik-postgres-1 psql -U lumnik -d lumnik &lt; docs/connectors/jdbc/data/demo-source.sql</span>
+<span class="c1">--</span>
+<span class="c1">-- The two GRANTs are the only ones a lumnik connection user ever needs: USAGE on the schema,</span>
+<span class="c1">-- SELECT on the tables. Nothing in the jdbc connector writes to a source.</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">;</span>
+
+<span class="c1">-- The view goes first: it reads demo.invoices, and Postgres refuses to drop a table a view</span>
+<span class="c1">-- depends on — so a second run of this script would stop here.</span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">v_open_invoices</span><span class="p">;</span>
+
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">invoice_id</span><span class="w"> </span><span class="nb">bigint</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">customer</span><span class="w">   </span><span class="nb">text</span><span class="w">           </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">total</span><span class="w">      </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">status</span><span class="w">     </span><span class="nb">text</span><span class="w">           </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">updated_at</span><span class="w"> </span><span class="k">timestamp</span><span class="w">      </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1001</span><span class="p">,</span><span class="w"> </span><span class="s1">'Northwind Ltd'</span><span class="p">,</span><span class="w"> </span><span class="mi">1250</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'paid'</span><span class="p">,</span><span class="w">    </span><span class="s1">'2026-09-01 09:15:00'</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1002</span><span class="p">,</span><span class="w"> </span><span class="s1">'Contoso SA'</span><span class="p">,</span><span class="w">     </span><span class="mi">480</span><span class="p">.</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="s1">'open'</span><span class="p">,</span><span class="w">    </span><span class="s1">'2026-09-01 11:40:00'</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1003</span><span class="p">,</span><span class="w"> </span><span class="s1">'Fabrikam Oy'</span><span class="p">,</span><span class="w">   </span><span class="mi">2310</span><span class="p">.</span><span class="mi">75</span><span class="p">,</span><span class="w"> </span><span class="s1">'open'</span><span class="p">,</span><span class="w">    </span><span class="s1">'2026-09-02 08:05:00'</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1004</span><span class="p">,</span><span class="w"> </span><span class="s1">'Adventure BV'</span><span class="p">,</span><span class="w">   </span><span class="mi">199</span><span class="p">.</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="s1">'draft'</span><span class="p">,</span><span class="w">   </span><span class="s1">'2026-09-02 16:20:00'</span><span class="p">);</span>
+
+<span class="c1">-- A table whose primary key is called `id` — one of the seven names the hub reserves on its</span>
+<span class="c1">-- own tables. See "Reserved column names" on the page.</span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">price_list</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">price_list</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">    </span><span class="nb">bigint</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">sku</span><span class="w">   </span><span class="nb">text</span><span class="w">    </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">price_list</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'PUMP-075'</span><span class="p">,</span><span class="w"> </span><span class="mi">349</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'HOSE-32M'</span><span class="p">,</span><span class="w">  </span><span class="mi">59</span><span class="p">.</span><span class="mi">90</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'FILT-A1'</span><span class="p">,</span><span class="w">  </span><span class="mi">129</span><span class="p">.</span><span class="mi">50</span><span class="p">);</span>
+
+<span class="c1">-- Two more tables for the guided flow: `warehouses` is the one it adds, `audit_log` has no</span>
+<span class="c1">-- primary key, which is what the guided add refuses.</span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">warehouses</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">warehouses</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">warehouse_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">code</span><span class="w">         </span><span class="nb">text</span><span class="w">      </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">city</span><span class="w">         </span><span class="nb">text</span><span class="w">      </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">updated_at</span><span class="w">   </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">warehouses</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'W-LYS'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Lyon'</span><span class="p">,</span><span class="w">      </span><span class="s1">'2026-09-01 08:00:00'</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'W-MRS'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Marseille'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-09-03 08:00:00'</span><span class="p">);</span>
+
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">audit_log</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">audit_log</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">at</span><span class="w">     </span><span class="k">timestamp</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">actor</span><span class="w">  </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">    </span><span class="n">action</span><span class="w"> </span><span class="nb">text</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">audit_log</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'2026-09-01 06:00:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'system'</span><span class="p">,</span><span class="w"> </span><span class="s1">'boot'</span><span class="p">);</span>
+
+<span class="c1">-- A COMPOSITE primary key: 100 orders of seven lines each, 700 rows. `pk_columns` is read</span>
+<span class="c1">-- whole, so the pair (order_id, line_no) is what the reader orders and resumes on and no</span>
+<span class="c1">-- order is split by a chunk boundary. See "Per-table keys" on the page.</span>
+<span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">order_lines</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">order_lines</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">order_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">line_no</span><span class="w">  </span><span class="nb">integer</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">sku</span><span class="w">      </span><span class="nb">text</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">line_no</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">order_lines</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="s1">'SKU-'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">'-'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">l</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">generate_series</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="n">generate_series</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">l</span><span class="p">;</span>
+
+<span class="c1">-- The view the page reads in "Reading a view": the invoices that are not paid.</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">v_open_invoices</span><span class="w"> </span><span class="k">AS</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">invoice_id</span><span class="p">,</span><span class="w"> </span><span class="n">customer</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'paid'</span><span class="p">;</span>
+
+<span class="k">GRANT</span><span class="w"> </span><span class="k">USAGE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">demo</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">lumnik_readonly</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="n">TABLES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="n">demo</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">lumnik_readonly</span><span class="p">;</span>
+<span class="k">ANALYZE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="p">;</span>
+<span class="k">ANALYZE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">price_list</span><span class="p">;</span>
+<span class="k">ANALYZE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">warehouses</span><span class="p">;</span>
+<span class="k">ANALYZE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">audit_log</span><span class="p">;</span>
+<span class="k">ANALYZE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">order_lines</span><span class="p">;</span>
+</code></pre></div>
+</details>
+<p>Then, from the repository root:</p>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/jdbc/10-full-dump.yaml
+✓ docs/connectors/jdbc/10-full-dump.yaml — valid
+$ lm apply -f docs/connectors/jdbc/10-full-dump.yaml
+{"name":"demo-invoices","connectorId":"f0e7d07b-289b-47c1-874d-ecb167dc2e90","endpointsApplied":1}
+$ lm connector run demo-invoices
+run scheduled: 16b2bee8-c96a-4c27-8d74-39b3697f5a72
+</code></pre></div>
+<p>"Scheduled" is not "done" — the run ledger is where the result lands:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector demo-invoices
+ID        CONNECTOR      ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+16b2bee8  demo-invoices  invoices  Completed  4   4    0        0             2026-09-08 01:18  2026-09-08 01:18
+</code></pre></div>
+<p><code>STARTED</code> / <code>ENDED</code> print in <strong>your terminal's</strong> time zone (these screens: Paris, UTC+2). The
+hub stores UTC, and <code>schedule</code> is evaluated in UTC.</p>
+<p>What landed in <code>connector.t_invoices</code> — every source column, no column filter:</p>
+<div class="highlight"><pre><span></span><code> invoice_id |   customer    |   total   | status |       updated_at
+------------+---------------+-----------+--------+------------------------
+  1001.0000 | Northwind Ltd | 1250.0000 | paid   | 2026-09-01 09:15:00+00
+  1002.0000 | Contoso SA    |  480.5000 | open   | 2026-09-01 11:40:00+00
+  1003.0000 | Fabrikam Oy   | 2310.7500 | open   | 2026-09-02 08:05:00+00
+  1004.0000 | Adventure BV  |  199.9000 | draft  | 2026-09-02 16:20:00+00
+</code></pre></div>
+<ul>
+<li><strong><code>jdbc-generic</code> is a 1:1 dump.</strong> <code>SELECT *</code> on the declared table; there is no column
+  filter in the manifest. <code>rename:</code> is the only per-column knob.</li>
+<li><strong><code>invoice_id</code> reads <code>1001.0000</code></strong> because every numeric source type lands in one hub type
+  — see <a href="#column-types">Column types</a>.</li>
+<li><strong>The password never sits in the manifest.</strong> <code>password_env</code> names a variable in the
+  environment where the <strong>hub</strong> runs; the self-host stack already exports the one used here.</li>
+</ul>
+<h2 id="two-modes-full-and-watermark">Two modes — <code>full</code> and <code>watermark</code></h2>
+<p>Both modes page through the table 500 rows at a time and remember where they stopped. What
+they remember is the whole difference:</p>
+<ul>
+<li><strong><code>mode: full</code></strong> remembers the <strong>last primary key</strong> it read. The next run continues past
+  that key.</li>
+<li><strong><code>mode: watermark</code></strong> remembers the <strong>last value of a column that moves on every change</strong>,
+  plus that row's primary key. The next run reads everything past that value.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>mode: full</code></th>
+<th><code>mode: watermark</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ordered by</td>
+<td>primary key</td>
+<td>watermark column, then primary key</td>
+</tr>
+<tr>
+<td>cursor holds</td>
+<td>the last primary key</td>
+<td>the last watermark value <strong>and</strong> its row's key</td>
+</tr>
+<tr>
+<td>a row <strong>inserted</strong> with a higher key</td>
+<td>read</td>
+<td>read</td>
+</tr>
+<tr>
+<td>a row <strong>inserted</strong> with a lower key (a backfill)</td>
+<td><strong>never read</strong></td>
+<td>read — the insert stamps the column</td>
+</tr>
+<tr>
+<td>a row <strong>updated</strong> in place</td>
+<td><strong>never read again</strong></td>
+<td>read again</td>
+</tr>
+<tr>
+<td>a row <strong>deleted</strong></td>
+<td>never noticed</td>
+<td>never noticed</td>
+</tr>
+<tr>
+<td>a run with nothing changed</td>
+<td>0 rows</td>
+<td>0 rows</td>
+</tr>
+<tr>
+<td>declares</td>
+<td><code>pk_columns</code></td>
+<td><code>pk_columns</code> <strong>and</strong> <code>watermark_column</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-watermark-manifest">The watermark manifest</h3>
+<p>The quickstart's connector, read incrementally instead. <code>mode</code> and <code>watermark_column</code> sit
+under <code>defaults:</code> — the place for what every table of a connector shares:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-watermark.yaml — the same table, read incrementally on a column that moves on every change.</span>
+<span class="c1">#</span>
+<span class="c1"># `updated_at` only ever grows, so a run reads the rows past the persisted cursor and nothing</span>
+<span class="c1"># else: an INSERT and an UPDATE both arrive, a run with nothing changed reads 0 rows.</span>
+<span class="c1">#</span>
+<span class="c1"># Same connector name as 10-full-dump.yaml on purpose. Applying this over a table that already</span>
+<span class="c1"># ran in `full` meets the cursor the full read persisted; the hub recognises it as foreign,</span>
+<span class="c1"># logs a WARN naming both, and restarts the table from the beginning. Rows already in the hub</span>
+<span class="c1"># table are deduplicated on their content hash — the table does not grow.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-invoices</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermark</span>
+<span class="w">    </span><span class="nt">watermark_column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_at</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invoices</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">invoice_id</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">indexes</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">customer</span><span class="p p-Indicator">],</span><span class="nt"> unique</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">  </span><span class="c1"># Uncomment to let the hub poll the source itself. Incremental runs cost one keyset query</span>
+<span class="w">  </span><span class="c1"># per table when nothing has changed. Cron times are UTC.</span>
+<span class="w">  </span><span class="c1"># schedule: "*/10 * * * *"</span>
+<span class="w">  </span><span class="c1"># window: "22:00-06:00"</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<h3 id="the-same-table-five-runs">The same table, five runs</h3>
+<p>Runs 1 and 2 use the quickstart manifest; run 3 applies the one above over the same
+connector, without touching the hub table.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">-- between run 1 and run 2: one insert, one update</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1005</span><span class="p">,</span><span class="w"> </span><span class="s1">'Tailspin AG'</span><span class="p">,</span><span class="w"> </span><span class="mi">640</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'open'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-09-08 07:30:00'</span><span class="p">);</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'paid'</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2026-09-08 07:45:00'</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">invoice_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1002</span><span class="p">;</span>
+
+<span class="c1">-- between run 3 and run 4: one update</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">demo</span><span class="p">.</span><span class="n">invoices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'paid'</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2026-09-08 09:10:00'</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">invoice_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1003</span><span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector demo-invoices
+ID        CONNECTOR      ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+41823606  demo-invoices  invoices  Completed  0   0    0        0             2026-09-08 01:19  2026-09-08 01:19
+8440fe3e  demo-invoices  invoices  Completed  1   1    0        0             2026-09-08 01:19  2026-09-08 01:19
+69f31e57  demo-invoices  invoices  Completed  5   5    0        0             2026-09-08 01:18  2026-09-08 01:18
+bdfb4d96  demo-invoices  invoices  Completed  1   1    0        0             2026-09-08 01:18  2026-09-08 01:18
+16b2bee8  demo-invoices  invoices  Completed  4   4    0        0             2026-09-08 01:18  2026-09-08 01:18
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>run</th>
+<th>mode</th>
+<th>source change before it</th>
+<th><code>IN</code></th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16b2bee8</td>
+<td>full</td>
+<td>—</td>
+<td>4</td>
+<td>first read, no cursor</td>
+</tr>
+<tr>
+<td>bdfb4d96</td>
+<td>full</td>
+<td>1 insert, 1 update</td>
+<td><strong>1</strong></td>
+<td>only the insert — its key sorts past the cursor. The update is invisible to a key cursor</td>
+</tr>
+<tr>
+<td>69f31e57</td>
+<td>watermark</td>
+<td>the manifest changed mode</td>
+<td>5</td>
+<td>the full-mode cursor belongs to another configuration, so the table restarts</td>
+</tr>
+<tr>
+<td>8440fe3e</td>
+<td>watermark</td>
+<td>1 update</td>
+<td><strong>1</strong></td>
+<td>the changed row's <code>updated_at</code> is past the cursor</td>
+</tr>
+<tr>
+<td>41823606</td>
+<td>watermark</td>
+<td>—</td>
+<td>0</td>
+<td>nothing past the cursor</td>
+</tr>
+</tbody>
+</table>
+<p>After run 2 the hub still said invoice 1002 was <code>open</code> while the source said <code>paid</code>. That is
+<code>mode: full</code> doing exactly what it declares.</p>
+<h3 id="which-one-to-declare">Which one to declare</h3>
+<ul>
+<li><strong><code>watermark</code>, whenever the source stamps a column that moves on every write.</strong> ERPs
+  usually have one: <code>updated_at</code>, <code>updated</code>, <code>modified_at</code>, <code>last_modified</code>.</li>
+<li><strong><code>full</code>, for a table that only grows</strong> — an append-only ledger, a reference table nobody
+  edits in place.</li>
+<li><strong><code>full</code> on a table that <em>is</em> edited in place will not see the edits.</strong> Either expose a
+  timestamp column on the source, or re-read the table on purpose with
+  <a href="#restarting-a-table-on-purpose"><code>lm endpoint reset-cursor</code></a> before each run.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">A watermark column that does not move is worse than <code>full</code></p>
+<p>The mode is a promise about the column, and the hub cannot check it. Two ways to get it
+wrong, both silent:</p>
+<ul>
+<li><strong>A column the application forgets to touch</strong> on some writes — those changes never
+  reach the hub.</li>
+<li><strong>A numeric primary key as the watermark.</strong> <code>lm source jdbc discover</code> suggests one when
+  it finds no timestamp (see the <code>price_list</code> line <a href="#discover">below</a>) — accepting it
+  gives you <code>mode: full</code> behaviour under another name.</li>
+</ul>
+</div>
+<h2 id="connection">Connection</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">connection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://db.acme.io:5432/billing</span><span class="w">   </span><span class="c1"># required</span>
+<span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ro_user</span><span class="w">                                    </span><span class="c1"># required</span>
+<span class="w">  </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_DB_PASSWORD</span><span class="w">                   </span><span class="c1"># required — a variable where the HUB runs</span>
+<span class="w">  </span><span class="nt">dialect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w">                                </span><span class="c1"># optional, inferred from the url</span>
+</code></pre></div>
+<ul>
+<li><strong>Dialect</strong>: <code>postgres</code> only in v1 (<code>postgresql</code> is accepted as an alias). A declared
+  <code>dialect</code> that disagrees with the URL scheme fails validation.</li>
+<li><strong>Grants</strong>: <code>USAGE</code> on the schema and <code>SELECT</code> on the tables. Nothing more — ingestion
+  issues <code>SELECT * FROM &lt;schema&gt;.&lt;table&gt;</code>, and <code>test</code> / <code>discover</code> use the driver's read-only
+  metadata calls.</li>
+<li><strong>Reachability is the hub's, not yours.</strong> The URL is resolved where the hub runs: a
+  database on your Mac is <code>host.docker.internal</code> for a hub in Docker, not <code>localhost</code>.</li>
+</ul>
+<h3 id="where-the-password-comes-from">Where the password comes from</h3>
+<p>Resolved at run time, first match wins:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Attached credential</strong></td>
+<td>A Basic credential on the connector, stored encrypted. Created by <a href="#guided-flow-lm-source-jdbc"><code>lm source jdbc add</code></a>, named <code>&lt;source-name&gt;--credential</code>. A manifest applied with <code>lm apply</code> never sets one.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>password</code> in the manifest</td>
+<td>Plain text. Dev and test only — it <strong>wins over</strong> <code>password_env</code>.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>password_env</code></td>
+<td>The name of a variable in the <strong>hub server's</strong> environment (OS variable or JVM system property). Unset at run time is a failed run with the variable named.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>password_env</code> is <strong>required by validation</strong> even when <code>password</code> is present.</li>
+<li>jdbc does <strong>not</strong> read the <a href="../../admin-console-guide/"><code>lm secret</code></a> registry — that is for
+  the CSV transports. The value must exist where the hub process runs.</li>
+<li>"Stored encrypted" is pgcrypto <strong>AES-256</strong> under <code>LUMNIK_CRYPTO_SECRET_KEY</code> — see
+  <a href="../../security/rls/#secrets-at-rest-the-master-key">Security → Secrets at rest</a>.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Never commit a real password</p>
+<p>Line 2 exists for a local demo. Anything else uses <code>password_env</code> or the guided flow's
+credential.</p>
+</div>
+<h2 id="source-one-entry-per-table">Source — one entry per table</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 40-two-tables.yaml — two tables under one connector, each with its own mode.</span>
+<span class="c1">#</span>
+<span class="c1"># Every entry in `source.tables[]` becomes an endpoint, and every endpoint gets its own run</span>
+<span class="c1"># row in the ledger: one `lm connector run` on this connector produces two rows. `defaults:`</span>
+<span class="c1"># carries what both tables share; each table overrides what it needs.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-erp</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouses</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermark</span>
+<span class="w">        </span><span class="nt">watermark_column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_at</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">warehouse_id</span><span class="p p-Indicator">]</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">price_list</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">id</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">rename</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">price_list_id</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>Each entry in <code>source.tables[]</code> is an <strong>endpoint</strong> of the connector:</p>
+<ul>
+<li>the endpoint name is the table name, its path is <code>/&lt;table-name&gt;</code>;</li>
+<li>one <code>lm connector run</code> fans out over all of them;</li>
+<li><strong>each endpoint writes its own row in the run ledger</strong> — a two-table connector logs two
+  rows per run.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector demo-erp
+ID        CONNECTOR  ENDPOINT    STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+41b06fa9  demo-erp   price_list  Completed  0   0    0        0             2026-09-08 01:22  2026-09-08 01:22
+18c3897f  demo-erp   warehouses  Completed  0   0    0        0             2026-09-08 01:22  2026-09-08 01:22
+103bb6c9  demo-erp   price_list  Completed  3   3    0        0             2026-09-08 01:20  2026-09-08 01:20
+8953b0c8  demo-erp   warehouses  Completed  2   2    0        0             2026-09-08 01:20  2026-09-08 01:20
+</code></pre></div>
+<p>The first run read <code>warehouses</code> (2 rows) and <code>price_list</code> (3); the second found nothing new
+in either. <code>ENDPOINT</code> is the table each row read — and the second half of the address the
+endpoint commands take, so a row that needs one reads straight into
+<code>lm endpoint reset-cursor demo-erp/warehouses</code>.</p>
+<h3 id="per-table-keys">Per-table keys</h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>yes</td>
+<td>The source table. Also names the hub table, <code>connector.t_&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>yes (here or in <code>defaults</code>)</td>
+<td>The source schema</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td>yes</td>
+<td><code>full</code> or <code>watermark</code></td>
+</tr>
+<tr>
+<td><code>watermark_column</code></td>
+<td>when <code>mode: watermark</code></td>
+<td>The column that moves on every change</td>
+</tr>
+<tr>
+<td><code>pk_columns</code></td>
+<td>yes</td>
+<td>The paging key, read whole and in order. It must be unique <strong>together</strong></td>
+</tr>
+<tr>
+<td><code>indexes</code></td>
+<td>no</td>
+<td>Postgres indexes to create on the hub table</td>
+</tr>
+<tr>
+<td><code>rename</code></td>
+<td>no</td>
+<td>Source column name → hub column name</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Any other key is refused</strong>, <code>chunk_size</code> first among them — see
+  <a href="#validation-rules">Validation rules</a>.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title"><code>pk_columns</code> is the paging key, read whole</p>
+<p>The reader orders by every entry and resumes on all of them at once —
+<code>WHERE (order_id, line_no) &gt; (72, 3)</code>, one lexicographic comparison. A composite key pages
+exactly like a single-column one: no group is split by a chunk boundary.</p>
+<p><code>demo.order_lines</code> is 700 lines over 100 orders, seven each:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 60-composite-key.yaml — a table whose primary key is two columns.</span>
+<span class="c1">#</span>
+<span class="c1"># `pk_columns` is the paging key and it is read WHOLE: the reader orders by (order_id, line_no)</span>
+<span class="c1"># and resumes on the pair, so no order is split by a chunk boundary. The order of the entries is</span>
+<span class="c1"># the paging order — reverse it and the stored cursor becomes foreign, and the table restarts.</span>
+<span class="c1">#</span>
+<span class="c1"># What has to hold is that the key is unique TOGETHER. `order_id` alone is not: 700 lines over</span>
+<span class="c1"># 100 orders, seven lines each. demo.order_lines is created by data/demo-source.sql.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-lines</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_lines</span>
+<span class="w">        </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">order_id</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">line_no</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>The full read, then a second run that finds nothing — and 700 rows in the hub table:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector demo-lines --limit 2
+ID        CONNECTOR   ENDPOINT     STATUS     IN   OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+b8b26cac  demo-lines  order_lines  Completed  0    0    0        0             2026-09-08 23:38  2026-09-08 23:38
+65dee4bd  demo-lines  order_lines  Completed  700  700  0        0             2026-09-08 23:37  2026-09-08 23:37
+note: result hit the limit of 2 — there may be more
+</code></pre></div>
+<p><strong>The order of the entries matters</strong> — it is the paging order, and it is part of what the
+cursor belongs to. Reversing it restarts the table (see
+<a href="#what-restarts-a-table">What restarts a table</a>).</p>
+<p>What still has to hold: the key must be unique <strong>together</strong>. A real primary key is — that is
+what makes it one, and <code>lm source jdbc add</code> writes the discovered primary key, so the guided
+flow is safe by construction. A hand-written manifest is not: declaring part of a key, or a
+plain column that repeats, still drops the group a chunk boundary falls inside, with no skip,
+no dead letter and no failed run.</p>
+</div>
+<h3 id="defaults"><code>defaults</code></h3>
+<p><code>defaults:</code> is a flat overlay: every key it holds is a fallback for every table, and a table
+that declares the same key wins.</p>
+<ul>
+<li>The merge is <strong>per key, not deep</strong>. A table's <code>rename:</code> replaces the one in <code>defaults:</code>
+  entirely rather than merging into it.</li>
+<li><code>mode</code>, <code>watermark_column</code>, <code>schema</code> in <code>defaults:</code> are the common case — see
+  <a href="#the-watermark-manifest">the watermark manifest</a>, where both live there.</li>
+</ul>
+<h3 id="chunking-is-fixed">Chunking is fixed</h3>
+<p>Reads page through the source in <strong>500-row chunks</strong>, keyset-paginated on the primary key, so
+a table of millions of rows stays linear and memory-bounded. There is no <code>chunk_size</code> setting:
+a manifest that declares one is refused rather than silently ignored.</p>
+<h2 id="the-hub-table">The hub table</h2>
+<p>Rows land in the <code>connector</code> schema as <code>connector.t_&lt;table-name&gt;</code>, one table per source
+table, created on the first run from the columns the source returned.</p>
+<div class="admonition warning">
+<p class="admonition-title">The hub table is named after the source table, not the connector</p>
+<p>Two connectors reading a table of the same name — the same table in two schemas, or the
+same table on two servers — write into the <strong>same</strong> <code>connector.t_&lt;name&gt;</code>. Give one of
+them a view under another name.</p>
+</div>
+<h3 id="column-types">Column types</h3>
+<p>The hub types each column from the source's declared JDBC type:</p>
+<table>
+<thead>
+<tr>
+<th>Source type</th>
+<th>Hub column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>smallint</code>, <code>integer</code>, <code>bigint</code>, <code>real</code>, <code>double precision</code>, <code>numeric</code>, <code>decimal</code></td>
+<td><code>NUMERIC(18,4)</code></td>
+</tr>
+<tr>
+<td><code>timestamp</code>, <code>timestamptz</code></td>
+<td><code>TIMESTAMPTZ</code></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>DATE</code></td>
+</tr>
+<tr>
+<td><code>boolean</code>, <code>bit</code></td>
+<td><code>BOOLEAN</code></td>
+</tr>
+<tr>
+<td>everything else</td>
+<td><code>TEXT</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>An integer prints with four decimals</strong> — <code>1001</code> reads <code>1001.0000</code>. Cosmetic, and the
+  value is intact.</li>
+<li><strong><code>NUMERIC(18,4)</code> holds at most 14 digits before the point.</strong> A wider key — a 19-digit
+  snowflake-style id — fails the run with <code>numeric field overflow</code>. Expose it as text through
+  a view: <code>SELECT event_id::text AS event_id, ...</code>.</li>
+</ul>
+<h3 id="seven-reserved-column-names">Seven reserved column names</h3>
+<p><code>id</code>, <code>_row_hash</code>, <code>_ingested_at</code>, <code>_source</code>, <code>_run_id</code>, <code>_mapping_version</code>, <code>tenant_id</code> —
+the hub adds these to every table it creates. A source column of one of those names is
+refused at write time, on a new table and an existing one alike, so no run ever drops a
+column's values in silence.</p>
+<div class="highlight"><pre><span></span><code>$ lm run get 9165490f
+ID        CONNECTOR        ENDPOINT    STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+9165490f  demo-price-list  price_list  Failed  0   0    0        0             2026-09-08 01:19  2026-09-08 01:19
+✖ run failed: source column 'id' collides with a hub system column (_ingested_at, _mapping_version, _row_hash, _run_id, _source, id, tenant_id); it must reach the hub under another name — jdbc: source.tables[].rename; csv: a map-columns row hook under spec.mapping; kafka: no rename exists, the field must be renamed in the topic payload
+</code></pre></div>
+<p><code>rename:</code> is the fix — <code>id</code> is the one you will meet, but the seven collide alike:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 30-rename-reserved-column.yaml — a source table whose primary key is called `id`.</span>
+<span class="c1">#</span>
+<span class="c1"># The hub adds seven columns of its own to every table it creates, `id` among them, so a</span>
+<span class="c1"># source column of that name is refused at write time rather than silently dropped. `rename:`</span>
+<span class="c1"># is the fix: the source column lands under another name in the hub table. Nothing is renamed</span>
+<span class="c1"># on the source — the connection stays read-only.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-price-list</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">price_list</span>
+<span class="w">        </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">id</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">rename</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">price_list_id</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm connector run demo-price-list
+run scheduled: 484aea15-ac55-44e6-ab9d-0e7e26189a8a
+$ lm run list --connector demo-price-list
+ID        CONNECTOR        ENDPOINT    STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+484aea15  demo-price-list  price_list  Completed  3   3    0        0             2026-09-08 01:19  2026-09-08 01:19
+9165490f  demo-price-list  price_list  Failed     0   0    0        0             2026-09-08 01:19  2026-09-08 01:19
+</code></pre></div>
+<div class="highlight"><pre><span></span><code> price_list_id |   sku    |  price
+---------------+----------+----------
+        1.0000 | PUMP-075 | 349.0000
+        2.0000 | HOSE-32M |  59.9000
+        3.0000 | FILT-A1  | 129.5000
+</code></pre></div>
+<ul>
+<li>The rename applies <strong>in the hub table only</strong>. Nothing is renamed on the source.</li>
+<li>Renaming a column <em>into</em> one of the seven is refused at <code>lm validate</code> — it only moves the
+  collision.</li>
+<li>Two source columns renamed onto the same hub column are refused for the same reason.</li>
+</ul>
+<h3 id="one-row-per-version-never-an-update">One row per version, never an update</h3>
+<p>The hub table has a unique constraint on <code>_row_hash</code>, a hash of the row's content:</p>
+<ul>
+<li><strong>A row read again unchanged is skipped</strong>, so re-reading costs nothing but the read.</li>
+<li><strong>A row changed at the source lands as a new row</strong>, with its own <code>_ingested_at</code>. Both
+  versions stay. That is the time axis — the hub table is a tape, not a mirror.</li>
+</ul>
+<p>After the five runs above, <code>t_invoices</code> holds seven rows for five invoices:</p>
+<div class="highlight"><pre><span></span><code> invoice_id | status |       updated_at       |         _ingested_at
+------------+--------+------------------------+-------------------------------
+  1001.0000 | paid   | 2026-09-01 09:15:00+00 | 2026-09-07 23:18:34.339879+00
+  1002.0000 | open   | 2026-09-01 11:40:00+00 | 2026-09-07 23:18:34.339879+00
+  1002.0000 | paid   | 2026-09-08 07:45:00+00 | 2026-09-07 23:18:56.001046+00
+  1003.0000 | open   | 2026-09-02 08:05:00+00 | 2026-09-07 23:18:34.339879+00
+  1003.0000 | paid   | 2026-09-08 09:10:00+00 | 2026-09-07 23:19:00.384925+00
+  1004.0000 | draft  | 2026-09-02 16:20:00+00 | 2026-09-07 23:18:34.339879+00
+  1005.0000 | open   | 2026-09-08 07:30:00+00 | 2026-09-07 23:18:44.432353+00
+</code></pre></div>
+<p><code>_ingested_at</code> is stored in UTC; the source's own <code>updated_at</code> is whatever the source wrote.</p>
+<div class="admonition note">
+<p class="admonition-title"><code>OUT</code> counts rows delivered, not rows inserted</p>
+<p><code>records_out</code> is the number of source rows handed to the target. Rows the hash skipped
+are counted there too, which is why a re-read that grows the table by nothing still
+reports a non-zero <code>OUT</code>.</p>
+</div>
+<h3 id="deletes-are-never-propagated">Deletes are never propagated</h3>
+<p>A row deleted at the source stays in the hub table, in both modes, forever: neither cursor
+ever sees an absence. To resync from nothing, <code>lm connector delete</code> drops the connector's
+<code>connector.t_*</code> tables and its RAG chunks, and the next apply plus run starts clean.</p>
+<h3 id="indexes-on-the-hub-table">Indexes on the hub table</h3>
+<p><code>indexes:</code> is <strong>per table</strong> for jdbc — that is where the runtime reads it. (<code>spec.target.indexes</code>
+at connector level is what <a href="../csv/#target-table">CSV &amp; files</a> reads; jdbc ignores it.)</p>
+<div class="highlight"><pre><span></span><code><span class="nt">indexes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">customer</span><span class="p p-Indicator">],</span><span class="nt"> unique</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">     </span><span class="c1"># unique defaults to false</span>
+</code></pre></div>
+<p>Each entry is <code>{ columns: [non-empty strings], unique?: bool }</code>. A malformed entry fails
+validation with its own error rather than being dropped.</p>
+<h2 id="cursors-resume-restart-reset">Cursors — resume, restart, reset</h2>
+<p>A cursor is stored per endpoint, after every chunk. An interrupted run resumes exactly where
+it stopped: no duplicates, no gaps.</p>
+<ul>
+<li><strong><code>mode: watermark</code></strong> stores <code>{col, value, pk}</code> and resumes with
+  <code>WHERE (col, pk...) &gt; (value, last_pk...)</code> — one lexicographic comparison over the watermark
+  followed by every key column. Rows sharing one watermark value cannot straddle a chunk boundary
+  and be lost, or read twice — the key breaks the tie.</li>
+<li><strong><code>mode: full</code></strong> stores the key alone and resumes with <code>WHERE (pk...) &gt; (last_pk...)</code>.</li>
+</ul>
+<h3 id="what-restarts-a-table">What restarts a table</h3>
+<p>A cursor belongs to the configuration that wrote it. Changing <code>mode</code>, <code>watermark_column</code> or
+<code>pk_columns</code> — its columns <strong>or their order</strong>, which is the paging order — makes the stored
+cursor foreign: the hub ignores it, logs a WARN naming both, and the table restarts from the
+beginning.</p>
+<div class="highlight"><pre><span></span><code>WARN  demo.invoices: ignoring cursor persisted by another configuration (col='', pk=[invoice_id];
+      this reader writes col='updated_at', pk=[invoice_id]) — restarting from the beginning
+</code></pre></div>
+<p>A restart re-reads the table from the beginning: every row already in the hub table meets its
+own hash and is skipped, so the table does not grow. <code>IN</code> and <code>OUT</code> count the re-read rows all
+the same — run 69f31e57 above is exactly this.</p>
+<h3 id="restarting-a-table-on-purpose">Restarting a table on purpose</h3>
+<p><code>lm endpoint reset-cursor &lt;connector&gt;/&lt;endpoint&gt;</code> drops the stored cursor. For jdbc the
+endpoint name is the table name. It prints nothing; the next run's <code>IN</code> is the proof:</p>
+<div class="highlight"><pre><span></span><code>$ lm endpoint reset-cursor demo-invoices/invoices
+$ lm connector run demo-invoices
+run scheduled: 0935e410-5216-4b0e-8d02-2f0adb1a6ac2
+$ lm run list --connector demo-invoices
+ID        CONNECTOR      ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+0935e410  demo-invoices  invoices  Completed  5   5    0        0             2026-09-08 01:20  2026-09-08 01:20
+41823606  demo-invoices  invoices  Completed  0   0    0        0             2026-09-08 01:19  2026-09-08 01:19
+</code></pre></div>
+<h2 id="scheduling">Scheduling</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"*/30</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span><span class="w">   </span><span class="c1"># cron, UTC</span>
+<span class="w">  </span><span class="nt">window</span><span class="p">:</span><span class="w"> </span><span class="s">"22:00-06:00"</span><span class="w">      </span><span class="c1"># optional fence, UTC</span>
+</code></pre></div>
+<ul>
+<li><strong><code>schedule</code></strong> applies to the connector as a whole: all its tables ingest on the same
+  trigger.</li>
+<li><strong>Both clocks are UTC</strong>, not the server's local zone.</li>
+<li><strong><code>window</code></strong> fences the schedule: a slot due outside it is skipped, never queued. A
+  window may cross midnight.</li>
+<li><strong>The end is exclusive.</strong> A nightly <code>0 6 * * *</code> needs a window ending later than <code>06:00</code>,
+  for instance <code>22:00-07:00</code>.</li>
+<li><strong>A manual <code>lm connector run</code> ignores the window.</strong> It is an operator's act.</li>
+<li><strong>Re-applying without the key lifts it.</strong> An absent <code>schedule</code> unschedules; an absent
+  <code>window</code> removes the fence.</li>
+</ul>
+<p>If the source is a production database, a window is usually the DBA's condition for granting
+the <code>SELECT</code> account — see <a href="../../operations/sizing/">Sizing &amp; load tests</a>.</p>
+<h2 id="guided-flow-lm-source-jdbc">Guided flow — <code>lm source jdbc</code></h2>
+<p>Four commands that reach the same connectors without writing YAML. They need the <code>lm_admin</code>
+role, and the password is <strong>never a flag</strong> — there is no <code>--password</code>, so it stays out of <code>ps</code>
+and out of your shell history.</p>
+<p>Where it comes from instead:</p>
+<table>
+<thead>
+<tr>
+<th>You are</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>at a keyboard</td>
+<td><code>Password for &lt;user&gt;:</code> is prompted, and what you type is not shown</td>
+</tr>
+<tr>
+<td>piping, with <code>--password-stdin</code></td>
+<td>the first line of stdin is the password</td>
+</tr>
+<tr>
+<td>piping, without the flag</td>
+<td>same, plus a warning on stderr naming the flag</td>
+</tr>
+</tbody>
+</table>
+<p><code>--password-stdin</code> is spelled the way <code>docker login</code> and <code>helm registry login</code> spell it. Declaring
+the pipe matters: <code>lm source jdbc add … &lt; list.txt</code> otherwise sends that file's first line to the
+hub as a password, and nothing would say so.</p>
+<p>Use it to explore a base you do not know, and to stand up a table quickly. Reach for a
+manifest when you need what it cannot express: <code>rename</code>, <code>indexes</code>, a view, a composite or
+undiscoverable key, or config you keep in version control.</p>
+<h3 id="test"><code>test</code></h3>
+<div class="highlight"><pre><span></span><code>$ printf '%s\n' "$DB_PASSWORD" | lm source jdbc test --password-stdin --url jdbc:postgresql://postgres:5432/lumnik --user lumnik_readonly
+OK       : true
+Dialect  : postgres
+Version  : 16.15 (Debian 16.15-1.pgdg12+2)
+Latency  : 1 ms
+Schemas  : connector, core, demo, ext, identity, information_schema, pg_catalog, platform, public, rag
+</code></pre></div>
+<p><code>Schemas</code> lists what this user can see — a schema absent from that line is a missing <code>USAGE</code>
+grant, before any manifest is written.</p>
+<h3 id="discover"><code>discover</code></h3>
+<div class="highlight"><pre><span></span><code>$ printf '%s\n' "$DB_PASSWORD" | lm source jdbc discover --password-stdin --url jdbc:postgresql://postgres:5432/lumnik --user lumnik_readonly --schema demo
+SCHEMA     NAME                            ROWS  COLS PK                   WATERMARK
+demo       audit_log                          1     3                      -
+demo       invoices                           4     5 invoice_id           updated_at
+demo       price_list                         3     3 id                   id
+demo       warehouses                         2     4 warehouse_id         updated_at
+</code></pre></div>
+<ul>
+<li><code>--schema</code> defaults to <code>public</code>. An ERP in its own schema names it here.</li>
+<li><code>ROWS</code> is the planner's estimate, <code>-1</code> when the table was never analyzed.</li>
+<li><code>PK</code> empty means no primary key — that table needs a manifest or a view.</li>
+<li><code>WATERMARK</code> is a <strong>suggestion</strong>, in this order: a column named <code>updated_at</code>, <code>updated</code>,
+  <code>modified_at</code> or <code>last_modified</code>; else the first timestamp or date column; else a single
+  numeric primary key. The last case is the trap named <a href="#which-one-to-declare">above</a> —
+  <code>price_list</code> suggests <code>id</code>.</li>
+<li><code>--include-views</code> adds views to the listing; <code>--skip-pattern</code> replaces the default
+  <code>pg_*,information_schema*,t_*</code>; <code>--output json</code> prints the whole descriptor.</li>
+</ul>
+<h3 id="add"><code>add</code></h3>
+<div class="highlight"><pre><span></span><code>$ printf '%s\n' "$DB_PASSWORD" | lm source jdbc add --password-stdin demo-src --url jdbc:postgresql://postgres:5432/lumnik --user lumnik_readonly --schema demo --tables warehouses
+Created 1 connectors:
+  • demo-src--warehouses
+$ lm source jdbc list-tables demo-src
+TABLE                          CONNECTOR                                STATUS
+warehouses                     demo-src--warehouses                     active
+$ lm connector run demo-src--warehouses
+run scheduled: 110866d1-9926-4c0b-a200-25fb9037f8f2
+$ lm run list --connector demo-src--warehouses
+ID        CONNECTOR             ENDPOINT    STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+110866d1  demo-src--warehouses  warehouses  Completed  2   2    0        0             2026-09-08 01:20  2026-09-08 01:20
+</code></pre></div>
+<p>What it creates, per requested table:</p>
+<ul>
+<li>one connector named <code>&lt;source-name&gt;--&lt;table&gt;</code>;</li>
+<li>one Basic credential per source, <code>&lt;source-name&gt;--credential</code>, stored encrypted — the
+  password never lands in a file;</li>
+<li><code>mode: watermark</code> when a watermark column was found or given, <code>mode: full</code> otherwise. The
+  hub decides; there is no <code>--mode</code>.</li>
+<li><code>--interactive</code> opens a TUI table picker instead of <code>--tables</code>, pre-filled with the
+  discovered suggestions. <code>--schedule-cron</code> sets the schedule.</li>
+</ul>
+<p>What it refuses, by name and reason, before anything is persisted:</p>
+<div class="highlight"><pre><span></span><code>$ printf '%s\n' "$DB_PASSWORD" | lm source jdbc add --password-stdin demo-src ... --tables audit_log
+Error: API error 400: table demo.audit_log has no primary key — jdbc-generic pages by primary key; declare pk_columns in a manifest instead
+$ printf '%s\n' "$DB_PASSWORD" | lm source jdbc add --password-stdin demo-src ... --tables nope
+Error: API error 400: table demo.nope not found among the base tables of that schema — check the schema and the connection user's SELECT grant; a view is declared in a manifest, not through the guided add
+</code></pre></div>
+<ul>
+<li>a table it cannot find in that schema, and a <strong>view</strong> — a view has no key to discover;</li>
+<li>a table without a primary key;</li>
+<li>a table whose name is not a plain identifier — the hub names its table after it;</li>
+<li><code>mode: watermark</code> with no column to watermark on.</li>
+</ul>
+<p>A table whose connector already exists is reported as skipped, not re-created.</p>
+<h2 id="reading-a-view">Reading a view</h2>
+<p>A view is how a table reaches the hub when the table itself cannot: no primary key, a
+reserved column name, a value too wide for the hub's numeric type, or more rows than the
+métier needs.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 50-view.yaml — read a VIEW instead of a table.</span>
+<span class="c1">#</span>
+<span class="c1"># A view is how a source-side table reaches the hub when the table itself cannot: no primary</span>
+<span class="c1"># key to page on, a column name the hub reserves, a column too wide for the hub's numeric</span>
+<span class="c1"># type, or simply more rows than the métier needs. jdbc-generic issues `SELECT *` — a view is</span>
+<span class="c1"># a table as far as the read is concerned.</span>
+<span class="c1">#</span>
+<span class="c1"># The guided `lm source jdbc add` refuses views on purpose: a view has no primary key to</span>
+<span class="c1"># discover, so `pk_columns` has to be declared, and that is what a manifest is for. The column</span>
+<span class="c1"># named here must be unique and stable — it is what the reader pages on.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo-open-invoices</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc-generic</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/lumnik</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik_readonly</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUMNIK_READONLY_DB_PASSWORD</span>
+
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tables</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># demo.v_open_invoices is created by data/demo-source.sql, with the tables.</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v_open_invoices</span>
+<span class="w">        </span><span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span>
+<span class="w">        </span><span class="nt">pk_columns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">invoice_id</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector demo-open-invoices
+ID        CONNECTOR           ENDPOINT         STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+eaee8eaa  demo-open-invoices  v_open_invoices  Completed  2   2    0        0             2026-09-08 01:22  2026-09-08 01:22
+</code></pre></div>
+<p>The columns named in <code>pk_columns</code> must be unique together and stable — they are what the
+reader pages on.</p>
+<h2 id="validation-rules">Validation rules</h2>
+<p><code>lm validate</code> refuses before <code>lm apply</code> does, and both name the path:</p>
+<div class="highlight"><pre><span></span><code>$ lm validate -f bad-chunk.yaml
+✗ bad-chunk.yaml — 1 error(s), 0 warning(s)
+
+  ERROR    spec.source.tables[0].chunk_size
+          chunk_size is not a knob — jdbc chunking is fixed at 500 rows per read; remove it
+          → The engine reads its chunk size from the connector type, never from the manifest
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Severity</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connection.url</code> matches <code>jdbc:&lt;dialect&gt;:...</code></td>
+<td>ERROR</td>
+<td><code>spec.connection.url</code></td>
+</tr>
+<tr>
+<td>Dialect is supported (postgres)</td>
+<td>ERROR</td>
+<td><code>spec.connection.url</code></td>
+</tr>
+<tr>
+<td>A declared <code>dialect</code> matches the URL scheme</td>
+<td>ERROR</td>
+<td><code>spec.connection.dialect</code></td>
+</tr>
+<tr>
+<td><code>connection.user</code> and <code>connection.password_env</code> present</td>
+<td>ERROR</td>
+<td><code>spec.connection.*</code></td>
+</tr>
+<tr>
+<td><code>source.tables[]</code> non-empty</td>
+<td>ERROR</td>
+<td><code>spec.source.tables</code></td>
+</tr>
+<tr>
+<td full="full" watermark_="watermark,"><code>mode</code> present and in</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].mode</code></td>
+</tr>
+<tr>
+<td><code>mode: watermark</code> declares <code>watermark_column</code></td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].watermark_column</code></td>
+</tr>
+<tr>
+<td><code>pk_columns</code> is a non-empty list</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].pk_columns</code></td>
+</tr>
+<tr>
+<td><code>chunk_size</code> is refused — chunking is fixed at 500</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].chunk_size</code></td>
+</tr>
+<tr>
+<td>No unknown per-table key</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i]</code></td>
+</tr>
+<tr>
+<td><code>indexes</code> entries are <code>{ columns: [...], unique?: bool }</code></td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].indexes[j]</code></td>
+</tr>
+<tr>
+<td>No duplicate table names</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].name</code></td>
+</tr>
+<tr>
+<td><code>rename</code> targets are plain identifiers</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].rename</code></td>
+</tr>
+<tr>
+<td><code>rename</code> targets none of the seven reserved names</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].rename</code></td>
+</tr>
+<tr>
+<td>No two <code>rename</code> sources hit the same target</td>
+<td>ERROR</td>
+<td><code>spec.source.tables[i].rename</code></td>
+</tr>
+<tr>
+<td><code>schedule</code> is a valid cron</td>
+<td>ERROR</td>
+<td><code>spec.schedule</code></td>
+</tr>
+<tr>
+<td><code>window</code> is <code>HH:MM-HH:MM</code> and not empty</td>
+<td>ERROR</td>
+<td><code>spec.window</code></td>
+</tr>
+<tr>
+<td><code>metadata.scopes</code> declared</td>
+<td>WARNING</td>
+<td><code>metadata.scopes</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>password_env '...' is not set in the server environment</code></td>
+<td>the variable must exist where the <strong>hub</strong> runs, not on your laptop; jdbc does not read <code>lm secret</code></td>
+<td>export it where the hub runs, or attach a credential through the guided flow</td>
+</tr>
+<tr>
+<td><code>source column 'id' collides with a hub system column</code></td>
+<td>the source has a column named like one of the seven</td>
+<td>add <code>rename: { id: source_id }</code> on that table</td>
+</tr>
+<tr>
+<td><code>numeric field overflow</code></td>
+<td>a numeric value wider than 14 digits before the point</td>
+<td>expose the column as text through a view</td>
+</tr>
+<tr>
+<td>the run reads 0 rows and nothing is wrong</td>
+<td>the cursor is already past everything</td>
+<td>expected — change a row at the source, or <code>lm endpoint reset-cursor</code></td>
+</tr>
+<tr>
+<td>updated rows never arrive</td>
+<td><code>mode: full</code>, or a watermark column the application does not move</td>
+<td>switch to <code>watermark</code> on a column that moves</td>
+</tr>
+<tr>
+<td>a WARN says the cursor was persisted by another configuration</td>
+<td><code>mode</code>, <code>watermark_column</code> or <code>pk_columns</code> changed (its columns or their order)</td>
+<td>expected once; the table restarts and the hashes deduplicate</td>
+</tr>
+<tr>
+<td>a deleted source row is still in the hub table</td>
+<td>by design, in both modes</td>
+<td><code>lm connector delete</code> then re-apply, or filter on <code>_ingested_at</code></td>
+</tr>
+<tr>
+<td>a table is in <code>discover</code> but <code>add</code> refuses it</td>
+<td>no primary key, or it is a view</td>
+<td>declare <code>pk_columns</code> in a manifest</td>
+</tr>
+<tr>
+<td>the hub table holds fewer rows than the source, no error anywhere</td>
+<td>the declared <code>pk_columns</code> is not unique — part of a key, or a plain column that repeats — so a chunk boundary dropped a group</td>
+<td>declare the whole primary key — see <a href="#per-table-keys">Per-table keys</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../">Connectors overview</a></li>
+<li><a href="../csv/">CSV &amp; files</a> — the same hub table, fed by files</li>
+<li><a href="../../rag/scopes/">Scopes</a></li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

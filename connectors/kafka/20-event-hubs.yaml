@@ -1,0 +1,43 @@
+# 20-event-hubs.yaml — Azure Event Hubs via the 'event-hubs' vendor preset.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/kafka/20-event-hubs.yaml
+#   lm connector run event-hubs-telemetry
+#
+# How the event-hubs preset works
+# --------------------------------
+# connector_type stays 'kafka' — the preset just pre-wires the bootstrap
+# address (namespace.servicebus.windows.net:9093) and SASL/SSL settings from
+# the connection string, so you don't have to work those out by hand. No
+# Kafka consumer group is created or needed — the hub tracks offsets itself,
+# same as any other kafka connector.
+#
+# The 'connection_string_env' field names an env var that holds the Event Hubs
+# connection string (Primary Connection String from the Azure portal). Kafka resolves
+# *_env via the process environment only (OS env, then JVM system property) — the
+# lm secret store is NOT consulted here. Export it where the hub runs:
+#   export EVENTHUBS_CONN_STR="Endpoint=sb://..."
+#
+# Auth: Event Hubs over Kafka uses SASL/PLAIN with fixed username "$ConnectionString".
+# Set it once in the environment (it is not a secret):
+#   export EVENT_HUBS_SASL_USERNAME='$ConnectionString'
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: event-hubs-telemetry         # unique connector name within the workspace
+  connector_type: kafka              # real engine type; the vendor alias is spec.preset below
+  scopes: [demo, azure]
+
+spec:
+  preset: event-hubs                 # vendor preset — expands to a real kafka config at apply time
+
+  name: telemetry_events             # logical/table name → target table connector.t_telemetry_events
+
+  namespace: my-namespace            # Azure Event Hubs namespace (without .servicebus.windows.net)
+
+  connection_string_env: EVENTHUBS_CONN_STR   # env var holding the Primary Connection String
+
+  topic: telemetry                   # Event Hub name (= Kafka topic name)
+
+  format: json                       # v1: one JSON object per message

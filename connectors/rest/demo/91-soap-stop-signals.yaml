@@ -1,0 +1,104 @@
+# 91-soap-stop-signals.yaml — the three ways a QueryPage loop is allowed to end, side by side.
+#
+# SOAP pagination has no total and no next link. It advances by offset arithmetic and stops on
+# exactly ONE signal, chosen by configuration and never tried in sequence:
+#
+#   last_page_path set → continue ONLY while the flag reads explicitly "false"
+#   else has_more_path → continue ONLY while the flag reads explicitly "true"
+#   else               → stop on the first page shorter than page_size
+#
+# Both flag rules are asymmetric with respect to absence, on purpose: a missing, null or
+# unreadable flag STOPS. A loop that kept going on a flag it could not read would hammer a
+# legacy service forever — offset arithmetic gives it no natural end.
+#
+# `90` covers last_page_path. This file covers the other two, plus the trap underneath all of
+# them.
+#
+# ── The trap: XML has no arrays ───────────────────────────────────────────────────────────
+# <ListOfCustomer> holding fifty <Customer> elements parses as a list. The SAME wrapper holding
+# ONE <Customer> parses as an object — and an engine that iterates blindly loses that row
+# without a word. The `tail` endpoint exists to make it observable: the /tail service serves a
+# truncated 201-row dataset and the page size is 100, so its final page carries exactly one.
+#
+#   201 rows → the force-list works.
+#   200 rows → the last page was silently dropped.
+#
+# Expect: 2 400 (more-records), 2 400 (short-page), 201 (single-element-tail).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-stops
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    # ── has_more_path — the SAP PI flavour: "there are more", not "this is the last" ────────
+    - id: more-records
+      kind: soap
+      path: /sap/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        has_more_path: "$.Body.CustomerQueryPage_Output.MoreRecords"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_moreflag
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }
+
+    # ── no flag at all — the service announces nothing, the short page is the only signal ───
+    - id: short-page
+      kind: soap
+      path: /mute/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 700          # 2 400 = 3 x 700 + 300 — the fourth page is the short one
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_shortpage
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }
+
+    # ── the single-element last page — 201 rows, or the force-list is broken ────────────────
+    - id: single-element-tail
+      kind: soap
+      path: /tail/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100          # 201 rows = 100 + 100 + ONE
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_tail
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }
