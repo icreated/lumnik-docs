@@ -1,0 +1,4846 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/connectors/kafka/">
+      
+      
+        <link rel="prev" href="../soap/">
+      
+      
+        <link rel="next" href="demo-broker/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Kafka - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kafka" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kafka
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_4" id="__nav_16_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_16_5" id="__nav_16_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_16_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-run-reads-a-topic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a run reads a topic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How a run reads a topic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partitions-and-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitions and the cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-head-is-the-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The head is the target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunks-and-the-two-poll-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunks and the two poll knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-consumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous consumption
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema evolution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema evolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#names-the-producer-chose-stay-and-stay-askable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names the producer chose stay — and stay askable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seven-column-names-are-reserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seven column names are reserved
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-topic-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the topic misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the topic misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#poison-messages-the-per-message-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Poison messages — the per-message DLQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tombstones-a-deletion-is-not-garbage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tombstones — a deletion is not garbage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-topic-that-does-not-exist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A topic that does not exist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-log-that-moved-under-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A log that moved under the cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-empty-poll-and-what-it-does-not-prove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An empty poll, and what it does not prove
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-broker-that-does-not-answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A broker that does not answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-and-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth and secrets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-event-hubs-the-event-hubs-preset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Azure Event Hubs — the event-hubs preset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-a-topic-mirrored-on-a-cadence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep a topic mirrored on a cadence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-a-topic-again-from-the-beginning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read a topic again from the beginning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspect-the-messages-that-did-not-land" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspect the messages that did not land
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-the-same-topic-into-two-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the same topic into two tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move-to-event-hubs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move to Event Hubs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_24" >
+        
+          
+          <label class="md-nav__link" for="__nav_24" id="__nav_24_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_24_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_27" >
+        
+          
+          <label class="md-nav__link" for="__nav_27" id="__nav_27_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_27_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-run-reads-a-topic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a run reads a topic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How a run reads a topic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partitions-and-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitions and the cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-head-is-the-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The head is the target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunks-and-the-two-poll-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chunks and the two poll knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-consumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous consumption
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema evolution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema evolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#names-the-producer-chose-stay-and-stay-askable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names the producer chose stay — and stay askable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seven-column-names-are-reserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seven column names are reserved
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-topic-misbehaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the topic misbehaves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When the topic misbehaves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#poison-messages-the-per-message-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Poison messages — the per-message DLQ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tombstones-a-deletion-is-not-garbage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tombstones — a deletion is not garbage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-topic-that-does-not-exist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A topic that does not exist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-log-that-moved-under-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A log that moved under the cursor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-empty-poll-and-what-it-does-not-prove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An empty poll, and what it does not prove
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-broker-that-does-not-answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A broker that does not answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-and-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth and secrets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-event-hubs-the-event-hubs-preset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Azure Event Hubs — the event-hubs preset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TUI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keep-a-topic-mirrored-on-a-cadence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep a topic mirrored on a cadence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-a-topic-again-from-the-beginning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read a topic again from the beginning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspect-the-messages-that-did-not-land" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspect the messages that did not land
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-the-same-topic-into-two-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the same topic into two tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move-to-event-hubs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Move to Event Hubs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kafka">Kafka</h1>
+<blockquote>
+<p><strong>lumnik Pro.</strong> Consume a Kafka-compatible topic — Apache Kafka, Redpanda, Azure Event Hubs —
+into a hub table. Each run reads from the stored position to the head the topic had when the
+run started, then completes; the hub owns the offsets, and nothing is ever written back to
+the broker.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td><code>kafka</code></td>
+</tr>
+<tr>
+<td><strong>Protocol</strong></td>
+<td>Kafka wire, JSON messages</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td><code>connector.t_&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Offsets</strong></td>
+<td>hub-owned, per partition — no consumer group on the broker</td>
+</tr>
+<tr>
+<td><strong>Delivery</strong></td>
+<td>at-least-once into a table deduplicated by content hash</td>
+</tr>
+<tr>
+<td><strong>Schedulable</strong></td>
+<td>cron</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Pro — the type is absent from the open edition, where a <code>kafka</code> manifest is refused at validate</td>
+</tr>
+</tbody>
+</table>
+<p>A topic is the third kind of legacy source after files and databases: the ERP already publishes
+its events, and nobody downstream has a table of them. This connector turns a topic into one —
+the same tenant-isolated, askable table the CSV and JDBC connectors produce, with the same
+dead-letter queue and the same run ledger — without a consumer group to provision, an offset to
+commit, or a schema to declare.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong><a href="#partitions-and-the-cursor">Hub-owned offsets, no consumer group.</a></strong> The connector assigns
+  partitions and seeks to positions it stores itself; the broker never sees a group, a commit or
+  a rebalance.</li>
+<li><strong><a href="#the-head-is-the-target">A run is a catch-up, not a subscription.</a></strong> It measures the head of
+  every partition once, drains to it and completes — on a topic that is being written to while it
+  reads. A run that stopped short of its target is reported <code>Partial</code>, never <code>Completed</code>.</li>
+<li><strong><a href="#schema-evolution">Auto-schema, and it evolves.</a></strong> Column types are inferred from the first
+  chunk; a field the producer adds later becomes a <code>text</code> column mid-run, and nested values land as
+  <code>jsonb</code>.</li>
+<li><strong><a href="#names-the-producer-chose-stay-and-stay-askable">Names the producer chose are kept — and stay askable.</a></strong>
+  <code>Partner Name</code> or <code>MONTANT_€</code> becomes a column under that exact name, and the chat quotes it.</li>
+<li><strong><a href="#poison-messages-the-per-message-dlq">Per-message dead-letter queue.</a></strong> A message that is not
+  a JSON object is set aside with its coordinates and raw value, its offset advances, and the run
+  goes on. <a href="#tombstones-a-deletion-is-not-garbage">Tombstones</a> are set aside under a reason that
+  names the deleted key.</li>
+<li><strong><a href="#a-log-that-moved-under-the-cursor">What the broker deleted is named.</a></strong> A stored position
+  that retention has overtaken yields a WARN with the exact lost offset range and a <code>Partial</code> run —
+  never a green run over a silent gap.</li>
+<li><strong><a href="#a-topic-that-does-not-exist">A read never writes to the source.</a></strong> The consumer is built with
+  automatic topic creation off, so asking about a topic cannot create it; an unknown topic is
+  refused by name.</li>
+<li><strong><a href="#auth-and-secrets">Credentials by name.</a></strong> Brokers, usernames and passwords are named, never
+  written: the <code>lm secret</code> registry first, the hub's environment second, and a refusal that names
+  both places it looked.</li>
+<li><strong><a href="#azure-event-hubs-the-event-hubs-preset">Vendor presets.</a></strong> <code>preset: event-hubs</code> expands a
+  namespace and a connection string into a full SASL/SSL kafka config at apply time.</li>
+<li><strong><a href="#continuous-consumption">Schedule and window.</a></strong> A cron keeps the table current; a UTC window
+  fences the slots; a per-endpoint lock makes overlap impossible.</li>
+</ul>
+<h2 id="quickstart">Quickstart</h2>
+<div class="admonition note">
+<p class="admonition-title">Every screen on this page reads a demo broker that ships with the repo</p>
+<p>One Redpanda in a container and one Python file that fills it with eleven topics over the
+same 2 400 fictional ACME partners the REST demo serves. Start it, fill it, and the broker is
+ready to be read:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docs/connectors/kafka/demo/docker-compose.yml<span class="w"> </span>up<span class="w"> </span>-d
+python3<span class="w"> </span>docs/connectors/kafka/demo/acme-topics.py<span class="w">        </span><span class="c1"># needs: pip install confluent-kafka</span>
+</code></pre></div>
+<p>The manifests point at <code>host.docker.internal:29092</code>, because the hub runs in a container and
+<code>localhost</code> inside it is that container. Which topic carries which shape, and the three
+gestures that change the broker: <a href="demo-broker/">The demo broker</a>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-quickstart.yaml — one topic, one partition, no auth.</span>
+<span class="c1">#</span>
+<span class="c1"># The whole manifest is a broker address, a topic and a table name. There is no consumer</span>
+<span class="c1"># group to provision on the broker: the hub keeps each partition's read position itself, in</span>
+<span class="c1"># its own cursor table, the way it keeps a JDBC watermark. A run reads from that position to</span>
+<span class="c1"># the head the topic had when the run started, then completes.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 rows in connector.t_acme_partners; a second run reads 0.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-partners</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/kafka/demo/10-quickstart.yaml
+✓ docs/connectors/kafka/demo/10-quickstart.yaml — valid
+$ lm apply -f docs/connectors/kafka/demo/10-quickstart.yaml
+{"name":"acme-kafka-partners","connectorId":"4cc236fc-e37f-4df7-8bc5-0173021923e7","endpointsApplied":1}
+$ lm connector run acme-kafka-partners
+run scheduled: c5fc42d2-87f9-4328-acd2-b29213562a54
+</code></pre></div>
+<p>"Scheduled" is not "done" — the run ledger is where the result lands, a second or two later.
+Run it a second time before looking:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-kafka-partners
+run scheduled: 39ae9f8f-65f8-405a-a6cf-42afb1b4e7e1
+$ lm run list --connector acme-kafka-partners
+ID        CONNECTOR            ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+39ae9f8f  acme-kafka-partners  default   Completed  0     0     0        0             2026-09-13 02:21  2026-09-13 02:21
+c5fc42d2  acme-kafka-partners  default   Completed  2400  2400  0        0             2026-09-13 02:21  2026-09-13 02:21
+</code></pre></div>
+<p>The first run read the whole topic; the second found the stored position already at the head
+and read nothing. <code>STARTED</code> / <code>ENDED</code> print in <strong>your terminal's</strong> time zone (these screens:
+Paris, UTC+2); the hub stores UTC, and <code>schedule</code> is evaluated in UTC.</p>
+<p>What landed in <code>connector.t_acme_partners</code> — each top-level JSON field became a column:</p>
+<div class="highlight"><pre><span></span><code> partner_id |           name            |   city    | credit_limit |      updated_at      
+------------+---------------------------+-----------+--------------+----------------------
+       1000 | Hydraulique Lyon 1000     | Lyon      |          500 | 2026-01-01T00:00:00Z
+       1001 | Roulements Bruxelles 1001 | Bruxelles |          637 | 2026-01-01T00:01:00Z
+       1002 | Fixations Milano 1002     | Milano    |          774 | 2026-01-01T00:02:00Z
+       1003 | Pneumatique Porto 1003    | Porto     |          911 | 2026-01-01T00:03:00Z
+(4 rows)
+</code></pre></div>
+<ul>
+<li><strong>Nothing was declared about the schema.</strong> Types are inferred from the first chunk: JSON
+  whole numbers land as <code>bigint</code> and numbers carrying a decimal point as <code>numeric(18,4)</code>,
+  strings as <code>text</code> (timestamps included — <code>updated_at</code> is the string the producer sent),
+  booleans as <code>boolean</code>, objects and arrays as <code>jsonb</code>. The columns follow the message's own
+  field order.
+  <a href="#schema-evolution">Schema evolution</a> is what happens when the producer changes its mind.</li>
+<li><strong>Nothing was provisioned on the broker.</strong> No consumer group exists for this connector; the
+  position is a row in the hub's cursor table — <a href="#partitions-and-the-cursor">Partitions and the cursor</a>.</li>
+<li><strong>The table deduplicates by content.</strong> A message read twice is one row —
+  <a href="#storage-layout">Storage layout</a>.</li>
+</ul>
+<h2 id="the-manifest">The manifest</h2>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">erp_events</span><span class="w">                  </span><span class="c1"># required — the table: connector.t_erp_events</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">broker-1:9092,broker-2:9092</span><span class="w">   </span><span class="c1"># bootstrap servers, literal…</span>
+<span class="w">  </span><span class="c1"># brokers_env: KAFKA_BROKERS      # …or by name, resolved at run time (lm secret, then the hub's environment)</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">erp.events</span><span class="w">                 </span><span class="c1"># required — one topic per connector</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span><span class="w">                      </span><span class="c1"># the only value in v1: one JSON object per message</span>
+<span class="w">  </span><span class="nt">poll_timeout_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span><span class="w">             </span><span class="c1"># optional, [100, 60000]; what one poll may wait for the broker</span>
+<span class="w">  </span><span class="nt">max_poll_records</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w">             </span><span class="c1"># optional, ≥ 1; clamped to the 500-row chunk</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span><span class="w">                             </span><span class="c1"># optional; omitted = no SASL handshake</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sasl-plain</span><span class="w">                </span><span class="c1"># none | sasl-plain</span>
+<span class="w">    </span><span class="nt">username_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KAFKA_USER</span><span class="w">        </span><span class="c1"># names, never values</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KAFKA_PW</span>
+<span class="w">    </span><span class="nt">security_protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SASL_SSL</span><span class="w">     </span><span class="c1"># or SASL_PLAINTEXT for a SASL broker without TLS</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span><span class="w">           </span><span class="c1"># optional cron, evaluated in UTC by the hub scheduler</span>
+<span class="w">  </span><span class="nt">window</span><span class="p">:</span><span class="w"> </span><span class="s">"06:00-22:00"</span><span class="w">             </span><span class="c1"># optional fence for the scheduled slots, UTC, end exclusive</span>
+</code></pre></div>
+<p>There is no <code>target</code> block and no <code>mapping</code> block: the table is <code>connector.t_&lt;name&gt;</code> and the
+messages land as they are. A manifest started from a jdbc or csv one gets those two keys named
+at validate rather than silently stored — see <a href="#configuration-reference">the warning below</a>.
+Three more keys exist and belong to the <a href="#azure-event-hubs-the-event-hubs-preset">Event Hubs preset</a>:
+<code>preset</code>, <code>namespace</code>, <code>connection_string_env</code>.</p>
+<h3 id="configuration-reference">Configuration reference</h3>
+<p><code>lm describe connector-type kafka</code> prints the schema the validator enforces — type, importance
+and the one-line meaning of every key, nested blocks included:</p>
+<div class="highlight"><pre><span></span><code>$ lm describe connector-type kafka
+Connector type: kafka
+
+name                 REQUIRED  [STRING, HIGH]
+  Logical connector/table name (target table connector.t_&lt;name&gt;)
+brokers              optional  [STRING, HIGH]
+  Comma-separated bootstrap servers
+brokers_env          optional  [STRING, HIGH]
+  Env var holding the bootstrap servers
+topic                REQUIRED  [STRING, HIGH]
+  Kafka topic to consume
+format               optional  [STRING, MEDIUM]
+  Record value format (default json)
+poll_timeout_ms      optional  [LONG, LOW]
+  Consumer poll timeout in ms [100, 60000]
+max_poll_records     optional  [LONG, LOW]
+  Max records per poll (positive integer; clamped to the engine chunk size)
+auth                 optional  [NESTED, MEDIUM]
+  Broker authentication (kind: none | sasl-plain)
+  kind                 optional  [STRING, HIGH]
+    Authentication method (none | sasl-plain)
+  username_env         optional  [STRING, HIGH]
+    SASL username source: lm secret name, else env var
+  password_env         optional  [STRING, HIGH]
+    SASL password source: lm secret name, else env var
+  security_protocol    optional  [STRING, MEDIUM]
+    Wire protocol for sasl-plain (SASL_SSL | SASL_PLAINTEXT)
+schedule             optional  [STRING, MEDIUM]
+  Cron expression for recurring catch-up runs — the hub scheduler fires it, evaluated in UTC
+window               optional  [STRING, MEDIUM]
+  Fence scheduled runs to a UTC time window, HH:MM-HH:MM (a manual run bypasses it)
+preset               optional  [STRING, LOW]
+  Vendor source preset expanded at apply time (e.g. event-hubs)
+namespace            optional  [STRING, LOW]
+  Input of the event-hubs preset: the Azure Event Hubs namespace
+connection_string_env optional  [STRING, LOW]
+  Input of the event-hubs preset: env var holding the namespace connection string
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>—</td>
+<td>a plain identifier: letters, digits, underscore, not starting with a digit — it becomes <code>connector.t_&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>brokers</code> / <code>brokers_env</code></td>
+<td>—</td>
+<td>exactly one of the two must be present; <code>brokers_env</code> is a name the hub resolves when the run starts</td>
+</tr>
+<tr>
+<td><code>topic</code></td>
+<td>—</td>
+<td>must match <code>[a-zA-Z0-9._-]+</code></td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td><code>json</code></td>
+<td>the only accepted value; Avro and Protobuf are <a href="#limitations">not yet supported</a></td>
+</tr>
+<tr>
+<td><code>poll_timeout_ms</code></td>
+<td><code>2000</code></td>
+<td>integer in <code>[100, 60000]</code></td>
+</tr>
+<tr>
+<td><code>max_poll_records</code></td>
+<td><code>500</code></td>
+<td>integer ≥ 1; a value above the chunk size is clamped to it — see <a href="#chunks-and-the-two-poll-knobs">Chunks</a></td>
+</tr>
+<tr>
+<td><code>auth.kind</code></td>
+<td><code>none</code></td>
+<td><code>none</code> or <code>sasl-plain</code>; <code>sasl-plain</code> requires <code>username_env</code> and <code>password_env</code>, and refuses a blank one</td>
+</tr>
+<tr>
+<td><code>auth.security_protocol</code></td>
+<td><code>SASL_SSL</code></td>
+<td>lands verbatim in the consumer's <code>security.protocol</code>; it is not validated at apply</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>—</td>
+<td>five-field cron, validated at apply, evaluated in UTC</td>
+</tr>
+<tr>
+<td><code>window</code></td>
+<td>—</td>
+<td><code>HH:MM-HH:MM</code>, UTC, end exclusive, may cross midnight; a manual run ignores it</td>
+</tr>
+<tr>
+<td><code>metadata.scopes</code></td>
+<td>—</td>
+<td>the métier scope(s) the table is askable in; the validator warns when none is declared</td>
+</tr>
+</tbody>
+</table>
+<p>Every rule above is enforced at <code>lm validate</code> and again at <code>lm apply</code>, so a manifest the
+command blesses is one the hub accepts. Five mistakes in one file, all named at once:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 90-refused.yaml — five mistakes in one manifest, every one named at validate.</span>
+<span class="c1">#</span>
+<span class="c1"># `lm validate` refuses what `lm apply` would refuse, field by field, before anything is</span>
+<span class="c1"># written. This file is not to be fixed: a clean validate on it is the defect.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: exit 1, five errors and one warning — the warning is `poll_timeout`, a key the</span>
+<span class="c1">#         connector reads nowhere (the real one is poll_timeout_ms).</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-refused</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9acme</span><span class="w">                        </span><span class="c1"># not a plain identifier: cannot become connector.t_9acme</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme/partners</span><span class="w">               </span><span class="c1"># a slash is not in [a-zA-Z0-9._-]</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avro</span><span class="w">                       </span><span class="c1"># v1 reads json only</span>
+<span class="w">  </span><span class="nt">poll_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">                   </span><span class="c1"># unknown key — the real one is poll_timeout_ms</span>
+<span class="w">  </span><span class="nt">max_poll_records</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w">                </span><span class="c1"># must be a positive integer</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oauth</span><span class="w">                      </span><span class="c1"># none | sasl-plain</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm validate -f docs/connectors/kafka/demo/90-refused.yaml
+✗ docs/connectors/kafka/demo/90-refused.yaml — 5 error(s), 1 warning(s)
+
+  ERROR    spec.name
+          must be a plain identifier (letters, digits, underscore; not starting with a digit) — it becomes the hub table connector.t_&lt;name&gt;
+
+  ERROR    spec.topic
+          topic must match [a-zA-Z0-9._-]+
+
+  ERROR    spec.format
+          format v1 supports only 'json'
+          → Use: format: json
+
+  ERROR    spec.max_poll_records
+          max_poll_records must be a positive integer (1..2147483647)
+
+  ERROR    spec.auth.kind
+          auth.kind must be 'none' or 'sasl-plain'
+
+  WARN     spec.poll_timeout
+          unknown key — ignored by the runtime
+          → Remove it, or check the spelling
+
+Fix errors above before running 'lm apply -f docs/connectors/kafka/demo/90-refused.yaml'.
+Error: validation failed: 5 error(s)
+</code></pre></div>
+<p>The warning is the one worth reading twice. <strong>The key list is closed</strong>: a key the connector reads
+nowhere — <code>poll_timeout</code> for <code>poll_timeout_ms</code>, <code>target</code> or <code>mapping</code> copied from another
+manifest — is named rather than accepted and stored. It stays a warning, the manifest still
+applies, but <code>poll_timeout: 50</code> would otherwise read back from <code>lm connector get</code> as a 50 ms
+poll on a connector that polls for 2 000. The sweep reaches inside <code>auth</code>, where a misspelled
+<code>security_protocol</code> leaves the default <code>SASL_SSL</code> in place and a manifest meant for a plaintext
+SASL broker dies in a TLS handshake with the typo as the cause.</p>
+<h2 id="how-a-run-reads-a-topic">How a run reads a topic</h2>
+<h3 id="partitions-and-the-cursor">Partitions and the cursor</h3>
+<p>A Kafka topic is one or more partitions, each an ordered log where every message has an
+<strong>offset</strong>. A consumer's position is therefore not one number but one per partition — and that is
+exactly what the hub stores. <code>acme.orders</code> is keyed by partner over six partitions:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-six-partitions.yaml — the per-partition cursor.</span>
+<span class="c1">#</span>
+<span class="c1"># acme.orders is keyed by partner over six partitions, so one partner's orders sit together</span>
+<span class="c1"># and the topic is read six offsets at a time. The stored cursor is a map {partition -&gt; next</span>
+<span class="c1"># offset}: a single-partition topic could never show that the map is really per partition.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 24 000 rows in connector.t_acme_orders and a cursor carrying SIX keys whose</span>
+<span class="c1">#         offsets sum to 24 000.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-orders</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_orders</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.orders</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-kafka-orders
+ID        CONNECTOR          ENDPOINT  STATUS     IN     OUT    SKIPPED  DEAD-LETTERS  STARTED           ENDED
+3463bf93  acme-kafka-orders  default   Completed  24000  24000  0        0             2026-09-13 02:21  2026-09-13 02:21
+</code></pre></div>
+<p>The position after that run, read out of <code>connector.connector_cursor</code> — the same table that
+holds a JDBC watermark or a CSV file position:</p>
+<div class="highlight"><pre><span></span><code>{"type": "KafkaOffset", "offsets": {"0": 3880, "1": 3770, "2": 3930, "3": 4120, "4": 4190, "5": 4110}}
+</code></pre></div>
+<p>Six keys, one per partition, each the <strong>next offset to read</strong>; they sum to 24 000. The next run
+seeks every partition to its stored offset and continues from there. A partition with no stored
+offset — the first run, or a partition the topic gained since — is read from its beginning, so
+<strong>run #1 reads everything the topic still retains</strong>.</p>
+<p>What the broker does <em>not</em> see: no <code>group.id</code>, no offset commit, no rebalance. The consumer is
+built with <code>enable.auto.commit=false</code>, assigns its partitions and seeks explicitly, and is closed
+after every chunk. Nothing has to be provisioned or cleaned up on the Kafka side, which is also
+why one connector cannot trample another's position — each has its own cursor row.</p>
+<h3 id="the-head-is-the-target">The head is the target</h3>
+<p>When a run starts, the hub asks the broker for the <strong>head</strong> of every partition (the high
+watermark) and writes it to the log:</p>
+<div class="highlight"><pre><span></span><code>INFO  run 3463bf93-… target: partition offsets [0: 3880, 1: 3770, 2: 3930, 3: 4120, 4: 4190, 5: 4110]
+</code></pre></div>
+<p>That is the run's whole definition of <em>done</em>: read from the stored position to those offsets,
+then complete. A message produced while the run is reading belongs to the <strong>next</strong> run. On a
+topic that is written to continuously — which is every real topic — this is what makes a run
+end at all:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 75-live.yaml — a topic that is being written to while the run reads it.</span>
+<span class="c1">#</span>
+<span class="c1"># Start the feeder, then the run:</span>
+<span class="c1">#   python3 …/acme-topics.py feed --rate 200 --seconds 30 &amp;</span>
+<span class="c1">#   sleep 10; lm connector run acme-kafka-live</span>
+<span class="c1">#</span>
+<span class="c1"># A run is a catch-up, not a subscription: it reads to the head each partition had when the</span>
+<span class="c1"># run STARTED, then completes. What arrived while it was reading belongs to the next run.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Completed, well before the feeder stops, with `in` below what the feeder produced;</span>
+<span class="c1">#         the next run reads the rest.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-live</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_live</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.live</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<p>The feeder wrote 200 messages a second for 30 seconds; the run was started 10 seconds in:</p>
+<div class="highlight"><pre><span></span><code>$ python3 docs/connectors/kafka/demo/acme-topics.py feed --rate 200 --seconds 30 &amp;
+$ sleep 10; lm connector run acme-kafka-live
+run scheduled: 644240c1-6741-407a-ae57-43aecdb19f1f
+  ▪ fed 3986 messages at 200.0/s into acme.live
+$ lm connector run acme-kafka-live
+run scheduled: f5046f38-66ed-4598-8a18-2106c09d7072
+$ lm run list --connector acme-kafka-live
+ID        CONNECTOR        ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+f5046f38  acme-kafka-live  default   Completed  2673  2673  0        0             2026-09-13 02:23  2026-09-13 02:23
+644240c1  acme-kafka-live  default   Completed  1313  1313  0        0             2026-09-13 02:23  2026-09-13 02:23
+</code></pre></div>
+<p>The first run found 1 313 messages at its start, read exactly those in 270 ms and completed
+while the feeder was still writing. The second read the 2 673 that had arrived since. Together,
+3 986 — the feeder's own count — and no row twice.</p>
+<p>A run that ends <strong>below</strong> the target it gave itself is reported <strong><code>Partial</code></strong>, not <code>Completed</code>.
+It has two causes, both certain: the run began by skipping offsets its stored position was
+entitled to because the broker had already deleted them (<a href="#a-log-that-moved-under-the-cursor">below</a>),
+or the reader stopped on its own chunk budget while the target said there was more (a topic
+feeding only unparsable messages, <a href="#poison-messages-the-per-message-dlq">below</a>). Being below the
+head is not itself partial: the head is an <em>upper</em> bound on readable records — a transactional
+producer leaves a commit marker there, compaction leaves gaps — so a run that read everything
+readable can end an offset short of it, correctly. <code>Partial</code> is the status worth alerting on:
+the run wrote everything it read, kept its position, and simply did not read everything there
+was; see <a href="../../operations/observability/">Observability</a>.</p>
+<h3 id="chunks-and-the-two-poll-knobs">Chunks and the two poll knobs</h3>
+<p>Every connector run writes in <strong>500-row chunks</strong>, each in its own transaction with the cursor
+persisted beside it. On kafka a chunk is filled by consumer polls, and the two knobs shape them:</p>
+<ul>
+<li><code>max_poll_records</code> is how many records one poll may return. The default is the chunk size, and
+  a larger value is clamped to it — <code>5000</code> still gives 6 chunks for 2 400 messages, exactly like
+  the default. A smaller one gives more chunks and more transactions: <code>100</code> gives 25. Measured on
+  <code>acme.partners</code>: 6 chunks in 865 ms against 25 in 1 042 ms.</li>
+<li><code>poll_timeout_ms</code> is how long one poll waits for the broker. A fresh consumer is built for
+  every chunk, so the first poll of a run pays metadata, connection and fetch out of that budget.
+  The default of 2 000 ms is generous for a broker on the same network; the floor of 100 ms is
+  legal and, on a slow link, is how a run <a href="#an-empty-poll-and-what-it-does-not-prove">reads nothing and ends</a>.</li>
+</ul>
+<p>A second run on a topic that has not moved does not poll at all — the stored position already
+sits at the target, so it completes in a few tens of milliseconds with <code>IN 0</code>.</p>
+<h3 id="continuous-consumption">Continuous consumption</h3>
+<p>To keep the table current, declare a <code>schedule</code>. Each slot is a fresh catch-up from the stored
+cursor to the head of that moment:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 30-cadence.yaml — a topic kept current on a cron, inside a quiet window.</span>
+<span class="c1">#</span>
+<span class="c1"># `schedule` is evaluated in UTC by the hub's own scheduler; each slot is a fresh catch-up</span>
+<span class="c1"># from the stored cursor. `window` fences the slots — one due outside it is skipped, never</span>
+<span class="c1"># queued — and a manual `lm connector run` ignores the fence. A slot that fires while a run</span>
+<span class="c1"># is still active on the endpoint is skipped too (per-endpoint advisory lock), so an</span>
+<span class="c1"># aggressive cadence degrades to back-to-back catch-ups, never to double ingestion.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: the same 2 400 rows as the quickstart, and SCHED filled in `lm connector list`.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-cadence</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_cadence</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span><span class="w">      </span><span class="c1"># every five minutes, UTC</span>
+<span class="w">  </span><span class="nt">window</span><span class="p">:</span><span class="w"> </span><span class="s">"06:00-22:00"</span><span class="w">        </span><span class="c1"># UTC, end exclusive — a slot due at night is skipped</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm apply -f docs/connectors/kafka/demo/30-cadence.yaml
+{"name":"acme-kafka-cadence","connectorId":"973926e1-8936-44ab-918c-3fb06f05b64d","endpointsApplied":1}
+$ lm connector list
+NAME                         TYPE          TENANT  SCHED        WINDOW  STATUS     LAST RUN
+acme-kafka-cadence           kafka         1       */5 * * * *                     
+acme-kafka-partners          kafka         1                            Completed  2026-09-13 02:21
+</code></pre></div>
+<ul>
+<li><strong>Evaluated in UTC</strong> by the hub's own scheduler — no OS cron. A re-apply without <code>schedule</code>
+  unschedules the connector.</li>
+<li><strong>Overlap is impossible.</strong> A slot that fires while a run is still active on the endpoint is
+  skipped (per-endpoint advisory lock) and recorded as <code>Cancelled</code> with the reason. Because a run
+  drains to the head it found and completes, a busy topic does not hold the lock for ever: an
+  aggressive cadence degrades to back-to-back catch-ups, never to double ingestion.</li>
+<li><strong><code>window</code> fences the slots.</strong> <code>"06:00-22:00"</code> skips — never queues — a slot due at night; the
+  end is exclusive, and the range may cross midnight (<code>"22:00-06:00"</code>). The fence gates a run's
+  <em>start</em>: a run that began inside the window drains to the head it found and completes. A manual
+  <code>lm connector run</code> always ignores it — an operator asking explicitly is not the scheduler.</li>
+<li>An external trigger works too: your own cron plus <code>lm connector run &lt;name&gt;</code>.</li>
+</ul>
+<p><strong>One connector reads one topic.</strong> There is no message-key or header filtering: whatever the
+topic carries lands whole in that connector's table. A topic that multiplexes several event types
+needs one connector per topic on the producer side — or a second connector on the same topic
+with a different <code>name</code>, if the same messages must land twice.</p>
+<h2 id="storage-layout">Storage layout</h2>
+<p>Nothing to set up: the table is created by the first run that has a row to write. This section
+is reference, for when you need it.</p>
+<div class="highlight"><pre><span></span><code>                                       Table "connector.t_acme_partners"
+      Column      |           Type           | Collation | Nullable |                        Default
+------------------+--------------------------+-----------+----------+-------------------------------------------------------
+ id               | bigint                   |           | not null | nextval('connector.t_acme_partners_id_seq'::regclass)
+ _row_hash        | text                     |           | not null |
+ _ingested_at     | timestamp with time zone |           | not null | now()
+ _source          | text                     |           |          |
+ _run_id          | uuid                     |           |          |
+ _mapping_version | integer                  |           |          |
+ tenant_id        | bigint                   |           | not null |
+ partner_id       | bigint                   |           |          |
+ name             | text                     |           |          |
+ city             | text                     |           |          |
+ country          | text                     |           |          |
+ credit_limit     | bigint                   |           |          |
+ updated_at       | text                     |           |          |
+Indexes:
+    "t_acme_partners_pkey" PRIMARY KEY, btree (id)
+    "t_acme_partners__row_hash_key" UNIQUE CONSTRAINT, btree (_row_hash)
+    "t_acme_partners_idx_tenant_id" btree (tenant_id)
+Policies:
+    POLICY "tenant_isolation"
+      USING ((tenant_id = (NULLIF(current_setting('app.current_tenant'::text, true), ''::text))::bigint))
+</code></pre></div>
+<ul>
+<li><strong>The seven columns above the line</strong> are the hub's: <code>id</code>, <code>_row_hash</code>, <code>_ingested_at</code>,
+  <code>_source</code>, <code>_run_id</code>, <code>_mapping_version</code>, <code>tenant_id</code> — the same seven every <code>connector.t_*</code>
+  table carries. The rest came from the messages, in the order the message lists its fields.</li>
+<li><strong><code>_row_hash</code> is the dedup.</strong> It is a hash of the row's content, <code>UNIQUE</code>, and a kafka write is
+  <code>ON CONFLICT DO NOTHING</code>: a message read twice — a producer retry, a cursor reset — is one
+  row. <code>data.row.changed</code> events, where a <a href="../../apps/processes/">Process</a>, a webhook or a
+  notification rule subscribes to the table, fire for genuinely new rows only.</li>
+<li><strong>The row-level security policy</strong> is what keeps one tenant's rows invisible to another.</li>
+<li>
+<p><strong><code>records_out</code> counts writes, including the ones the table refused.</strong> Reset the cursor and run
+  again:</p>
+<div class="highlight"><pre><span></span><code>$ lm endpoint reset-cursor acme-kafka-partners/default
+$ lm connector run acme-kafka-partners
+$ lm run list --connector acme-kafka-partners
+ID        CONNECTOR            ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+dc41ba74  acme-kafka-partners  default   Completed  2400  2400  0        0             2026-09-13 02:25  2026-09-13 02:25
+</code></pre></div>
+<p><code>OUT 2400</code>, and the table still holds exactly 2 400 rows. The re-read is a no-op the ledger
+reports as a full write, the same way every connector family reports a re-run; the witness
+that nothing duplicated is the table's row count, not the <code>SKIPPED</code> column.</p>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Deleting a kafka connector deletes its data</p>
+<p><code>lm connector delete</code> drops <code>connector.t_&lt;name&gt;</code> and the cursor — the same erasure gesture as
+the other connector families (a kafka run writes rows and the schema card, not RAG chunks, so
+there is nothing else to drop). The topic is untouched: the hub never writes to it, and
+re-applying the manifest reads it again from the beginning.</p>
+</div>
+<h2 id="schema-evolution">Schema evolution</h2>
+<p>The producer changed its mind at message 1 201 and added two fields. <code>acme.partners-drift</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 50-drift.yaml — a schema that changes halfway through the topic.</span>
+<span class="c1">#</span>
+<span class="c1"># The first 1 200 messages carry six fields; from message 1 201 the producer added</span>
+<span class="c1"># `vat_number` and `segment`. Nothing in this manifest says so: the table's columns are</span>
+<span class="c1"># inferred from the messages, and a field that appears later becomes a column when it does</span>
+<span class="c1"># (ALTER TABLE ADD COLUMN, mid-run), NULL for the rows written before it existed.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 2 400 rows, eight columns, `vat_number` filled 1 200 times.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-drift</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_drift</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-drift</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-kafka-drift
+ID        CONNECTOR         ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+18c2f825  acme-kafka-drift  default   Completed  2400  2400  0        0             2026-09-13 02:21  2026-09-13 02:21
+</code></pre></div>
+<div class="highlight"><pre><span></span><code> column_name  | data_type
+--------------+-----------
+ partner_id   | bigint
+ name         | text
+ city         | text
+ country      | text
+ credit_limit | bigint
+ updated_at   | text
+ vat_number   | text
+ segment      | text
+
+ rows | with_vat_number | with_segment
+------+-----------------+--------------
+ 2400 |            1200 |         1200
+</code></pre></div>
+<p>The table was created from the first chunk's six fields; when a message carrying <code>vat_number</code>
+arrived in a later chunk, the column was added (<code>ALTER TABLE ADD COLUMN</code>) and the run went on.
+Rows written before it existed hold <code>NULL</code> there — nothing was re-read and nothing was lost. A
+field that <em>disappears</em> from later messages simply leaves its column <code>NULL</code> for those rows.</p>
+<p><strong>The new column is typed like any other</strong>: from the chunk that introduces it, by the same
+inference the first chunk uses. A whole number arriving on day two lands <code>bigint</code>, one with a
+decimal point <code>numeric</code>, a boolean <code>boolean</code>, a nested value <code>jsonb</code>. The two fields above are
+strings, so the screen cannot show the difference — but a <code>credit_limit</code> appearing later would.
+The added columns come after the ones created first, in the order their chunk presents them.</p>
+<p>The bound is the chunk, exactly as it is at creation: inference reads the messages in hand, so a
+field that is present but <code>null</code> in all of them still lands <code>text</code>. Each run that adds columns
+says so in the hub log, naming them and the type each one got, because a decision taken from a
+partial sample is one you may want to revisit — the gesture for that is <code>lm endpoint reset-cursor</code>
+followed by a re-read, once the producer has settled.</p>
+<p>Each run that changed the table's shape refreshes the scope's schema card, so the chat knows the
+new column before the next question is asked.</p>
+<h3 id="names-the-producer-chose-stay-and-stay-askable">Names the producer chose stay — and stay askable</h3>
+<p>A kafka manifest has <strong>no <code>mapping</code> block</strong> — no hooks run at ingestion, nothing renames,
+flattens or filters — so the field names on the topic are the column names in the table.
+<code>acme.partners-raw</code> carries the shapes an ERP export is fond of:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 55-raw.yaml — what the producer sends is what lands.</span>
+<span class="c1">#</span>
+<span class="c1"># acme.partners-raw carries field names a database column is not supposed to have</span>
+<span class="c1"># ("Partner Name", "credit.limit", "MONTANT_€"), a nested object and an array. A kafka</span>
+<span class="c1"># manifest has no mapping block, so nothing renames or flattens them: each top-level key</span>
+<span class="c1"># becomes a column under that exact name (quoted), and a nested value lands as jsonb.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 500 rows; columns "Partner Name", "credit.limit", "MONTANT_€", address (jsonb),</span>
+<span class="c1">#         tags (jsonb) — and every one of them askable by name in chat.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-raw</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_raw</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-raw</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code> column_name  | data_type
+--------------+-----------
+ partner_id   | bigint
+ Partner Name | text
+ credit.limit | bigint
+ MONTANT_€    | numeric
+ address      | jsonb
+ tags         | jsonb
+
+ partner_id |       Partner Name        | credit.limit | MONTANT_€ |                    address                     |             tags
+------------+---------------------------+--------------+-----------+------------------------------------------------+-------------------------------
+       1000 | Hydraulique Lyon 1000     |          500 |    0.0000 | {"city": "Lyon", "street": "0 rue de l'Usine"} | ["erp", "partner", "batch-0"]
+       1001 | Roulements Bruxelles 1001 |          637 |    1.5000 | {"city": "Bruxelles", "street": "1 rue de l'Usine"} | ["erp", "partner", "batch-1"]
+</code></pre></div>
+<p>A space, a dot, a currency sign, a capital — each is a quoted identifier in PostgreSQL, and the
+hub quotes it everywhere it generates SQL. The schema card the chat reads names every column
+quoted too, so generated SQL quotes it as well:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask --scope billing "How many rows are in connector.t_acme_partners_raw and what is the largest MONTANT_€?"
+There are 500 rows in connector.t_acme_partners_raw. The largest MONTANT_€ is 748.5000.
+  data as of: 2026-09-13T00:23:26.656851Z (last completed run)
+
+  SQL: SELECT COUNT(*), MAX("MONTANT_€") AS max_montant_eur FROM "connector"."t_acme_partners_raw"
+</code></pre></div>
+<p>The nested <code>address</code> and the <code>tags</code> array landed as <code>jsonb</code>, values intact. One thing does not
+survive: <strong>object key order</strong> — <code>{"street", "city"}</code> was produced and <code>{"city", "street"}</code> came
+back, because <code>jsonb</code> stores an object as a set of keys. Order that matters travels in an array.
+A <a href="../../apps/workflows/#names-the-source-chose"><code>kind:Workflow</code></a> lifecycle can be declared over
+such a column just as it is; see also
+<a href="../../transparency/ask-honesty/#names-the-source-chose">Names the source chose</a>.</p>
+<h3 id="seven-column-names-are-reserved">Seven column names are reserved</h3>
+<p><code>id</code>, <code>_row_hash</code>, <code>_ingested_at</code>, <code>_source</code>, <code>_run_id</code>, <code>_mapping_version</code>, <code>tenant_id</code> — the
+hub adds these to every <code>connector.t_&lt;name&gt;</code> table. A top-level JSON field sharing one of them is
+refused at write time, on a brand-new table and on an existing one alike. <code>id</code> is the one you
+will meet: <code>acme.partners-reserved</code> carries the REST demo's partner record verbatim, <code>id</code> included.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 58-reserved.yaml — a top-level `id` in the message.</span>
+<span class="c1">#</span>
+<span class="c1"># This is the REST demo's partner record verbatim, `id` included. `id` is one of the seven</span>
+<span class="c1"># columns the hub adds to every connector.t_* table, and a kafka manifest has no mapping hook</span>
+<span class="c1"># to rename a field — so the run is refused at write time, on a message that names all seven</span>
+<span class="c1"># and says what each connector family can do about it.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Failed — `source column 'id' collides with a hub system column`. No table.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-reserved</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_reserved</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-reserved</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run get 7ebc090f
+ID        CONNECTOR            ENDPOINT  STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+7ebc090f  acme-kafka-reserved  default   Failed  0   0    0        0             2026-09-13 02:21  2026-09-13 02:21
+✖ run failed: source column 'id' collides with a hub system column (_ingested_at, _mapping_version, _row_hash, _run_id, _source, id, tenant_id); it must reach the hub under another name — jdbc: source.tables[].rename; csv: a map-columns row hook under spec.mapping; kafka: no rename exists, the field must be renamed in the topic payload
+</code></pre></div>
+<p>Because there is no mapping block, there is <strong>no in-product rename</strong>: the field has to reach the
+hub under another name, which means changing what the producer puts on the topic.</p>
+<h2 id="when-the-topic-misbehaves">When the topic misbehaves</h2>
+<p>A broker does not lie the way an HTTP server can — it answers honestly every time. What
+misbehaves is the <strong>topic</strong>: a message that is not what the schema expects, a deletion, a name
+that does not exist, and <strong>time</strong>: a log start that moved under the stored position, a poll that
+came back empty for the wrong reason.</p>
+<h3 id="poison-messages-the-per-message-dlq">Poison messages — the per-message DLQ</h3>
+<p><code>acme.partners-poison</code> holds 1 000 messages of which 143 are not a JSON object — a truncated
+object, a JSON array, a JSON scalar:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 40-poison.yaml — the per-message dead-letter queue.</span>
+<span class="c1">#</span>
+<span class="c1"># acme.partners-poison holds 1 000 messages of which exactly 143 are not a JSON object: a</span>
+<span class="c1"># truncated object, a JSON array, a JSON scalar, at every index where i % 7 == 3. Poison is</span>
+<span class="c1"># placed deterministically, never at random — a source whose corpus changes between runs</span>
+<span class="c1"># cannot tell a fix from a coincidence.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Completed, in=1000 out=857 skipped=143, 143 dead-letters under MalformedSource,</span>
+<span class="c1">#         857 rows in the table, and the identity 1000 = 857 + 143 by hand.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-poison</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_poison</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-poison</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run get bd4d3df9
+ID        CONNECTOR          ENDPOINT  STATUS     IN    OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+bd4d3df9  acme-kafka-poison  default   Completed  1000  857  143      143           2026-09-13 02:21  2026-09-13 02:21
+⚠ 143 rows quarantined — see: lm dlq list --run bd4d3df9-a25b-4844-9a46-d25ef97d5dab
+$ lm dlq list --run bd4d3df9-a25b-4844-9a46-d25ef97d5dab
+ID        CONNECTOR          RUN       REASON           ATTEMPTS  MESSAGE
+4d3fb883  acme-kafka-poison  bd4d3df9  MalformedSource  1         acme.partners-poison:0:997:997 — message value is not a JS…
+844d1f31  acme-kafka-poison  bd4d3df9  MalformedSource  1         acme.partners-poison:0:990:990 — invalid JSON: Unexpected …
+c1a2e423  acme-kafka-poison  bd4d3df9  MalformedSource  1         acme.partners-poison:0:983:983 — message value is not a JS…
+$ lm dlq get 844d1f31
+ID:        844d1f31-5a15-401e-8f5b-4564bd89f89f
+Connector: acme-kafka-poison (98bea7c4-7052-4186-838a-79110ffa58e2)
+Run:       bd4d3df9-a25b-4844-9a46-d25ef97d5dab
+Reason:    MalformedSource
+Attempts:  1
+Message:   acme.partners-poison:0:990:990 — invalid JSON: Unexpected end-of-input within/between Object entries
+Payload:   {"raw":["{\"broken\": "],"file":"acme.partners-poison:0:990","line":990}
+</code></pre></div>
+<ul>
+<li><strong>The conservation identity holds by hand</strong>: <code>IN 1000 = OUT 857 + SKIPPED 143</code>, and the table
+  holds 857 rows. A poison message is read, counted, set aside — never silently dropped.</li>
+<li><strong>The coordinate is <code>topic:partition:offset</code></strong>, and the raw value travels with it (capped at
+  8 192 characters), so the message can be found on the broker and read.</li>
+<li><strong>Offsets still advance.</strong> A poison message is dead-lettered once and never re-read: the next
+  run on this topic reads <code>IN 0</code>. A poll of <em>only</em> poison keeps polling for a real row, bounded
+  by the chunk budget, so a continuously-poison topic cannot wedge a run — the reader stops on
+  its budget, the run ends <code>Partial</code> with the dead-lettered offsets persisted, and the next run
+  resumes past them.</li>
+<li>Inspect entries with <a href="../../cli/lm-reference/"><code>lm dlq</code></a> — <code>list</code>, <code>get</code>, then <code>discard</code>, or
+  <code>replayed</code> to record that you re-sent the message yourself (the hub never re-reads it); watch the
+  queue in the TUI under <code>:dlq</code>.</li>
+</ul>
+<h3 id="tombstones-a-deletion-is-not-garbage">Tombstones — a deletion is not garbage</h3>
+<p>On a compacted topic, a record with a <strong>null value</strong> is how a producer says <em>"this key is
+deleted"</em>; log compaction keeps it as the deletion marker. <code>acme.partners-compacted</code> holds 1 000
+partners, then 300 tombstones:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 45-compacted.yaml — a compacted topic carrying tombstones.</span>
+<span class="c1">#</span>
+<span class="c1"># 1 000 partner records, then the producer deletes the first 300 keys — on a compacted topic</span>
+<span class="c1"># a deletion is a record with a NULL value, the tombstone log compaction keeps as the marker.</span>
+<span class="c1"># The hub's ingestion is append-only: a tombstone is dead-lettered under a reason naming the</span>
+<span class="c1"># key, never applied as a DELETE on the table.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Completed, in=1300 out=1000 skipped=300, 300 dead-letters each naming its key,</span>
+<span class="c1">#         1 000 rows in the table.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-compacted</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_compacted</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-compacted</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run get e6d58e37
+ID        CONNECTOR             ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+e6d58e37  acme-kafka-compacted  default   Completed  1300  1000  300      300           2026-09-13 02:21  2026-09-13 02:21
+⚠ 300 rows quarantined — see: lm dlq list --run e6d58e37-3c4f-4f3f-aef7-906d79812a2a
+$ lm dlq get 42d8ea82
+ID:        42d8ea82-9207-4f38-b8dc-cf06706676f3
+Connector: acme-kafka-compacted (4448919e-1cef-432b-844a-dd9d78f76571)
+Run:       e6d58e37-3c4f-4f3f-aef7-906d79812a2a
+Reason:    MalformedSource
+Attempts:  1
+Message:   acme.partners-compacted:0:1299:1299 — Kafka tombstone (key '1299'): the message value is null — the producer deleted that key, and append-only ingestion dead-letters the marker rather than applying it as a delete
+Payload:   {"raw":[],"file":"acme.partners-compacted:0:1299","line":1299}
+</code></pre></div>
+<p>lumnik ingestion is <strong>append-only</strong> — the hub mirrors what the topic carried, it never removes a
+row behind your back — so a tombstone becomes one DLQ entry naming the <strong>key</strong> it deleted, which
+is all a tombstone carries. It counts as a skip (<code>1300 = 1000 + 300</code>), it does not block, and the
+1 000 rows around it landed in the same run. If those deletions matter to your table, the
+deletion has to reach the hub <strong>as data</strong> — a field the producer sets — because there is no
+mapping hook here to interpret one.</p>
+<h3 id="a-topic-that-does-not-exist">A topic that does not exist</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 60-absent.yaml — a topic the broker does not have.</span>
+<span class="c1">#</span>
+<span class="c1"># acme.absent is never created, and the consumer the hub builds is forbidden to create it</span>
+<span class="c1"># (a read must not write to its source). The refusal names the topic and says which of two</span>
+<span class="c1"># situations it is: a first read (check the name) or an endpoint that had read this topic</span>
+<span class="c1"># before (the broker lost it, or the name was edited).</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: Failed — `kafka topic 'acme.absent' does not exist on the broker`.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-absent</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_absent</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.absent</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run get c1008671
+ID        CONNECTOR          ENDPOINT  STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+c1008671  acme-kafka-absent  default   Failed  0   0    0        0             2026-09-13 02:21  2026-09-13 02:21
+✖ run failed: kafka topic 'acme.absent' does not exist on the broker: it reports no partition for that name, so there is nothing to read. Check spec.source.topic for a typo, or create the topic on the broker. The hub never creates one (an ingestion run must not write to its source).
+</code></pre></div>
+<p>Two things happened in those 36 ms. The consumer asked the broker about <code>acme.absent</code> <strong>with
+automatic topic creation off</strong> — the client's default is <em>on</em>, and a broker left at Apache's own
+default would have created the topic and handed back one empty partition, turning a typo into a
+green run over zero rows and a write into your cluster. And the empty answer was refused <strong>by
+name</strong>, with the cause and the gesture, instead of the client's own
+<code>Consumer is not subscribed to any topics or assigned any partitions</code>.</p>
+<p>The message says which of two situations it is. A first read is a name to check. An endpoint
+that <strong>has</strong> a stored position read this topic before — the topic was deleted or renamed on the
+broker, or the manifest's topic name was edited — and the message says so instead of sending you
+to hunt a typo in a manifest that worked for months.</p>
+<h3 id="a-log-that-moved-under-the-cursor">A log that moved under the cursor</h3>
+<p>Retention, compaction or an administrative trim moves a partition's log start forward. A stored
+position below it names messages that no longer exist. The Kafka client repairs such a seek by
+itself (<code>auto.offset.reset=earliest</code>) and says nothing — which is how a run that lost 500
+messages would look exactly like one that read everything. Replay it on the demo broker:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 70-trimmed.yaml — the broker deletes what the cursor still points at.</span>
+<span class="c1">#</span>
+<span class="c1"># Retention, compaction or an administrative trim moves a partition's log start forward. A</span>
+<span class="c1"># stored position below it names messages that no longer exist. Replay it in three gestures:</span>
+<span class="c1">#</span>
+<span class="c1">#   lm connector run acme-kafka-trimmed                              # run 1: 5 000, cursor at 5 000</span>
+<span class="c1">#   python3 …/acme-topics.py feed --topic acme.partners-trimmed --rate 500 --seconds 2   # ~1 000 more</span>
+<span class="c1">#   python3 …/acme-topics.py trim 5500                               # offsets 0..5499 are gone</span>
+<span class="c1">#   lm connector run acme-kafka-trimmed                              # run 2</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: run 2 ends `Partial`, its error names offsets 5000..5499 as unreadable, and the</span>
+<span class="c1">#         hub log carries the same sentence at WARN.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-trimmed</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_trimmed</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners-trimmed</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-kafka-trimmed                                    # run 1
+$ python3 docs/connectors/kafka/demo/acme-topics.py feed --topic acme.partners-trimmed --rate 500 --seconds 2
+  ▪ fed 607 messages at 500.0/s into acme.partners-trimmed
+$ python3 docs/connectors/kafka/demo/acme-topics.py trim 5500
+  ✓ acme.partners-trimmed now starts at offset 5500 (high watermark 5607): offsets 0..5499 are gone
+$ lm connector run acme-kafka-trimmed                                    # run 2
+$ lm run list --connector acme-kafka-trimmed
+ID        CONNECTOR           ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+49b90bd6  acme-kafka-trimmed  default   Partial    107   107   0        0             2026-09-13 02:22  2026-09-13 02:22
+c30cf76f  acme-kafka-trimmed  default   Completed  5000  5000  0        0             2026-09-13 02:22  2026-09-13 02:22
+$ lm run get 49b90bd6
+• run partial: acme.partners-trimmed[0]: the stored position is offset 5000 but the broker's log now starts at 5500 — offsets 5000..5499 are no longer on the broker (retention, compaction or a trim removed them) and can never be read; resuming at 5500
+</code></pre></div>
+<p>Run 1 read 5 000 and stored position 5 000. The producer wrote 607 more; the broker deleted
+everything below 5 500. Run 2 asked the broker where the log starts <strong>before</strong> seeking, saw its
+position overtaken, read the 107 messages that remained — and reported itself <strong><code>Partial</code></strong>, with
+the exact lost range in its message and the same sentence at <code>WARN</code> in the hub log. Nothing
+recovers those 500 messages; no connector could. What changed is that a run that read less than
+the topic ever held no longer looks like a complete one.</p>
+<p>A first run against a topic whose start has already moved is different: nothing was lost <em>here</em>,
+and the run completes with an <code>INFO</code> line saying which offsets left the broker before this
+connector ever read it. <code>lm endpoint reset-cursor</code> deletes the stored position, so a reset
+endpoint is honestly a first read again.</p>
+<p>The gesture, when it repeats: raise the topic's retention, or shorten the interval between runs.</p>
+<h3 id="an-empty-poll-and-what-it-does-not-prove">An empty poll, and what it does not prove</h3>
+<p>A run ends when a poll returns nothing — that is how "caught up" is detected. A poll that
+<strong>timed out</strong> before its first fetch arrived looks identical, and a fresh consumer per chunk
+means the first poll of a run pays metadata, connection and fetch out of <code>poll_timeout_ms</code>. On a
+slow link at the 100 ms floor, a run can read nothing from a topic holding thousands of messages
+and end.</p>
+<p>Because the run knows its target, that silence is named. A poll that returns nothing while the
+position is still below the head ends the run on a <code>WARN</code> stating both numbers:</p>
+<div class="highlight"><pre><span></span><code>WARN  acme.orders: the poll returned no record within 100 ms and the position is below the high watermark on partition(s) [0: at 0, high watermark 3880, …] — the poll may have timed out before the first fetch arrived, or those offsets may hold no readable record (compaction, transaction markers). The run ends here either way. Raise poll_timeout_ms if this repeats on a topic known to have data
+</code></pre></div>
+<p>It names two causes and chooses neither, because it cannot: compaction gaps and transaction
+markers occupy offsets no consumer is ever handed, so a run that read everything can end below
+the watermark, correctly. The run stays <code>Completed</code> — this is the one shortfall the hub cannot
+prove — and the message goes to the hub's log only. When a run ingested less than you expected
+and the ledger is green, read the log for the topic's name.</p>
+<p>An honest empty topic looks like this, in 46 ms and with no such line:</p>
+<div class="highlight"><pre><span></span><code>$ lm run list --connector acme-kafka-empty
+ID        CONNECTOR         ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+2b7a9ee6  acme-kafka-empty  default   Completed  0   0    0        0             2026-09-13 02:21  2026-09-13 02:21
+</code></pre></div>
+<h3 id="a-broker-that-does-not-answer">A broker that does not answer</h3>
+<p>A bootstrap address that answers nothing fails the run on the Kafka client's own metadata
+timeout — one wait of about <strong>60 s</strong>, then a <code>Failed</code> row saying the broker did not answer,
+naming the address and the topic. The run measures its target first; when <em>that</em> is what times
+out, the reader is not given the same 60 s to spend over again, because a broker that did not
+answer a metadata request will not answer a fetch either. An address that refuses the connection
+fails the same way. Neither is reported as a successful empty sync, and the failure is marked
+retryable — a broker that comes back is what the next scheduled slot finds.</p>
+<h2 id="auth-and-secrets">Auth and secrets</h2>
+<table>
+<thead>
+<tr>
+<th><code>auth.kind</code></th>
+<th>Config</th>
+<th>Wire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td>nothing — the default when <code>auth:</code> is omitted</td>
+<td>plaintext, no SASL handshake</td>
+</tr>
+<tr>
+<td><code>sasl-plain</code></td>
+<td><code>username_env</code> + <code>password_env</code>, optional <code>security_protocol</code></td>
+<td>SASL/PLAIN over <code>SASL_SSL</code> (default) or <code>SASL_PLAINTEXT</code></td>
+</tr>
+</tbody>
+</table>
+<p>Every <code>*_env</code> key on this connector — <code>brokers_env</code>, <code>username_env</code>, <code>password_env</code> — is a
+<strong>name</strong>. The hub resolves it when the run starts: the <a href="../../admin-console-guide/"><code>lm secret</code></a>
+registry for your tenant first, then its own environment (an OS variable, then a JVM system
+property). The value is never in the manifest and never in the stored config.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 62-brokers-env.yaml — the broker address by name, resolved at run time.</span>
+<span class="c1">#</span>
+<span class="c1"># `brokers_env` names an entry the hub resolves when the run starts: the `lm secret`</span>
+<span class="c1"># registry for your tenant first, then the hub process's own environment. Run it once with</span>
+<span class="c1"># nothing set to read the refusal, then:</span>
+<span class="c1">#   lm secret set ACME_KAFKA_BROKERS       # host.docker.internal:29092</span>
+<span class="c1"># and run again.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: run 1 Failed naming BOTH places it looked; run 2 Completed, 2 400 rows.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-brokers-env</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_by_name</span>
+<span class="w">  </span><span class="nt">brokers_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_KAFKA_BROKERS</span><span class="w">   </span><span class="c1"># the value lives in the registry, never in this file</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+</code></pre></div>
+<p>Run it before the name resolves, and the refusal names <strong>both</strong> places it looked:</p>
+<div class="highlight"><pre><span></span><code>$ lm run get 3e808fcf
+ID        CONNECTOR               ENDPOINT  STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+3e808fcf  acme-kafka-brokers-env  default   Failed  0   0    0        0             2026-09-13 02:21  2026-09-13 02:21
+✖ run failed: 'ACME_KAFKA_BROKERS' (brokers_env) resolves to nothing — no 'lm secret' entry for this tenant, and nothing of that name in the hub's own environment
+$ lm secret set ACME_KAFKA_BROKERS          # prompts at the keyboard; what you type is not shown
+Created secret "ACME_KAFKA_BROKERS"
+$ lm connector run acme-kafka-brokers-env
+$ lm run list --connector acme-kafka-brokers-env
+ID        CONNECTOR               ENDPOINT  STATUS     IN    OUT   SKIPPED  DEAD-LETTERS  STARTED           ENDED
+d071091c  acme-kafka-brokers-env  default   Completed  2400  2400  0        0             2026-09-13 02:22  2026-09-13 02:22
+3e808fcf  acme-kafka-brokers-env  default   Failed     0     0     0        0             2026-09-13 02:21  2026-09-13 02:21
+</code></pre></div>
+<p>The same resolution serves the credentials. <code>sasl-plain</code> refuses a name that resolves to nothing
+— or to blanks — <strong>before</strong> opening a connection, so the failure is about the secret and not
+about SASL:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 65-sasl.yaml — SASL/PLAIN credentials, by name.</span>
+<span class="c1">#</span>
+<span class="c1"># Neither the username nor the password is in this file: `username_env` and `password_env`</span>
+<span class="c1"># name registry entries (`lm secret set ACME_KAFKA_USER`, `lm secret set ACME_KAFKA_PW`).</span>
+<span class="c1"># `security_protocol` picks the wire: SASL_SSL is the default, SASL_PLAINTEXT is for a</span>
+<span class="c1"># broker that authenticates without TLS. Both land verbatim in the consumer's config.</span>
+<span class="c1">#</span>
+<span class="c1"># The demo broker authenticates nobody, so this manifest cannot complete against it — it is</span>
+<span class="c1"># here for the two refusals worth seeing: the one an unresolved name gets before any</span>
+<span class="c1"># connection, and the one a broker that speaks no SASL gives after.</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-kafka-sasl</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_partners_sasl</span>
+<span class="w">  </span><span class="c1"># The hub runs in Docker: `localhost` there is the hub's own container, not your machine.</span>
+<span class="w">  </span><span class="nt">brokers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.docker.internal:29092</span>
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.partners</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+<span class="w">  </span><span class="nt">auth</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sasl-plain</span>
+<span class="w">    </span><span class="nt">security_protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SASL_PLAINTEXT</span>
+<span class="w">    </span><span class="nt">username_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_KAFKA_USER</span>
+<span class="w">    </span><span class="nt">password_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_KAFKA_PW</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm run get 052f113a
+✖ run failed: 'ACME_KAFKA_USER' (username_env) resolves to nothing — no 'lm secret' entry for this tenant, and nothing of that name in the hub's own environment
+</code></pre></div>
+<p>The demo broker authenticates nobody, so once both names resolve the <em>broker</em> refuses, in its
+own words — the message to expect from a listener that does not speak the mechanism you declared:</p>
+<div class="highlight"><pre><span></span><code>$ lm run get 9e962b07
+✖ run failed: Unexpected handshake request with client mechanism PLAIN, enabled mechanisms are []
+</code></pre></div>
+<ul>
+<li><code>security_protocol</code> lands verbatim in the consumer's <code>security.protocol</code>; it is not validated
+  at apply. <code>SASL_SSL</code> is the default; a SASL listener without TLS wants <code>SASL_PLAINTEXT</code>.</li>
+<li>The username and password are embedded in the JAAS login string with proper escaping — a secret
+  containing a backslash or a double quote cannot break the parser or smuggle an extra option.</li>
+<li>SASL/SCRAM, mTLS and OAuth are <a href="#limitations">not yet supported</a>.</li>
+</ul>
+<h2 id="azure-event-hubs-the-event-hubs-preset">Azure Event Hubs — the <code>event-hubs</code> preset</h2>
+<p>Event Hubs exposes a Kafka-compatible endpoint that authenticates as SASL/PLAIN with the <strong>fixed
+username <code>$ConnectionString</code></strong> (the literal string, dollar sign included — it is not a secret) and
+the namespace connection string as the password. The preset writes that config for you:
+<code>connector_type</code> stays <code>kafka</code>, and <code>spec.preset</code> rides as an internal field the apply handler
+expands and removes.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-event-hubs.yaml — Azure Event Hubs via the 'event-hubs' vendor preset.</span>
+<span class="c1">#</span>
+<span class="c1"># Apply and run:</span>
+<span class="c1">#   lm apply -f docs/connectors/kafka/20-event-hubs.yaml</span>
+<span class="c1">#   lm connector run event-hubs-telemetry</span>
+<span class="c1">#</span>
+<span class="c1"># How the event-hubs preset works</span>
+<span class="c1"># --------------------------------</span>
+<span class="c1"># connector_type stays 'kafka' — the preset just pre-wires the bootstrap</span>
+<span class="c1"># address (namespace.servicebus.windows.net:9093) and SASL/SSL settings from</span>
+<span class="c1"># the connection string, so you don't have to work those out by hand. No</span>
+<span class="c1"># Kafka consumer group is created or needed — the hub tracks offsets itself,</span>
+<span class="c1"># same as any other kafka connector.</span>
+<span class="c1">#</span>
+<span class="c1"># The 'connection_string_env' field NAMES the entry that holds the Event Hubs</span>
+<span class="c1"># connection string (Primary Connection String from the Azure portal). Every *_env key</span>
+<span class="c1"># resolves the same way: the lm secret registry for your tenant first, then the hub</span>
+<span class="c1"># process's own environment (OS variable, then JVM system property).</span>
+<span class="c1">#   lm secret set EVENTHUBS_CONN_STR          # or: export EVENTHUBS_CONN_STR="Endpoint=sb://..."</span>
+<span class="c1">#</span>
+<span class="c1"># Auth: Event Hubs over Kafka uses SASL/PLAIN with the fixed username "$ConnectionString"</span>
+<span class="c1"># (the literal string, dollar sign included — it is not a secret). The preset reads it</span>
+<span class="c1"># from the fixed name EVENT_HUBS_SASL_USERNAME:</span>
+<span class="c1">#   lm secret set EVENT_HUBS_SASL_USERNAME    # or: export EVENT_HUBS_SASL_USERNAME='$ConnectionString'</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">event-hubs-telemetry</span><span class="w">         </span><span class="c1"># unique connector name within the workspace</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka</span><span class="w">              </span><span class="c1"># real engine type; the vendor alias is spec.preset below</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">demo</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">azure</span><span class="p p-Indicator">]</span>
+
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">preset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">event-hubs</span><span class="w">                 </span><span class="c1"># vendor preset — expands to a real kafka config at apply time</span>
+
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry_events</span><span class="w">             </span><span class="c1"># logical/table name → target table connector.t_telemetry_events</span>
+
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-namespace</span><span class="w">            </span><span class="c1"># Azure Event Hubs namespace (without .servicebus.windows.net)</span>
+
+<span class="w">  </span><span class="nt">connection_string_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EVENTHUBS_CONN_STR</span><span class="w">   </span><span class="c1"># env var holding the Primary Connection String</span>
+
+<span class="w">  </span><span class="nt">topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span><span class="w">                   </span><span class="c1"># Event Hub name (= Kafka topic name)</span>
+
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span><span class="w">                       </span><span class="c1"># v1: one JSON object per message</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm apply -f docs/connectors/kafka/20-event-hubs.yaml
+{"name":"event-hubs-telemetry","connectorId":"6ba84373-8816-4ef2-98dd-6b98477c924e","endpointsApplied":1}
+$ lm connector get event-hubs-telemetry
+name: event-hubs-telemetry
+typeId: kafka
+config:
+    auth:
+        kind: sasl-plain
+        password_env: EVENTHUBS_CONN_STR
+        security_protocol: SASL_SSL
+        username_env: EVENT_HUBS_SASL_USERNAME
+    brokers: my-namespace.servicebus.windows.net:9093
+    format: json
+    kind: kafka
+    name: telemetry_events
+    topic: telemetry
+</code></pre></div>
+<p>The stored config is a plain kafka one: <code>preset</code>, <code>namespace</code> and <code>connection_string_env</code> did
+their work at apply time and do not survive. The two names it reads resolve like every other
+<code>*_env</code> key — registry first, then the hub's environment:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>EVENTHUBS_CONN_STR<span class="w">          </span><span class="c1"># the namespace Primary Connection String, Endpoint=sb://…</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>EVENT_HUBS_SASL_USERNAME<span class="w">    </span><span class="c1"># the fixed literal $ConnectionString</span>
+</code></pre></div>
+<p>An unknown <code>preset</code> name is refused at validate (<code>unknown source preset 'event-hubbs'</code>) — a typo
+never silently degrades to plain kafka — and a preset missing an input reports each missing key
+by name (<code>preset 'event-hubs' requires 'namespace'</code>) before anything is expanded. No consumer
+group is created on the Event Hubs side either; there is nothing to provision or clean up there.</p>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li><strong>JSON only.</strong> One JSON object per message value. Avro, Protobuf and a Schema Registry are not
+  yet supported; <code>format</code> accepts only <code>json</code>.</li>
+<li><strong>One topic per connector</strong>, and no filtering by message key or header: whatever the topic
+  carries lands in the table. Message keys, headers and timestamps are not stored as columns.</li>
+<li><strong>No mapping block.</strong> No hooks run at ingestion — no rename, no flatten, no filter, no lookup.
+  A field must reach the hub under the name and shape it should land with.</li>
+<li><strong>No pre-flight.</strong> <code>lm source jdbc test</code> and <code>lm source rest test</code> have no kafka sibling yet;
+  the first run is the test. It is a cheap one: a topic that does not exist is refused in tens of
+  milliseconds, an unresolved secret before any connection.</li>
+<li><strong>Append-only.</strong> A tombstone is set aside, never applied as a delete; a deletion that must reach
+  the table has to travel as data.</li>
+<li><strong><code>sasl-plain</code> only.</strong> No SASL/SCRAM, no mTLS, no OAuth.</li>
+<li><strong>Object key order</strong> inside a nested value does not survive <code>jsonb</code>.</li>
+</ul>
+<h2 id="cli">CLI</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>&lt;file.yaml&gt;
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>&lt;file.yaml&gt;
+lm<span class="w"> </span>describe<span class="w"> </span>connector-type<span class="w"> </span>kafka<span class="w">                    </span><span class="c1"># the configuration reference, from the validator itself</span>
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>&lt;connector&gt;
+lm<span class="w"> </span>connector<span class="w"> </span>get<span class="w"> </span>&lt;connector&gt;<span class="w">                        </span><span class="c1"># the stored config, presets expanded</span>
+lm<span class="w"> </span>endpoint<span class="w"> </span>reset-cursor<span class="w"> </span>&lt;connector&gt;/default<span class="w">        </span><span class="c1"># forget the position: the next run reads from the beginning</span>
+lm<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--connector<span class="w"> </span>&lt;connector&gt;
+lm<span class="w"> </span>dlq<span class="w"> </span>list<span class="w"> </span>--run<span class="w"> </span>&lt;run-id&gt;<span class="w"> </span>·<span class="w"> </span>lm<span class="w"> </span>dlq<span class="w"> </span>get<span class="w"> </span>&lt;id&gt;
+</code></pre></div>
+<h2 id="tui">TUI</h2>
+<ul>
+<li><code>:sources</code> — the <code>KIND</code> column reads <code>kafka</code>; Enter drills into the single <code>default</code> endpoint</li>
+<li><code>:runs</code> — one row per run, <code>Partial</code> in its own colour beside <code>Completed</code> and <code>Failed</code></li>
+<li><code>:dlq</code> — the quarantined messages, with coordinates</li>
+</ul>
+<p>Full reference: <a href="../../cli/lm-reference/">CLI &amp; TUI</a>.</p>
+<h2 id="how-to">How to…</h2>
+<h3 id="keep-a-topic-mirrored-on-a-cadence">Keep a topic mirrored on a cadence</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+<span class="w">  </span><span class="nt">window</span><span class="p">:</span><span class="w"> </span><span class="s">"06:00-22:00"</span><span class="w">      </span><span class="c1"># optional</span>
+</code></pre></div>
+<p><strong>Result:</strong> every five minutes, a catch-up from the stored cursor to the head of that moment;
+slots at night are skipped. A slot that meets a running run is skipped too, so the cadence can be
+as tight as you like. See <a href="#continuous-consumption">Continuous consumption</a>.</p>
+<h3 id="read-a-topic-again-from-the-beginning">Read a topic again from the beginning</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>endpoint<span class="w"> </span>reset-cursor<span class="w"> </span>&lt;connector&gt;/default
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>&lt;connector&gt;
+</code></pre></div>
+<p><strong>Result:</strong> the stored position is deleted and the run reads everything the topic retains. Rows
+already in the table are refused by <code>_row_hash</code> and counted in <code>OUT</code> anyway — the table's row
+count is the witness. The command prints nothing and exits 0.</p>
+<h3 id="inspect-the-messages-that-did-not-land">Inspect the messages that did not land</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>run<span class="w"> </span>get<span class="w"> </span>&lt;run-id&gt;<span class="w">                 </span><span class="c1"># the ⚠ line says how many, and the exact command to list them</span>
+lm<span class="w"> </span>dlq<span class="w"> </span>list<span class="w"> </span>--run<span class="w"> </span>&lt;run-id&gt;
+lm<span class="w"> </span>dlq<span class="w"> </span>get<span class="w"> </span>&lt;id&gt;<span class="w">                     </span><span class="c1"># coordinates, reason, raw value</span>
+</code></pre></div>
+<p><strong>Result:</strong> one entry per message, reason <code>MalformedSource</code>, coordinate <code>topic:partition:offset</code>.
+A tombstone's entry names the deleted key; a poison message's entry carries the raw value.</p>
+<h3 id="read-the-same-topic-into-two-tables">Read the same topic into two tables</h3>
+<p>Apply a second manifest with the same <code>topic</code> and a different <code>name</code>. Each connector has its own
+cursor and its own table; the broker sees two independent readers.</p>
+<p><strong>Result:</strong> two connectors over one topic, useful when two métiers need the same events under
+two scopes.</p>
+<h3 id="move-to-event-hubs">Move to Event Hubs</h3>
+<p>Replace <code>brokers</code> and <code>auth</code> with <code>preset: event-hubs</code>, <code>namespace</code> and <code>connection_string_env</code>,
+and set the two secrets. <strong>Result:</strong> the same run ledger, the same table; see
+<a href="#azure-event-hubs-the-event-hubs-preset">the preset</a>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>first run ingests far more than expected</td>
+<td>no stored position yet — a full-retention read, by design</td>
+<td>let it complete; later runs are incremental</td>
+</tr>
+<tr>
+<td>run completes with <code>IN 0</code> on a topic that has data, and the hub log says <code>the poll returned no record within N ms</code></td>
+<td>the first poll timed out before its first fetch — or those offsets hold no readable record</td>
+<td>raise <code>poll_timeout_ms</code>; if it repeats on a compacted or transactional topic that is genuinely caught up, it is the watermark, not the run</td>
+</tr>
+<tr>
+<td>a run ends <code>Partial</code></td>
+<td>it stopped below the head it found at start: the broker deleted offsets the stored position was entitled to, or the topic fed only unparsable messages up to the chunk budget</td>
+<td><code>lm run get</code> names which; for the first, nothing can be recovered — check <code>retention.ms</code> against your cadence</td>
+</tr>
+<tr>
+<td>run fails: <code>kafka topic '…' does not exist on the broker</code></td>
+<td>no partition reported under that name, and the hub never creates one</td>
+<td>first read: check <code>spec.topic</code> or create the topic; stored position: the topic was deleted or renamed on the broker</td>
+</tr>
+<tr>
+<td>run fails: <code>'NAME' (brokers_env) resolves to nothing</code></td>
+<td>neither the registry nor the hub's environment holds it</td>
+<td><code>lm secret set NAME</code>, or export it where the hub runs</td>
+</tr>
+<tr>
+<td>run fails: <code>Unexpected handshake request with client mechanism PLAIN</code></td>
+<td>the listener does not speak SASL/PLAIN — wrong port, or <code>auth</code> on a plaintext broker</td>
+<td>check the broker's listener; drop <code>auth</code> for a plaintext one</td>
+</tr>
+<tr>
+<td>run fails after ~60 s: <code>the kafka broker did not answer within the client's metadata timeout</code></td>
+<td>the bootstrap address answers nothing — wrong host, wrong listener, or a broker that is down</td>
+<td>from the hub's container, prove the address; on Docker, <code>host.docker.internal</code>, not <code>localhost</code></td>
+</tr>
+<tr>
+<td>run fails: <code>source column 'id' collides with a hub system column</code></td>
+<td>a top-level field shares one of the seven reserved names</td>
+<td>the producer must emit it under another name — no rename exists on kafka</td>
+</tr>
+<tr>
+<td>messages missing from the table, <code>DEAD-LETTERS</code> &gt; 0</td>
+<td>not a JSON object — dead-lettered per message, offsets advance</td>
+<td><code>lm dlq list --run &lt;id&gt;</code>; fix the producer and re-send, then <code>lm dlq replayed</code> or <code>discard</code></td>
+</tr>
+<tr>
+<td>rows missing, <code>lm dlq get</code> says <code>a Kafka tombstone (key '…')</code></td>
+<td>the producer deleted that key; ingestion is append-only</td>
+<td>nothing to repair — if deletions must reach the table, send them as data</td>
+</tr>
+<tr>
+<td>a scheduled slot shows <code>Cancelled: skipped: another run is already active</code></td>
+<td>the previous catch-up was still running</td>
+<td>nothing — the next slot catches up; widen the cadence if it repeats</td>
+</tr>
+<tr>
+<td>a column is <code>NULL</code> for the first N rows and filled after</td>
+<td>the producer added the field mid-topic — <a href="#schema-evolution">schema evolution</a></td>
+<td>expected; reset the cursor to re-read if the early rows carry it on the broker now</td>
+</tr>
+<tr>
+<td><code>lm validate</code> warns <code>unknown key</code> on <code>target</code> or <code>mapping</code></td>
+<td>copied from a jdbc or csv manifest; kafka has neither</td>
+<td>remove the block</td>
+</tr>
+<tr>
+<td><code>lm validate</code> refuses the manifest: the connector type <code>kafka</code> is unknown to the hub</td>
+<td>the hub is the open edition</td>
+<td>Kafka is a Pro connector</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="demo-broker/">The demo broker</a> — the source every screen here reads</li>
+<li><a href="../">Overview</a> — apply/validate flow shared by all connectors</li>
+<li><a href="../transformers/">Transformers</a> — the hooks other connectors run at ingestion, and that kafka does not</li>
+<li><a href="../../rag/scopes/">Scopes</a> — how <code>metadata.scopes</code> makes ingested rows discoverable in chat</li>
+<li><a href="../../apps/processes/">Processes — react</a> — <code>data.row.changed</code> on the rows a run writes</li>
+<li><a href="../../operations/observability/">Observability</a> — <code>Partial</code> as the status to alert on</li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,40 @@
+# 10-kafka-json.yaml — plaintext Kafka source: one topic, JSON messages, no auth.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/kafka/10-kafka-json.yaml
+#   lm connector run kafka-erp-exports
+#
+# How this connector works
+# -------------------------
+# No Kafka consumer group is created or needed — the hub tracks each
+# partition's read position itself, the same way it tracks a JDBC watermark.
+# A run catches up chunk by chunk until it reaches the head of the topic,
+# then completes.
+#
+# Non-JSON messages are set aside (not lost) and never block the run — the
+# same per-row safety net as the CSV connector's dead-letter queue.
+#
+# Dedup: re-ingesting the same message is silently skipped, so producers can
+# retry safely without creating duplicate rows.
+#
+# Auth: none — no SASL credentials are sent; suitable for a local Redpanda or
+# an internal broker that trusts the network.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: kafka-erp-exports            # unique connector name within the workspace
+  connector_type: kafka              # selects the Kafka connector implementation
+  scopes: [demo]
+
+spec:
+  name: erp_events                   # logical/table name → target table connector.t_erp_events
+
+  brokers: localhost:9092            # Kafka / Redpanda bootstrap address (literal)
+  # brokers_env: KAFKA_BROKERS       # alternative: resolve from env var
+
+  topic: erp-exports                 # source topic; must be identifier-safe (no spaces)
+
+  format: json                       # v1: one JSON object per message (Avro/Protobuf deferred)
+
+  # No auth block → unauthenticated connection (no SASL handshake).

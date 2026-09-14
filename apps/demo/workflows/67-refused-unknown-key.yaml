@@ -1,0 +1,17 @@
+# 67-refused-unknown-key.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `after:` belongs under `dormancy:`; a key kind:Workflow does not honor is named,
+# because a lifecycle silently missing its threshold is what the refusal prevents.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-typo
+spec:
+  scope: desk
+  provenance: declared
+  after: 7d
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  states:
+    - { code: A, initial: true }

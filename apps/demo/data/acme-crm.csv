@@ -1,0 +1,9 @@
+customer,company,town,email
+P-1000,HYDRAULIQUE LYON,Lyon,contact@hydraulique-lyon.example
+P-1002,Fixations Milano 1002,Milan,ventes@fixations-milano.example
+P-1003,Pneumatique Porto 1003,Porto,geral@pneumatique-porto.example
+P-1005,Transmission Aarhus 1005,Aarhus,salg@transmission-aarhus.example
+P-1008,Filtration Lyon 1008,Villeurbanne,contact@filtration-lyon.example
+P-1012,Levage Aarhus 1012,Aarhus,salg@levage-aarhus.example
+P-1013,Filtration Valencia 1013,Valencia,ventas@filtration-valencia.example
+,Fantôme SARL,Nulle-part,ghost@fantome.example

@@ -1,0 +1,11 @@
+# 60-refused-unknown-column.yaml — must be refused. A clean render or apply on this file is the defect.
+#
+# The rule: every column must exist in the scope's card — a view never lies with an empty table.
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: acme-refused-column
+spec:
+  scope: desk
+  table: connector.v_acmecustomer
+  columns: [code, name, phone]

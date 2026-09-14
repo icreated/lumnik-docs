@@ -1,0 +1,22 @@
+# 62-brokers-env.yaml — the broker address by name, resolved at run time.
+#
+# `brokers_env` names an entry the hub resolves when the run starts: the `lm secret`
+# registry for your tenant first, then the hub process's own environment. Run it once with
+# nothing set to read the refusal, then:
+#   lm secret set ACME_KAFKA_BROKERS       # host.docker.internal:29092
+# and run again.
+#
+# Expect: run 1 Failed naming BOTH places it looked; run 2 Completed, 2 400 rows.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-brokers-env
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_by_name
+  brokers_env: ACME_KAFKA_BROKERS   # the value lives in the registry, never in this file
+  topic: acme.partners
+  format: json
