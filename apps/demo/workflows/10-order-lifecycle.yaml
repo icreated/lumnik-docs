@@ -1,0 +1,41 @@
+# 10-order-lifecycle.yaml — the lifecycle the orders' status column already has.
+#
+# Four declared states with aliases for the spellings the export really carries, a
+# transition graph, and a dormancy threshold that turns the declaration into a watched one.
+# `ANNULE` is declared and never seen; `EN LITIGE` and `Terminé` are seen and never declared.
+# Apply reports both — and refuses neither: a fact about the data is not a contradiction in
+# the declaration.
+#
+# Expect: 200, dataTruth.undeclared = EN LITIGE (2 rows) + Terminé (1), unobserved = [ANNULE],
+#         nullOrBlank = 1.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: acme-order-lifecycle
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_orders
+    column: status
+    key: order_no
+  dormancy:
+    after: 30d
+  states:
+    - code: BROUILLON
+      label: "Brouillon"
+      initial: true
+    - code: EN_COURS
+      label: "En préparation"
+      aliases: [en cours, encours]
+    - code: TERMINE
+      label: "Terminée"
+      aliases: [fini]
+      terminal: true
+    - code: ANNULE
+      label: "Annulée"
+      terminal: true
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [BROUILLON, EN_COURS], to: ANNULE }
+    - { from: [EN_COURS], to: TERMINE }

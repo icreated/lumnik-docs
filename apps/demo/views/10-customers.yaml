@@ -1,0 +1,17 @@
+# 10-customers.yaml — the desk's customer list, over the fused entity.
+#
+# Column headers are the labels the entity manifest declares; the detail of one record ends
+# with its _conflicts ledger when the sources disagree on it.
+#
+#   lm view -f docs/apps/demo/views/10-customers.yaml
+#   lm view -f docs/apps/demo/views/10-customers.yaml --filter city=Lyon
+#   lm view P-1000 -f docs/apps/demo/views/10-customers.yaml
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: acme-customers
+spec:
+  scope: desk
+  table: connector.v_acmecustomer
+  title: Clients ACME
+  columns: [code, name, city, segment, credit_limit]

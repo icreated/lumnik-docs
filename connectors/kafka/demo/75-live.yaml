@@ -1,0 +1,25 @@
+# 75-live.yaml — a topic that is being written to while the run reads it.
+#
+# Start the feeder, then the run:
+#   python3 …/acme-topics.py feed --rate 200 --seconds 30 &
+#   sleep 10; lm connector run acme-kafka-live
+#
+# A run is a catch-up, not a subscription: it reads to the head each partition had when the
+# run STARTED, then completes. What arrived while it was reading belongs to the next run.
+#
+# Expect: Completed, well before the feeder stops, with `in` below what the feeder produced;
+#         the next run reads the rest.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-live
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_live
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.live
+  format: json

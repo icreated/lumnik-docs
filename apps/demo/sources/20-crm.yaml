@@ -1,0 +1,19 @@
+# 20-crm.yaml — the CRM's export of the same customers, under its own column names.
+#
+# Lands connector.t_acme_desk_crm. Eight rows: five overlap the ERP (three of them disagreeing
+# with it), two are known to the CRM only, and one carries no customer code at all.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-desk-crm
+  connector_type: csv-file
+  scopes: [desk]                  # the métier: every table of the desk is askable, viewable, watchable under it
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/acme-crm.csv      # on the HUB's filesystem — see the demo page for the docker cp
+  parser:
+    has_header: true
+  after_process: none
