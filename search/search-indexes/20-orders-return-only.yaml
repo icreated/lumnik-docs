@@ -1,0 +1,14 @@
+apiVersion: search.lumnik.io/v1
+kind: SearchIndex
+metadata:
+  name: orders
+spec:
+  entity: AcmeOrder
+  fields:
+    - name: order_no
+      match: prefix
+    - name: customer_name
+      match: fuzzy
+    - name: status
+      facet: true
+    - name: ordered_at

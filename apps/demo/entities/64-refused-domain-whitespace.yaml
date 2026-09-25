@@ -1,0 +1,14 @@
+# 64-refused-domain-whitespace.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: a declared value with leading or trailing whitespace would never exact-match, and the domain guard would refuse every real filter in silence.
+
+kind: Entity
+name: AcmeRefusedDomain
+match: [code]
+scopes: [desk]
+columns:
+  segment:
+    values: [GOLD, " SILVER", BRONZE]
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, segment: segment }

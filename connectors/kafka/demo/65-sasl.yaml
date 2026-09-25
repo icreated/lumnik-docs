@@ -1,0 +1,29 @@
+# 65-sasl.yaml — SASL/PLAIN credentials, by name.
+#
+# Neither the username nor the password is in this file: `username_env` and `password_env`
+# name registry entries (`lm secret set ACME_KAFKA_USER`, `lm secret set ACME_KAFKA_PW`).
+# `security_protocol` picks the wire: SASL_SSL is the default, SASL_PLAINTEXT is for a
+# broker that authenticates without TLS. Both land verbatim in the consumer's config.
+#
+# The demo broker authenticates nobody, so this manifest cannot complete against it — it is
+# here for the two refusals worth seeing: the one an unresolved name gets before any
+# connection, and the one a broker that speaks no SASL gives after.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-sasl
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_sasl
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners
+  format: json
+  auth:
+    kind: sasl-plain
+    security_protocol: SASL_PLAINTEXT
+    username_env: ACME_KAFKA_USER
+    password_env: ACME_KAFKA_PW

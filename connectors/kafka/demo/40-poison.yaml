@@ -1,0 +1,23 @@
+# 40-poison.yaml — the per-message dead-letter queue.
+#
+# acme.partners-poison holds 1 000 messages of which exactly 143 are not a JSON object: a
+# truncated object, a JSON array, a JSON scalar, at every index where i % 7 == 3. Poison is
+# placed deterministically, never at random — a source whose corpus changes between runs
+# cannot tell a fix from a coincidence.
+#
+# Expect: Completed, in=1000 out=857 skipped=143, 143 dead-letters under MalformedSource,
+#         857 rows in the table, and the identity 1000 = 857 + 143 by hand.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-poison
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_poison
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-poison
+  format: json

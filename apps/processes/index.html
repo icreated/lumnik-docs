@@ -1,0 +1,3626 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/apps/processes/">
+      
+      
+        <link rel="prev" href="../views/">
+      
+      
+        <link rel="next" href="../workflows/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Processes — react - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kind-process-react" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Processes — react
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_4" id="__nav_16_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_5" id="__nav_16_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search indexes — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/providers-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced provider configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trigger-at-the-raw-write-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger at the raw write path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#message-templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Message templating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#firing-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firing it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delivery-is-opt-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delivery is opt-in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-an-order-lands-in-dispute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when an order lands in dispute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watch-a-second-condition-on-the-same-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch a second condition on the same table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turn-a-process-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a process off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_27" >
+        
+          
+          <label class="md-nav__link" for="__nav_27" id="__nav_27_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_27_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_28" >
+        
+          
+          <label class="md-nav__link" for="__nav_28" id="__nav_28_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_28_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_28">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trigger-at-the-raw-write-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger at the raw write path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#message-templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Message templating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#firing-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firing it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delivery-is-opt-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delivery is opt-in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-an-order-lands-in-dispute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when an order lands in dispute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watch-a-second-condition-on-the-same-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch a second condition on the same table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turn-a-process-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turn a process off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kind-process-react">kind: Process — react</h1>
+<blockquote>
+<p>The second rung: a <strong>declarative watcher</strong> on ingested rows. When a row lands that matches
+your conditions, the process emits a <code>decision.*</code> event — and the effect <em>is</em> the event. It
+lands in the outbox and in the inbox every time; reaching n8n, Make, Zapier or your own
+endpoint rides the hub's webhook subscriptions. Zero new code paths.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kind</strong></td>
+<td><code>Process</code> — <code>apps.lumnik.io/v1</code></td>
+</tr>
+<tr>
+<td><strong>Trigger</strong></td>
+<td><code>data.row.changed</code> on a raw <code>connector.t_*</code> table — the only v1 trigger</td>
+</tr>
+<tr>
+<td><strong>Conditions</strong></td>
+<td>the <a href="../views/#filter-grammar">view filter grammar</a>, ANDed, over the table's own columns</td>
+</tr>
+<tr>
+<td><strong>Emits</strong></td>
+<td>one <code>decision.&lt;name&gt;</code> event per matching row, <code>{col}</code>-templated, fields included</td>
+</tr>
+<tr>
+<td><strong>Apply</strong></td>
+<td><code>lm process apply</code> — <code>lm_admin</code>; the whole <code>/api/processes</code> surface is the admin door</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>A process is how the substrate breathes out: it does not update anything, it does not call
+anyone — it says, once, that something worth a human's attention just landed, with the row's own
+words. Who gets told, and how, is a subscription question answered elsewhere. The story for the
+métier reader is <a href="../../respiration/">How lumnik breathes</a>; this page is the mechanics of one link.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong><a href="#firing-it">Fires on rows that land, not rows that exist.</a></strong> A process reacts to
+  <code>data.row.changed</code>, which the write path emits for genuinely new rows only — re-running the
+  same export emits nothing.</li>
+<li><strong><a href="#the-manifest">Conditions in the view grammar.</a></strong> <code>status=EN LITIGE</code>, <code>amount&gt;1000</code>,
+  <code>city~lyon</code> — the same forms a view filters by, validated at apply against the trigger table.</li>
+<li><strong><a href="#message-templating">The row's own words.</a></strong> <code>{col}</code> placeholders are validated at apply and
+  rendered at fire time; every referenced column also rides in the event as data.</li>
+<li><strong><a href="#refusals">Refused at apply, never silent at fire time.</a></strong> A trigger table that cannot fire,
+  an unknown column, a quoted condition value, an unknown placeholder, an emit type outside
+  <code>decision.</code> — each is a <code>400</code> that names the fix.</li>
+<li><strong><a href="#turn-a-process-off">Reversible, and removable.</a></strong> <code>lm process disable</code> stops it firing and
+  keeps the manifest; <code>lm process rm</code> removes it.</li>
+<li><strong><a href="#failure-contract">Fail-closed per process.</a></strong> A process that breaks at runtime logs and
+  skips; it never blocks the event cursor or its siblings.</li>
+<li><strong><a href="#delivery-is-opt-in">Delivery is a subscription.</a></strong> The inbox always has the decision;
+  a webhook has it once one is registered for the tenant.</li>
+</ul>
+<h2 id="quickstart">Quickstart</h2>
+<div class="admonition note">
+<p class="admonition-title">Every screen on this page reads the demo desk that ships with the repo</p>
+<p>An order book whose export arrives every morning, under <code>docs/apps/demo/</code>. Land it first —
+<a href="../demo-desk/">The demo desk</a> has the three commands.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-litige.yaml — when an order lands in dispute, say so.</span>
+<span class="c1">#</span>
+<span class="c1"># A process fires on data.row.changed, born at the raw write path — so on.table is the raw</span>
+<span class="c1"># orders table and `when` speaks its own columns. The effect IS the event: decision.litige</span>
+<span class="c1"># lands in the outbox and in `lm inbox`; reaching n8n or a webhook needs a subscription.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: nothing on apply (a process fires on rows that LAND, not on rows already there),</span>
+<span class="c1">#         then one decision per genuinely new EN LITIGE row on the next run.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Process</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">litige-ouvert</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">event</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data.row.changed</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_acme_desk_orders</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status=EN LITIGE</span>
+<span class="w">  </span><span class="nt">emit</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decision.litige-ouvert</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"Commande</span><span class="nv"> </span><span class="s">{order_no}</span><span class="nv"> </span><span class="s">du</span><span class="nv"> </span><span class="s">client</span><span class="nv"> </span><span class="s">{code}</span><span class="nv"> </span><span class="s">en</span><span class="nv"> </span><span class="s">litige</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">{amount}</span><span class="nv"> </span><span class="s">€"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm process apply -f docs/apps/demo/processes/10-litige.yaml
+{"name":"litige-ouvert","table":"connector.t_acme_desk_orders","emit":"decision.litige-ouvert"}
+$ lm process list
+NAME           TABLE                         EMIT                    ENABLED
+litige-ouvert  connector.t_acme_desk_orders  decision.litige-ouvert  true
+$ lm inbox
+ID  QUAND  PROCESS  MESSAGE  ENTITY_KEY
+</code></pre></div>
+<p>Nothing fired: two orders already sat in <code>EN LITIGE</code> when the process was declared, and a
+process reacts to rows that <strong>land</strong>, not to rows that exist. Now the next morning's export
+arrives, with one new order in dispute:</p>
+<div class="highlight"><pre><span></span><code>$ docker cp docs/apps/demo/data/acme-orders-day2.csv lumnik-hub-1:/tmp/acme-desk/acme-orders.csv
+$ lm connector run acme-desk-orders
+run scheduled: 70e54370-f53f-4811-8deb-86a7c5d15ad6
+$ lm run list --connector acme-desk-orders
+ID        CONNECTOR         ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+70e54370  acme-desk-orders  default   Completed  13  13   0        0             2026-09-13 02:39  2026-09-13 02:39
+a5f820af  acme-desk-orders  default   Completed  12  12   0        0             2026-09-13 02:38  2026-09-13 02:38
+</code></pre></div>
+<p>Thirteen rows read; twelve of them the table already held and deduplicated by content; <strong>one</strong>
+genuinely new row, and it is in dispute. A few seconds later:</p>
+<div class="highlight"><pre><span></span><code>$ lm inbox
+ID    QUAND        PROCESS        MESSAGE                                                   ENTITY_KEY
+1929  à l'instant  litige-ouvert  Commande SO-000013 du client P-1007 en litige — 860.00 €  96357a4a5750f97026f9ec5b8ce0f986517179f470e8a74b9fd013befe0e3622
+</code></pre></div>
+<p>One decision, for the one row, in the row's own words. <code>ENTITY_KEY</code> is the row's content hash —
+the same <code>_row_hash</code> the table deduplicates by, so the decision points at exactly one row for as
+long as that row exists. The event behind it, in the outbox:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"process"</span><span class="p">:</span><span class="w"> </span><span class="s2">"litige-ouvert"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"entity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"connector.t_acme_desk_orders"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"entity_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"96357a4a…e3622"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Commande SO-000013 du client P-1007 en litige — 860.00 €"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P-1007"</span><span class="p">,</span><span class="w"> </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"860.00"</span><span class="p">,</span><span class="w"> </span><span class="nt">"order_no"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SO-000013"</span><span class="p">}}</span>
+</code></pre></div>
+<p><code>fields</code> carries every column the message referenced, as data — an automation consumes values,
+not a sentence to parse. (<code>entity_key</code> is abridged here; the inbox above prints it whole.)</p>
+<h2 id="the-manifest">The manifest</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>metadata.name</code></td>
+<td>yes</td>
+<td>kebab-case (<code>[a-z0-9-]+</code>); becomes the event's <code>process</code> and, by convention, its type</td>
+</tr>
+<tr>
+<td><code>spec.scope</code></td>
+<td>yes</td>
+<td>the scope whose <a href="../../rag/http-api/#schema-admin">schema card</a> declares <code>on.table</code></td>
+</tr>
+<tr>
+<td><code>spec.on.event</code></td>
+<td>yes</td>
+<td><strong>must be <code>data.row.changed</code></strong> — the only v1 trigger</td>
+</tr>
+<tr>
+<td><code>spec.on.table</code></td>
+<td>yes</td>
+<td>the <strong>raw ingest table</strong> (<code>connector.t_&lt;name&gt;</code>) — see <a href="#trigger-at-the-raw-write-path">Trigger at the raw write path</a></td>
+</tr>
+<tr>
+<td><code>spec.when[]</code></td>
+<td>yes (≥ 1)</td>
+<td>conditions in the <a href="../views/#filter-grammar">view filter grammar</a>, ANDed</td>
+</tr>
+<tr>
+<td><code>spec.emit.type</code></td>
+<td>yes</td>
+<td><strong>must start with <code>decision.</code></strong> — the governed taxonomy the inbox and the webhook filters are built on</td>
+</tr>
+<tr>
+<td><code>spec.emit.message</code></td>
+<td>yes</td>
+<td>the human sentence, <code>{col}</code>-templated</td>
+</tr>
+</tbody>
+</table>
+<p>That table is the whole surface: <code>apply</code> refuses a key it does not honour and names it, so a
+misspelled <code>mesage:</code> costs a <code>400</code> rather than a decision that fires with no text. The
+<code>apiVersion:</code> envelope is accepted and ignored.</p>
+<p>Every stored process carries an <code>enabled</code> flag (default <code>true</code>, the <code>ENABLED</code> column of
+<code>lm process list</code>), and only enabled processes fire. There is <strong>no API or CLI gesture to toggle
+or delete</strong> a process yet — both are a database-level edit, so if you do not operate the hub
+yourself, this one goes to whoever does.</p>
+<h3 id="trigger-at-the-raw-write-path">Trigger at the raw write path</h3>
+<p><code>data.row.changed</code> is born where rows are written — the connector's write path — so <code>on.table</code>
+is the <strong>raw</strong> table a connector fills, and <code>when</code> columns are that table's own. The scope must be
+the one whose card carries that raw table. A fused entity view (<code>connector.v_*</code>) receives no
+such event: nothing writes rows <em>into</em> a view.</p>
+<p>Being in the card is not enough, and apply checks the stronger thing: that the table is one a
+connector's row writer actually fills. A card also advertises the fused entity views and the
+<code>ext.*</code> tables a <a href="../../connectors/rest/"><code>kind: hybrid</code> target</a> fills — no row is written <em>into</em>
+either — so both are refused. A view gets the better sentence, because the entity knows the raw
+tables it fuses:</p>
+<div class="highlight"><pre><span></span><code>$ lm process apply -f docs/apps/demo/processes/63-refused-fused-view.yaml
+Error: API error 400: spec.on.table 'connector.v_acmecustomer' is a fused entity view — data.row.changed is born on the raw table a connector writes, never on a view, so this process could never fire — declare it on connector.t_acme_desk_erp or connector.t_acme_desk_crm
+</code></pre></div>
+<p>Declare one process per raw source, or move the condition to the source that carries it.</p>
+<p>Emission is <strong>gated</strong>, and cheaply: the write path asks, per chunk, whether <em>any</em> subscriber on
+the tenant wants <code>data.row.changed</code> for this table — a webhook endpoint, a notification rule or a
+process — and stages events only when one does. A table nobody watches costs nothing at
+ingestion; declaring a process is what turns the events on for its table.</p>
+<h2 id="message-templating">Message templating</h2>
+<p><code>{col}</code> interpolates the row's value — <code>"Commande {order_no} du client {code} en litige — {amount} €"</code>.
+A <code>NULL</code> renders as an empty string. There is no escape syntax: a placeholder is exactly
+<code>{letters_digits_}</code>, anything else (<code>{}</code>, <code>{a-b}</code>, a lone brace) passes through literally.</p>
+<p>Every <code>{col}</code> is validated at <strong>apply time</strong> against the trigger table:</p>
+<div class="highlight"><pre><span></span><code>$ lm process apply -f docs/apps/demo/processes/61-refused-placeholder.yaml
+Error: API error 400: message references {customer_name} — not a column of connector.t_acme_desk_orders
+</code></pre></div>
+<p>— never discovered silently at fire time. Every referenced column also rides in the event's
+<code>fields</code>, so the receiving automation gets the data, not just the sentence.</p>
+<h2 id="firing-it">Firing it</h2>
+<p>The process consumer reads the event log a few seconds behind the write. For each
+<code>data.row.changed</code> on a watched table it loads the row, evaluates every enabled process on that
+table, and stages one <code>decision.*</code> per process whose conditions all hold. Two consequences worth
+knowing:</p>
+<ul>
+<li><strong>Only genuinely new rows fire.</strong> The write path emits <code>data.row.changed</code> for rows the table
+  accepted; a row it refused as a duplicate (same <code>_row_hash</code>) emits nothing. Re-running an
+  unchanged export is silent — the quickstart's second run read 13 and fired once.</li>
+<li><strong>A row that matches two processes fires two decisions</strong>, one per process, each under its own
+  type — <a href="#watch-a-second-condition-on-the-same-table">measured below</a>.</li>
+</ul>
+<h2 id="delivery-is-opt-in">Delivery is opt-in</h2>
+<p>A firing process's decision lands in the outbox — and in <a href="../inbox/">the inbox</a> — every time,
+regardless of subscriptions. Reaching an external system additionally needs a <strong>webhook
+subscription</strong> registered for the tenant; none is seeded by default. With none registered,
+nothing is pushed anywhere — the inbox is still where the decision is.</p>
+<div class="highlight"><pre><span></span><code>$ lm inbox ack 1929
+acked.
+$ lm inbox --all
+ID    QUAND  PROCESS        MESSAGE                                                            ENTITY_KEY
+1929  2min   litige-ouvert  Commande SO-000013 du client P-1007 en litige — 860.00 € [traité]  96357a4a5750f97026f9ec5b8ce0f986517179f470e8a74b9fd013befe0e3622
+</code></pre></div>
+<p>The human disposes; the ack is itself an event (<code>annotation.decision.acked</code>), so a webhook
+subscribed to <code>annotation.*</code> reacts when someone marks it done — and app state stays a fold over
+the log, never a state row. Registering a subscription is <code>lm integration add</code> — it posts to
+<code>/api/platform/integrations</code>, so it needs <code>lm_integrator</code> for the platform door <strong>and</strong> <code>lm_admin</code>
+for the endpoint; the raw admin form is <code>POST /api/tenants/{tid}/integrations</code>, <code>lm_admin</code> alone. The
+<a href="../../admin-console-guide/#send-events-out-to-another-system">Admin API guide</a> walks the whole
+gesture, and the <a href="../../demo/wow-customer/">WOW demo</a> plays it against a stand-in n8n.</p>
+<h2 id="failure-contract">Failure contract</h2>
+<ul>
+<li><strong>Refusable at apply</strong>: structural errors, a <a href="#trigger-at-the-raw-write-path">trigger table that cannot
+  fire</a>, an unknown <code>when</code> column, an unknown placeholder, an emit
+  type outside <code>decision.</code>, an out-of-domain value — each is refused with the card's hint. A
+  process that could never fire is never accepted silently.</li>
+<li><strong>Fail-closed per process at runtime</strong>: a process that breaks (its table vanished) logs and
+  skips — it never blocks the event cursor or its sibling processes.</li>
+<li><strong>Declarative only, by doctrine</strong>: there is no Kotlin escape hatch for processes. If a real
+  métier process cannot be expressed declaratively, that limitation should surface — not be
+  hidden inside a script. The substrate breathes; it does not mutate.</li>
+</ul>
+<h2 id="refusals">Refusals</h2>
+<div class="highlight"><pre><span></span><code>$ lm process apply -f docs/apps/demo/processes/60-refused-unknown-column.yaml
+Error: API error 400: when: column 'montant' is not in connector.t_acme_desk_orders — fix the column name or rediscover the scope
+$ lm process apply -f docs/apps/demo/processes/61-refused-placeholder.yaml
+Error: API error 400: message references {customer_name} — not a column of connector.t_acme_desk_orders
+$ lm process apply -f docs/apps/demo/processes/62-refused-emit-type.yaml
+Error: API error 400: spec.emit.type is required and must start with 'decision.' — the governed taxonomy
+$ lm process apply -f docs/apps/demo/processes/63-refused-fused-view.yaml
+Error: API error 400: spec.on.table 'connector.v_acmecustomer' is a fused entity view — data.row.changed is born on the raw table a connector writes, never on a view, so this process could never fire — declare it on connector.t_acme_desk_erp or connector.t_acme_desk_crm
+$ lm process apply -f docs/apps/demo/processes/64-refused-quoted-value.yaml
+Error: API error 400: filter value 'EN LITIGE' is quoted; a value here is a bare literal, so the quotes would be compared to status too — write status=EN LITIGE
+</code></pre></div>
+<p>The last one is the <a href="../views/#filter-grammar">view grammar</a> speaking, not a rule of its own: a
+value here is a <strong>bare literal</strong>, and quotes are ordinary characters. <code>status='EN LITIGE'</code> used to
+be accepted and then compared to the column quotes and all — a condition that can never be true,
+sitting enabled and silent for ever.</p>
+<p>The whole <code>/api/processes</code> surface (apply, list, <code>GET /api/processes/{name}/manifest</code>,
+<code>PUT /api/processes/{name}/enabled</code>, <code>DELETE /api/processes/{name}</code>) is the <strong>admin door</strong> —
+<code>lm_admin</code>: declaring an attention rule is tenant administration, not a métier gesture. Inside
+that door the <a href="../../rag/scopes/">métier-scope boundary</a> applies with its opt-in semantics, the
+same as every app-ladder door: an admin with no <code>scope:</code> role sees and declares
+for the whole tenant; a scope-bound admin declares only for granted scopes, lists only those, and
+gets the uniform <code>403 {"error":"scope not granted"}</code> outside them. In the TUI, <code>:processes</code> lists
+the declared rules and <code>e</code> re-opens a stored manifest through the <code>:new</code> authoring loop.</p>
+<h2 id="how-to">How to…</h2>
+<h3 id="get-told-when-an-order-lands-in-dispute">Get told when an order lands in dispute</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>process<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/apps/demo/processes/10-litige.yaml
+lm<span class="w"> </span>inbox
+</code></pre></div>
+<p><strong>Result:</strong> every genuinely new <code>EN LITIGE</code> row lands as one decision in <code>lm inbox</code> (and the
+PWA's <em>Décisions</em> tab), with the order's own number, customer and amount. To push it further,
+register a webhook subscription on <code>decision.*</code>.</p>
+<h3 id="watch-a-second-condition-on-the-same-table">Watch a second condition on the same table</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-grosse-commande.yaml — a second watcher on the same table.</span>
+<span class="c1">#</span>
+<span class="c1"># Two processes on one table are independent: a row that matches both fires two decisions, one</span>
+<span class="c1"># per process, each under its own type. `amount` is a text column, as every CSV column is; the</span>
+<span class="c1"># ordering filter casts it, exactly as a kind:View filter does.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: nothing on apply; on the day-3 export, SO-000014 (EN LITIGE, 5 000 €) fires this one</span>
+<span class="c1">#         AND litige-ouvert.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Process</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grosse-commande</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">event</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data.row.changed</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_acme_desk_orders</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amount&gt;1000</span>
+<span class="w">  </span><span class="nt">emit</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decision.grosse-commande</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"Grosse</span><span class="nv"> </span><span class="s">commande</span><span class="nv"> </span><span class="s">{order_no}</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">{amount}</span><span class="nv"> </span><span class="s">€</span><span class="nv"> </span><span class="s">pour</span><span class="nv"> </span><span class="s">{code}"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm process apply -f docs/apps/demo/processes/20-grosse-commande.yaml
+{"name":"grosse-commande","table":"connector.t_acme_desk_orders","emit":"decision.grosse-commande"}
+$ docker cp docs/apps/demo/data/acme-orders-day3.csv lumnik-hub-1:/tmp/acme-desk/acme-orders.csv
+$ lm connector run acme-desk-orders
+$ lm inbox
+ID    QUAND        PROCESS          MESSAGE                                                    ENTITY_KEY
+1935  à l'instant  grosse-commande  Grosse commande SO-000014 : 5000.00 € pour P-1003          3a47cea8e762663021d4c5bba36b5a410ad0731a1271e17706ce6976ee8c138b
+1934  à l'instant  litige-ouvert    Commande SO-000014 du client P-1003 en litige — 5000.00 €  3a47cea8e762663021d4c5bba36b5a410ad0731a1271e17706ce6976ee8c138b
+</code></pre></div>
+<p><strong>Result:</strong> the third morning's export carries one new order, in dispute and above 1 000 €. Two
+processes, two decisions, the same <code>ENTITY_KEY</code> — each triaged on its own. <code>amount</code> is a <code>text</code>
+column, as every CSV column is; <code>amount&gt;1000</code> casts it for the comparison exactly as a view
+filter does.</p>
+<h3 id="turn-a-process-off">Turn a process off</h3>
+<p>Two gestures, one reversible and one not.</p>
+<div class="highlight"><pre><span></span><code>$ lm process disable litige-ouvert
+process litige-ouvert enabled=false
+$ lm process list
+NAME             TABLE                         EMIT                      ENABLED
+grosse-commande  connector.t_acme_desk_orders  decision.grosse-commande  true
+litige-ouvert    connector.t_acme_desk_orders  decision.litige-ouvert    false
+$ lm process rm litige-ouvert
+process litige-ouvert deleted
+$ lm process rm litige-ouvert
+Error: API error 404: unknown process: litige-ouvert
+</code></pre></div>
+<p><strong>Result:</strong> <code>disable</code> stops it firing and keeps everything else — the manifest is still stored,
+still re-appliable, and <code>lm process enable</code> puts it back. <code>rm</code> removes it for good, with no prompt;
+a second <code>rm</code> answers <code>404</code>. In the TUI's <code>:processes</code> page the same two gestures are <code>^P</code> and
+<code>Del</code> on the row under the cursor, and <code>e</code> re-opens the stored manifest in the authoring loop.</p>
+<p>Disabling is not cosmetic: the hub only stages a <code>data.row.changed</code> when <em>some</em> subscription wants
+it, and a disabled process stops counting as one. If nothing else listens to that table, the event
+stops being written at all.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apply refused: <code>unknown key(s) in the manifest: …</code></td>
+<td>a misspelled field (<code>mesage:</code>)</td>
+<td>the message lists what <code>kind:Process</code> honors — fix the spelling</td>
+</tr>
+<tr>
+<td>apply refused <code>404</code>: <code>no schema for scope '…' — run discovery first</code></td>
+<td><code>spec.scope</code> is not a discovered scope</td>
+<td><code>lm source rediscover --scope &lt;tag&gt;</code> — needs <strong>both</strong> <code>lm_integrator</code> and <code>lm_admin</code>, and the scope must be one the caller holds; <code>lm source schema --scope &lt;tag&gt;</code> shows what it holds</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.table '…' is not in the '…' scope</code></td>
+<td>the scope's card does not carry that table</td>
+<td><code>lm source schema --scope &lt;tag&gt;</code>, then fix the name</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.table '…' is a fused entity view …</code></td>
+<td>the trigger is a <code>connector.v_*</code> view, which no connector writes into</td>
+<td>declare the process on one of the raw tables the message names</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.table '…' cannot fire …</code></td>
+<td>the trigger is in the card but no row writer fills it (an <code>ext.*</code> hybrid target)</td>
+<td>declare the process on a <code>connector.t_*</code> table</td>
+</tr>
+<tr>
+<td>apply refused: <code>when: column '…' is not in …</code>, or <code>'…' is not an allowed value for …</code></td>
+<td>a condition names an unknown column, or an <code>=</code> value outside its declared domain</td>
+<td>fix the condition against the card</td>
+</tr>
+<tr>
+<td>apply refused: <code>message references {…} — not a column of …</code></td>
+<td>a placeholder that is not a column of the trigger table</td>
+<td>fix the placeholder, or drop it</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.emit.type … must start with 'decision.'</code></td>
+<td>an emit type outside the taxonomy</td>
+<td><code>decision.&lt;something&gt;</code></td>
+</tr>
+<tr>
+<td>a process applied cleanly and never fires</td>
+<td><code>on.table</code> is a fused view (<code>connector.v_*</code>) — no row is ever written into a view</td>
+<td>point it at the raw <code>connector.t_*</code> table the view is built from</td>
+</tr>
+<tr>
+<td>a process never fires on a re-run</td>
+<td>the rows were already in the table — the write path emits nothing for a duplicate</td>
+<td>it is doing its job; only new rows fire</td>
+</tr>
+<tr>
+<td>a declared, enabled process stopped firing</td>
+<td>its trigger table vanished or broke at runtime — fail-closed per process</td>
+<td>check the hub's log; sibling processes keep firing</td>
+</tr>
+<tr>
+<td>a process still fires after you meant to turn it off</td>
+<td>it is still enabled</td>
+<td><code>lm process disable &lt;name&gt;</code> (reversible), or <code>lm process rm &lt;name&gt;</code> to remove it</td>
+</tr>
+<tr>
+<td>decisions show in <code>lm inbox</code> but never reach an external system</td>
+<td>delivery needs a webhook subscription registered for the tenant — none is seeded</td>
+<td><code>lm integration add</code> (<code>lm_integrator</code> + <code>lm_admin</code>), or keep triaging from <code>lm inbox</code></td>
+</tr>
+<tr>
+<td><code>403 {"error":"scope not granted"}</code></td>
+<td>you are scope-bound and <code>spec.scope</code> is not one of your grants</td>
+<td>ask for that <code>scope:</code> role, or declare under a granted scope</td>
+</tr>
+<tr>
+<td><code>403</code> with an <strong>empty body</strong></td>
+<td>you do not hold <code>lm_admin</code> — the whole <code>/api/processes</code> surface requires it</td>
+<td><code>GET /api/bff/v1/me</code> returns your roles under <code>roles</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../demo-desk/">The demo desk</a> — the order book every screen here reads</li>
+<li><a href="../inbox/">Inbox</a> — where a human sees and disposes of the emitted decisions</li>
+<li><a href="../../admin-console-guide/#send-events-out-to-another-system">Admin API guide — Integration Hub</a> — the webhook subscription delivery depends on</li>
+<li><a href="../workflows/">Workflows</a> — declares what a status column's values <em>mean</em>, so a <code>when: status=…</code> condition matches a state someone actually declared; a process fires on a row landing, but silence — nothing landing — is the workflow's dormancy sweep to see</li>
+<li><a href="../../connectors/kafka/">Kafka connector</a> — events <em>into</em> the hub</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

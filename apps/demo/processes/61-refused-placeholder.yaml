@@ -1,0 +1,17 @@
+# 61-refused-placeholder.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: every {col} in the message is validated at apply against the trigger table — never discovered silently at fire time.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: refused-placeholder
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.t_acme_desk_orders
+  when:
+    - status=BROUILLON
+  emit:
+    type: decision.brouillon
+    message: "Commande {order_no} pour {customer_name}"

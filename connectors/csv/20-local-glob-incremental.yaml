@@ -1,0 +1,39 @@
+# 20-local-glob-incremental.yaml — glob pattern picks up multiple files; incremental cursor
+# avoids re-processing rows that were already ingested in a previous run.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/csv/20-local-glob-incremental.yaml
+#   lm connector run csv-local-glob
+#
+# How the cursor works
+# --------------------
+# The reader commits a cursor { file, rowsProcessed } after every 500-row chunk that another
+# chunk follows; the run's LAST chunk (end of stream) saves nothing. The next run resumes from
+# the last saved position: the rest of that file, then every file that sorts AFTER it in the
+# lexically ordered glob result — so name incoming files monotonically (date-prefixed).
+# A file that fits in one chunk therefore leaves no cursor and is simply re-read; the table
+# deduplicates by _row_hash either way. Walk-through: docs/connectors/csv.md.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-local-glob            # unique connector name within the workspace
+  connector_type: csv-file
+  scopes: [demo]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/*.csv   # glob — matches customers.csv AND customers-2.csv
+                                           # files are processed in lexicographic order
+
+  parser:
+    has_header: true
+                                  # incremental recovery if the run is interrupted mid-file
+
+  after_process: none             # keep source files in place; cursor handles incrementalism
+
+  target:
+    indexes:                  # Postgres indexes created with the table (ask-to-SQL perf lever).
+      - columns: [email]      # v1: ensured at table creation and on column evolution; to add an
+                              # index to an existing unchanged table, purge/recreate the connector.

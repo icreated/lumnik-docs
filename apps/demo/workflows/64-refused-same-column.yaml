@@ -1,0 +1,20 @@
+# 64-refused-same-column.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: a column has exactly one lifecycle — a DIFFERENT name declaring an already-declared column is refused, naming the workflow that holds it.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: acme-order-lifecycle-bis
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_orders
+    column: status
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, aliases: [en cours] }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }
