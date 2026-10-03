@@ -1,0 +1,22 @@
+# 10-quickstart.yaml — one topic, one partition, no auth.
+#
+# The whole manifest is a broker address, a topic and a table name. There is no consumer
+# group to provision on the broker: the hub keeps each partition's read position itself, in
+# its own cursor table, the way it keeps a JDBC watermark. A run reads from that position to
+# the head the topic had when the run started, then completes.
+#
+# Expect: 2 400 rows in connector.t_acme_partners; a second run reads 0.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-partners
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners
+  format: json

@@ -1,0 +1,68 @@
+# 40-watermark.yaml — reading only what moved since last time.
+#
+# `mode: full` re-fetches every page on every run. `mode: watermark` sends the stored high-water
+# mark as a query parameter on the first request of the run, and the API returns only what is
+# newer:  GET /offset/partners?updated_since=2026-01-02T15:59:00Z&offset=0&limit=500
+#
+# The new mark is the MAX of `watermark_path` across the items actually read. Here that is
+# $.updated_at, whose ISO shape sorts lexicographically — which is why a plain string
+# comparison is enough for the demo API to filter on it.
+#
+# ── Why the first run is not the interesting one ─────────────────────────────────────────
+# Run 1: nothing stored, so no parameter is sent — a full read, 2 400 rows.
+# Run 2: the parameter goes out and only newer rows come back — here the single row sharing
+#        the maximal instant, because the demo API filters inclusively, as most APIs do. It is
+#        re-upserted on its unique key, so it counts as records_out and the table does not
+#        grow. Run 2 reading 2 400 again would mean the watermark never persisted.
+#
+# ── The staged promotion, which is the subtle part ───────────────────────────────────────
+# The mark is NOT advanced page by page. A crash mid-pagination would otherwise leave it past
+# pages that were never fetched — silent, permanent data loss. The stored value keeps its
+# pre-run reading throughout while a candidate carries the running MAX, and only the final
+# chunk promotes it.
+#
+#   lm endpoint reset-cursor acme-incremental/partners     # the next run is full again
+#
+# A watermark is only as incremental as the column behind it: pointed at a column the source
+# does not touch on update, it re-reads everything forever and reports it as new.
+#
+# Expect: run 1 = 2 400 in / 2 400 out. Run 2 = 1 in / 1 out, and the table still 2 400.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-incremental
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      path: /offset/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+        # No total_path here on purpose: an incremental endpoint returns a filtered slice, and
+        # the source's unfiltered $.total is not the number it should be checked against.
+      incremental:
+        mode: watermark
+        param: updated_since        # the query parameter the API filters on
+        watermark_path: "$.updated_at"
+      target:
+        kind: hybrid
+        table: ext.acme_incremental_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name,       path: "$.name",       type: text }
+          - { name: updated_at, path: "$.updated_at", type: timestamptz, transform: parse_iso8601 }

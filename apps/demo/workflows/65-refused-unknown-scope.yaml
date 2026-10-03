@@ -1,0 +1,20 @@
+# 65-refused-unknown-scope.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: the scope must be a discovered one — 404, the same answer kind:Process gives, because a typo would index the lifecycle under a tag nobody holds.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-scope
+spec:
+  scope: dsk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, aliases: [en cours] }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }

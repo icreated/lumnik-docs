@@ -1,0 +1,26 @@
+# 20-s3-hourly.yaml — the same entity, every hour, to an S3 bucket (AWS, MinIO, R2…).
+#
+# ${timestamp} gives each run its own key, so two runs in a day never collide. Credentials
+# are secret names; omitted, they default to AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY.
+apiVersion: apps.lumnik.io/v1
+kind: Export
+metadata:
+  name: customers-hourly
+spec:
+  scope: desk
+  source:
+    entity: AcmeCustomer
+  columns: [code, name, credit_limit]
+  order: [code]
+  format:
+    kind: csv
+  destination:
+    kind: s3
+    bucket: acme-outbound
+    prefix: customers/
+    filename: customers-${timestamp}.csv
+    region: eu-west-3
+    access_key_env: OUTBOUND_S3_ACCESS_KEY
+    secret_key_env: OUTBOUND_S3_SECRET_KEY
+  mode: snapshot
+  schedule: "0 * * * *"

@@ -1,0 +1,25 @@
+# 20-crm-first.yaml — the same two tables, the CRM listed first.
+#
+# Source order is the merge priority and nothing else: the row count and the disputed set are
+# identical to 10-customer.yaml; only the representative flips — P-1000 reads HYDRAULIQUE LYON,
+# P-1002 sits in Milan and P-1008 in Villeurbanne.
+#
+# Expect: 14 rows, the same three in dispute.
+kind: Entity
+name: AcmeCustomerCrmFirst
+match: [code]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_crm
+    map:
+      customer: code
+      company: name
+      town: city
+      email: email
+  - table: t_acme_desk_erp
+    map:
+      code: code
+      name: name
+      city: city
+      segment: segment
+      credit_limit: credit_limit

@@ -1,0 +1,68 @@
+# 70-graphql-relay.yaml — GraphQL is a request SHAPE on the REST engine, not a second connector.
+#
+# `connector_type` stays rest-generic. What changes: the request is a POST carrying
+# {"query": ..., "variables": ...} to a single URL, and the cursor rides in the body.
+#
+# ── The hard rule ────────────────────────────────────────────────────────────────────────
+# A graphql endpoint must declare `kind: relay` with `cursor_binding: variable`, and that
+# binding is valid nowhere else. The reason is mechanical: the binding writes the cursor into
+# the POST body's `variables.<cursor_var>`, and a GET has no body to write it into. Both halves
+# are refused at apply.
+#
+# ── Relay, concretely ────────────────────────────────────────────────────────────────────
+# The Connections spec puts rows under edges[].node and the paging state under pageInfo:
+#   cursor_path    → $.data.partners.pageInfo.endCursor   (an OPAQUE string — base64 here)
+#   has_more_path  → $.data.partners.pageInfo.hasNextPage
+#   response_path  → $.data.partners.edges[*].node        (a JSONPath projection)
+#   cursor_var     → after — the same name as $after in the query, without the sigil
+#
+# Note the asymmetry with the `cursor` strategy, which unwraps a one-element list from
+# $.data[-1:].id: relay does not — cursor_path must resolve to a scalar directly.
+#
+# Page size lives in the query (`first: 500`): GraphQL has no size parameter to bind.
+# `graphql_path` is spec-level and defaults to /graphql — spelled out here for readability.
+#
+# Expect: 2 400 rows in ext.acme_graphql_partners.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-graphql
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+  graphql_path: /graphql
+
+  auth:
+    kind: api-key
+    in: header
+    name: X-API-Key
+    value_env: ACME_API_KEY
+
+  endpoints:
+    - id: partners
+      kind: graphql
+      query: |
+        query($after: String) {
+          partners(first: 500, after: $after) {
+            edges { cursor node { id name city credit_limit } }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      pagination:
+        kind: relay
+        cursor_binding: variable
+        cursor_var: after
+        cursor_path: "$.data.partners.pageInfo.endCursor"
+        has_more_path: "$.data.partners.pageInfo.hasNextPage"
+        response_path: "$.data.partners.edges[*].node"
+      target:
+        kind: hybrid
+        table: ext.acme_graphql_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name,         path: "$.name",         type: text }
+          - { name: city,         path: "$.city",         type: text }
+          - { name: credit_limit, path: "$.credit_limit", type: bigint }

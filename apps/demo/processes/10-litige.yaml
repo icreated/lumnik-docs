@@ -1,0 +1,22 @@
+# 10-litige.yaml — when an order lands in dispute, say so.
+#
+# A process fires on data.row.changed, born at the raw write path — so on.table is the raw
+# orders table and `when` speaks its own columns. The effect IS the event: decision.litige
+# lands in the outbox and in `lm inbox`; reaching n8n or a webhook needs a subscription.
+#
+# Expect: nothing on apply (a process fires on rows that LAND, not on rows already there),
+#         then one decision per genuinely new EN LITIGE row on the next run.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: litige-ouvert
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.t_acme_desk_orders
+  when:
+    - status=EN LITIGE
+  emit:
+    type: decision.litige-ouvert
+    message: "Commande {order_no} du client {code} en litige — {amount} €"

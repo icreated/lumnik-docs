@@ -1,0 +1,55 @@
+# 10-offset-none.yaml — offset + limit pagination, no authentication.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/rest/10-offset-none.yaml
+#   lm connector run rest-offset
+#
+# How offset pagination works
+# ---------------------------
+# The connector issues GET /v1/records?offset=0&limit=50, reads the total count from
+# `$.total`, then advances the offset by the page size until offset + page_count >= total
+# (or the page is shorter than the limit — whichever comes first).
+# No auth header is sent; the target API is open.
+#
+# Auth: none — no Authorization header is added to requests.
+# Pagination: offset — classic offset/limit with a total count guard.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: rest-offset                  # unique connector name within the workspace
+  connector_type: rest-generic       # selects the REST connector implementation
+  scopes: [demo]
+
+spec:
+  base_url: http://localhost:8081    # the docker-compose 'wiremock' service (port 8081→8080)
+
+  # No auth block → unauthenticated requests (no Authorization header).
+
+  endpoints:
+    - id: records
+      path: /v1/records
+      method: GET
+
+      # ── Pagination ─────────────────────────────────────────────────────────
+      pagination:
+        kind: offset
+        offset_param: offset          # query param that carries the current offset
+        limit_param: limit            # query param that carries the page size
+        limit: 2                      # page size (kept small for the demo stub)
+        total_path: "$.total"         # JSONPath into the response body for the total row count
+        response_path: "$.data"       # JSONPath that unwraps the records array
+
+      # ── Hybrid target table ────────────────────────────────────────────────
+      # 'kind: hybrid' = a single table in the ext.* schema.
+      # unique_key deduplicates rows on upsert; promote lifts typed columns to real PG columns.
+      target:
+        kind: hybrid
+        table: ext.rest_offset        # physical table; created on first run
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+      # ── Incremental mode ──────────────────────────────────────────────────
+      incremental:
+        mode: full                    # full reload on every run (no watermark)
