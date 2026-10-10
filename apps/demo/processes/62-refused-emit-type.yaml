@@ -1,0 +1,17 @@
+# 62-refused-emit-type.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `emit.type` must start with `decision.` — the inbox and the webhook filters are built on that prefix.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: refused-type
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.t_acme_desk_orders
+  when:
+    - status=BROUILLON
+  emit:
+    type: order.draft
+    message: "Commande {order_no}"

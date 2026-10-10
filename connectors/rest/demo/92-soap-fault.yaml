@@ -1,0 +1,71 @@
+# 92-soap-fault.yaml — the run that MUST fail, and the twin of 80-graphql-errors.yaml.
+#
+# SOAP, like GraphQL, has an error channel that is not the HTTP status — and stacks use it two
+# different ways:
+#
+#   HTTP 500 + <soap:Fault>   what the SOAP 1.1 book prescribes
+#   HTTP 200 + <soap:Fault>   what a good many gateways and .NET services actually send
+#
+# Both must fail the run. The second is the dangerous one: an engine that trusts the status
+# reads a body with no rows in it and reports a clean, empty, successful sync.
+#
+# ── And the part that is NOT symmetric with a plain 5xx ───────────────────────────────────
+# A Fault is a BUSINESS error: the service answered, and its answer is "no". Retrying it is
+# waiting for a different answer to the same wrong question. So the fault check runs INSIDE the
+# retry boundary and refuses first — a fault is never retried, even though it arrives on the
+# 500 the shared policy calls transient. Read this file against 93, which is the same status
+# from the same server with the opposite handling.
+#
+# Expect: BOTH endpoints Failed, 0 records_out, the run message naming the faultstring.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-fault
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: fault-on-500
+      kind: soap
+      path: /fault/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_fault500
+        unique_key: "$.Id"
+        promote: []
+
+    - id: fault-on-200
+      kind: soap
+      path: /fault200/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_fault200
+        unique_key: "$.Id"
+        promote: []

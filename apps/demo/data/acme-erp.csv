@@ -1,0 +1,13 @@
+code,name,city,segment,credit_limit
+P-1000,Hydraulique Lyon 1000,Lyon,GOLD,500
+P-1001,Roulements Bruxelles 1001,Bruxelles,SILVER,637
+P-1002,Fixations Milano 1002,Milano,BRONZE,774
+P-1003,Pneumatique Porto 1003,Porto,GOLD,911
+P-1004,Étanchéité Kraków 1004,Kraków,SILVER,1048
+P-1005,Transmission Aarhus 1005,,GOLD,1185
+P-1006,Outillage Valencia 1006,Valencia,BRONZE,1322
+P-1007,Levage Bristol 1007,Bristol,SILVER,1459
+P-1008,Filtration Lyon 1008,Lyon,GOLD,1596
+P-1009,Soudure Bruxelles 1009,Bruxelles,BRONZE,1733
+P-1010,Hydraulique Milano 1010,Milano,SILVER,1870
+P-1011,Roulements Porto 1011,Porto,,2007

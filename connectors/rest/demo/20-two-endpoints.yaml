@@ -1,0 +1,56 @@
+# 20-two-endpoints.yaml — one connector is one API, whatever number of endpoints it exposes.
+#
+# Both endpoints below read the same 2 400 partners from the same server, through two
+# conventions that have nothing in common:
+#
+#   /v1/partners   opaque cursor  — ?starting_after=<id>, $.has_more says whether to continue
+#   /drf/partners  follow a link  — $.next carries the whole next URL, until it is null
+#
+# Preset `stripe` expands to kind: cursor (cursor_param starting_after, cursor_path
+# $.data[-1:].id, has_more_path $.has_more, response_path $.data); preset `drf-page` expands to
+# kind: body-link (link_path $.next, response_path $.results). Neither sends a page-size
+# parameter — see the page-size note in rest.md — so `page_size` rides in the DRF endpoint's
+# own `path:`, which the request builder extends with `&`.
+#
+# The credential is declared once, at connector level, and both endpoints use it.
+#
+# Expect: 2 400 rows in each of the two tables.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-saas
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: bearer
+    token_env: ACME_BEARER_TOKEN   # lm secret set ACME_BEARER_TOKEN   → demo-token
+
+  endpoints:
+    - id: cursor-partners
+      path: /v1/partners?limit=500
+      method: GET
+      pagination: { kind: stripe }
+      target:
+        kind: hybrid
+        table: ext.acme_cursor_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+          - { name: city, path: "$.city", type: text }
+
+    - id: link-partners
+      path: /drf/partners?page_size=500
+      method: GET
+      pagination: { kind: drf-page }
+      target:
+        kind: hybrid
+        table: ext.acme_link_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+          - { name: city, path: "$.city", type: text }

@@ -1,0 +1,3723 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/search/querying/">
+      
+      
+        <link rel="prev" href="../search-indexes/">
+      
+      
+        <link rel="next" href="../../cli/lm-reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Query it - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#querying-search" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Query it
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_3" id="__nav_16_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_4" id="__nav_16_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_16_5" id="__nav_16_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_16_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-declare-build-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart — declare, build, ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-hit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a hit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-query-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a query is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#narrow-with-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Narrow with filters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages-and-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pages and the cursor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-answer-is-not-no-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the answer is not "no results"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#over-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over HTTP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-sees-which-hits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who sees which hits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/providers-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced provider configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_25" >
+        
+          
+          <label class="md-nav__link" for="__nav_25" id="__nav_25_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_25_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_25">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_26" >
+        
+          
+          <label class="md-nav__link" for="__nav_26" id="__nav_26_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_26_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_26">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_27" >
+        
+          
+          <label class="md-nav__link" for="__nav_27" id="__nav_27_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_27_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_28" >
+        
+          
+          <label class="md-nav__link" for="__nav_28" id="__nav_28_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_28_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_28">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-declare-build-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart — declare, build, ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-hit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a hit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-query-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a query is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#narrow-with-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Narrow with filters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages-and-the-cursor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pages and the cursor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-answer-is-not-no-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the answer is not "no results"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#over-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Over HTTP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-sees-which-hits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who sees which hits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="querying-search">Querying Search</h1>
+<blockquote>
+<p>Ask the index you declared: one query, optional filters, ranked hits. <code>lm search query</code> is
+the terminal door; <code>GET /api/search</code> is the one an application calls.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Command</strong></td>
+<td><code>lm search query "TEXT" [--entity E] [--facet field=value]… [--limit N] [--cursor C]</code></td>
+</tr>
+<tr>
+<td><strong>Door</strong></td>
+<td><code>GET /api/search</code></td>
+</tr>
+<tr>
+<td><strong>Who</strong></td>
+<td><code>lm_user</code>, bounded by the entity's scopes</td>
+</tr>
+<tr>
+<td><strong>Needs</strong></td>
+<td>a <a href="../search-indexes/#choosing-a-provider">Search provider built into the hub</a>, and a declared <strong>and built</strong> <a href="../search-indexes/"><code>kind: SearchIndex</code></a></td>
+</tr>
+<tr>
+<td><strong>Not to be confused with</strong></td>
+<td><code>lm ask</code>: that one takes a <em>question</em> and counts or aggregates (and shows the SQL it ran). This one takes <em>keywords</em> and finds records, the same answer every time, with no model</td>
+</tr>
+</tbody>
+</table>
+<h2 id="quickstart-declare-build-ask">Quickstart — declare, build, ask</h2>
+<p>Every screen on this page reads the customers of the <a href="../../apps/demo-desk/">demo desk</a>: fourteen
+fictional customers fused from an ERP export and a CRM export. Land the sources first
+(<a href="../../apps/demo-desk/#landing-the-sources">Landing the sources</a>), then apply the entity, then
+declare the index. Search needs a provider in the hub — the published image has none, see
+<a href="../search-indexes/#choosing-a-provider">Choosing a provider</a>.</p>
+<p>The index is the one from <a href="../search-indexes/#quickstart">the declaration page</a>: the customer's
+name matched with tolerance for typos, the code matched exactly, the city as words and as a filter,
+the segment as a filter.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">search.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SearchIndex</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customers</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AcmeCustomer</span>
+<span class="w">  </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">french</span>
+<span class="w">  </span><span class="nt">fields</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<span class="w">      </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fuzzy</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code</span>
+<span class="w">      </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exact</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">city</span>
+<span class="w">      </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">text</span>
+<span class="w">      </span><span class="nt">facet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">segment</span>
+<span class="w">      </span><span class="nt">facet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p>From the repository root:</p>
+<div class="highlight"><pre><span></span><code>$ lm entity apply -f docs/apps/demo/entities/10-customer.yaml
+Applied entity "AcmeCustomer" → connector."v_acmecustomer"
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search apply -f docs/search/search-indexes/10-customers.yaml
+Applied search index "customers" → entity AcmeCustomer (valid)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search rebuild customers --wait
+Name              customers
+Status            ready
+Live generation   19
+Documents         14
+Lag               0s
+Last rebuild      aa7b5014-3dbe-4f0d-8960-133950183b7c (ready)
+</code></pre></div>
+<p><code>rebuild --wait</code> is the step that makes the index answer: declaring it only stores the declaration.
+Without <code>--wait</code> the command returns as soon as the hub has taken the run on, and a query made right
+away gets the <a href="#when-the-answer-is-not-no-results">answer for an index that is not built yet</a>.
+<code>lm search status customers</code> prints that same card whenever you want to look: <code>ready</code>, how many
+documents, how far behind the data it is (<code>Lag</code>), and the last error if the build failed.</p>
+<p>Now ask. <code>--entity</code> narrows the search to one entity; without it, every entity you may read is
+searched and the hits of several entities come back mixed (the first column says which is which).</p>
+<div class="highlight"><pre><span></span><code>$ lm search query "hydraulique lyon" --entity AcmeCustomer
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1000  0.77   city=*Lyon* | code=P-1000 | name=Hydraulique Lyon 1000 | segment=GOLD
+AcmeCustomer  code=P-1010  0.41   city=Milano | code=P-1010 | name=Hydraulique Milano 1010 | segment=SILVER
+
+facets:
+city      Lyon (1)  Milano (1)
+segment   GOLD (1)  SILVER (1)
+
+2 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<h2 id="reading-a-hit">Reading a hit</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ENTITY</code>, <code>KEY</code></td>
+<td>what the hit is. The key is the entity's own — read the full record with it (<code>GET /api/entities/AcmeCustomer?code=P-1000</code>)</td>
+</tr>
+<tr>
+<td><code>SCORE</code></td>
+<td>how close the hit is. <strong>Compare scores inside one answer only</strong>: they rank this answer, they do not measure anything across queries or indexes</td>
+</tr>
+<tr>
+<td><code>MATCH</code></td>
+<td>the fields the index declares for this hit — the fields that matched first, then the others alphabetically; an empty field is left out. Words found in a <code>text</code> field are between <code>*stars*</code></td>
+</tr>
+<tr>
+<td><code>facets:</code></td>
+<td>for each filterable field, the values among <strong>all</strong> the matches and how many — not only the ones on this page</td>
+</tr>
+<tr>
+<td><code>as of</code></td>
+<td>how fresh the index is: it shows the data as of that moment. Trust it, not your clock</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-a-query-is">What a query is</h2>
+<p>It is <strong>one argument</strong>, 1 to 200 characters, put in quotes when it contains spaces. The quotes are for your
+shell; they do not make a phrase search (there is none). Without them the shell hands over several
+arguments, and the command refuses rather than drop words:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique lyon --entity AcmeCustomer
+Error: search query takes ONE argument — quote it when it has spaces, e.g. lm search query "hydraulique lyon" (got 2 arguments)
+</code></pre></div>
+<p>What a word does depends on the <strong>match mode</strong> the index gives the field it lands in (see
+<a href="../search-indexes/#fields-searchable-returned-faceted">Fields</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>What you can type</th>
+<th>Seen above</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fuzzy</code></td>
+<td>a name with a typo, a missing accent, a spelling variant</td>
+<td><code>Hydrolique</code> finds <em>Hydraulique</em>, <code>etancheite</code> finds <em>Étanchéité</em></td>
+</tr>
+<tr>
+<td><code>exact</code></td>
+<td>the whole code</td>
+<td><code>P-1008</code> — and the exact match scores highest</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>words, understood in the index's <code>language</code> (plurals, accents)</td>
+<td><code>Lyon</code> on the city, shown between stars</td>
+</tr>
+<tr>
+<td><code>prefix</code></td>
+<td>the beginning of something typed</td>
+<td>not used by this index</td>
+</tr>
+</tbody>
+</table>
+<p>A typo is absorbed by a <code>fuzzy</code> field:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query Hydrolique --entity AcmeCustomer
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1000  0.32   city=Lyon | code=P-1000 | name=Hydraulique Lyon 1000 | segment=GOLD
+
+facets:
+city      Lyon (1)
+segment   GOLD (1)
+
+1 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<p>and so is a missing accent:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query etancheite --entity AcmeCustomer
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1004  0.48   city=Kraków | code=P-1004 | name=Étanchéité Kraków 1004 | segment=SILVER
+
+facets:
+city      Kraków (1)
+segment   SILVER (1)
+
+1 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<p>A code that matches exactly comes first:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query P-1008 --entity AcmeCustomer
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1008  1.23   city=Lyon | code=P-1008 | name=Filtration Lyon 1008 | segment=GOLD
+
+facets:
+city      Lyon (1)
+segment   GOLD (1)
+
+1 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<p><strong>A <code>fuzzy</code> field ranks by resemblance; it does not demand every word.</strong> The first screen of this page asked for
+<code>"hydraulique lyon"</code> and got two customers: the one that matches the name <em>and</em> the city first, and the
+other <em>Hydraulique</em> second. Read the score, not only the presence.</p>
+<p>How several words combine <strong>depends on the provider</strong>. On the PostgreSQL provider, which these screens
+ran on, the words of a <code>text</code> field must all be present, so an added word <strong>narrows</strong>: two cities cannot
+both be a customer's city.</p>
+<div class="highlight"><pre><span></span><code>$ lm search query "lyon porto" --entity AcmeCustomer
+0 hits
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search query xyzzy --entity AcmeCustomer
+0 hits
+</code></pre></div>
+<p>The OpenSearch provider answers the same contract but combines the words of <code>text</code> and <code>fuzzy</code> fields with
+<em>or</em> (those of a <code>prefix</code> field with <em>and</em>), so there an added word can <strong>widen</strong> the answer. Read the
+scores, and check a query on the provider you run before relying on how its words combine.</p>
+<p><strong>What a query does not have</strong>: no <code>AND</code>, <code>OR</code> or <code>NOT</code>, no phrase search, no <code>field:value</code>. A <code>-</code>
+or a quote is only punctuation. Here <code>-hydraulique</code> excludes nothing — the answer is the same two
+customers as above:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query "lyon -hydraulique" --entity AcmeCustomer
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1000  0.77   city=*Lyon* | code=P-1000 | name=Hydraulique Lyon 1000 | segment=GOLD
+AcmeCustomer  code=P-1010  0.41   city=Milano | code=P-1010 | name=Hydraulique Milano 1010 | segment=SILVER
+
+facets:
+city      Lyon (1)  Milano (1)
+segment   GOLD (1)  SILVER (1)
+
+2 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<h2 id="narrow-with-filters">Narrow with filters</h2>
+<p><code>--facet field=value</code> keeps only the hits whose field has that value. It works on the fields the index
+declares <code>facet: true</code> (here <code>city</code> and <code>segment</code>) and can be repeated, one value per field.</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --facet segment=GOLD
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1000  0.55   city=Lyon | code=P-1000 | name=Hydraulique Lyon 1000 | segment=GOLD
+
+facets:
+city      Lyon (1)
+segment   GOLD (1)
+
+1 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --facet segment=BRONZE
+0 hits
+</code></pre></div>
+<p>A filter on a field the index does not declare as a facet is refused, naming the field:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --facet code=P-1000
+Error: API error 400: filters key 'code' is not a facet field on any eligible SearchIndex
+</code></pre></div>
+<h2 id="pages-and-the-cursor">Pages and the cursor</h2>
+<p><code>--limit</code> is 1 to 100 (the hub's default is 20). Outside that range the hub refuses and says so —
+the command never quietly changes the number you typed:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --limit 0
+Error: API error 400: limit must be between 1 and 100
+</code></pre></div>
+<p>When there is more, the answer ends with the exact command for the next page. Here with <code>--limit 1</code>
+(note that the facets still count the whole match, not the page):</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --limit 1
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1000  0.55   city=Lyon | code=P-1000 | name=Hydraulique Lyon 1000 | segment=GOLD
+
+facets:
+city      Lyon (1)  Milano (1)
+segment   GOLD (1)  SILVER (1)
+
+1 hits shown · as of 2026-10-06 08:48
+more: lm search query hydraulique --entity AcmeCustomer --limit 1 --cursor eyJzY29yZSI6MC41NDU0NTQ1NjE3MTAzNTc3LCJzZWFyY2hJbmRleCI6ImN1c3RvbWVycyIsImRvY3VtZW50SWQiOiIxfDY6UC0xMDAwIiwiZmluZ2VycHJpbnQiOiJzaGEyNTY6MzllODY0N2M5N2NjMzFkMDQyMGJmZjNmM2U1MDcwN2YxMTU4ODYyMDJjODY5MWJlMTBkOTk4ZTc1MmZkZTBiMSIsImVsaWdpYmxlIjp7ImN1c3RvbWVycyI6MTZ9fQ
+</code></pre></div>
+<p>Paste that line — it carries the cursor — to get the next page:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --limit 1 --cursor &lt;cursor&gt;
+ENTITY        KEY          SCORE  MATCH
+AcmeCustomer  code=P-1010  0.50   city=Milano | code=P-1010 | name=Hydraulique Milano 1010 | segment=SILVER
+
+facets:
+city      Lyon (1)  Milano (1)
+segment   GOLD (1)  SILVER (1)
+
+1 hits shown · as of 2026-10-06 08:48
+</code></pre></div>
+<p>(The cursor is long; it is shortened to <code>&lt;cursor&gt;</code> here, nothing else is changed.)</p>
+<p><strong>A cursor is not a snapshot.</strong> If the indexes being searched change between two pages — one is rebuilt,
+one finishes building, one is removed — the hub refuses the old cursor rather than mix two states in one
+list. The message talks about the <em>set of indexes</em>; what it means is "start this search over":</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer --limit 1 --cursor &lt;cursor&gt;
+Error: API error 400: eligible SearchIndex set changed since this cursor was issued
+</code></pre></div>
+<h2 id="in-a-script">In a script</h2>
+<p><code>-o json</code> (or <code>-o yaml</code>) prints the hub's answer. Standard output stays clean for the next tool: when
+the answer is empty, the explanation of why goes to standard error.</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer -o json | jq '{hits: [.hits[] | {code: .key.code, score}], facets, asOf}'
+{
+  "hits": [
+    {
+      "code": "P-1000",
+      "score": 0.5454545617103577
+    },
+    {
+      "code": "P-1010",
+      "score": 0.5
+    }
+  ],
+  "facets": {
+    "city": [
+      {
+        "value": "Lyon",
+        "count": 1
+      },
+      {
+        "value": "Milano",
+        "count": 1
+      }
+    ],
+    "segment": [
+      {
+        "value": "GOLD",
+        "count": 1
+      },
+      {
+        "value": "SILVER",
+        "count": 1
+      }
+    ]
+  },
+  "asOf": "2026-10-06T06:49:07.399715Z"
+}
+</code></pre></div>
+<h2 id="when-the-answer-is-not-no-results">When the answer is not "no results"</h2>
+<p>Several situations look like an empty answer and are not. <code>lm search query</code> tells them apart from a
+real "nothing matches" (which is a plain <code>0 hits</code>, as for <code>xyzzy</code> above) and says what to do.</p>
+<p><strong>The index was deleted a moment ago.</strong> The declaration is gone at once, but the documents already
+built take a little while to be purged — the delete <a href="../search-indexes/#deleting-and-the-purge-it-leaves-behind">leaves a purge behind</a>.
+The purge runs asynchronously, so the old index may still answer until it completes. Once it has:</p>
+<div class="highlight"><pre><span></span><code>$ lm search rm customers
+search index customers deleted
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer
+0 hits
+no SearchIndex is declared over AcmeCustomer (that your scopes can read) — there is nothing to search. Declare one: lm search apply -f &lt;manifest&gt;
+</code></pre></div>
+<p><strong>Nothing is declared over that entity</strong> — what the screen above says: declare an index
+(<code>lm search apply -f</code>).</p>
+<p><strong>The index is declared but not built.</strong> Declaring stores the declaration; building makes it answer:</p>
+<div class="highlight"><pre><span></span><code>$ lm search apply -f docs/search/search-indexes/10-customers.yaml
+Applied search index "customers" → entity AcmeCustomer (valid)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity AcmeCustomer
+0 hits
+SearchIndex "customers" over AcmeCustomer is declared but not built yet: lm search rebuild customers --wait
+</code></pre></div>
+<p><strong>The build failed.</strong> <code>lm search status NAME</code> names the error. After an upgrade, an entity applied before
+Search existed has to be applied again before it can be indexed (<a href="../search-indexes/#an-entity-applied-before-search">the declaration
+page</a> has the detail). The hub says so, naming the
+entity (quoted):</p>
+<div class="highlight"><pre><span></span><code>Status            degraded
+Last error        IllegalStateException: entity 'AcmeCustomer' cannot be indexed: its view has no "_canonical_key" column, because the entity was applied by a hub older than the one that added it — apply it again (lm entity apply -f &lt;manifest&gt;), then rebuild
+</code></pre></div>
+<p>The way out: apply the entity again — the same manifest, no other change — and rebuild, as in the
+<a href="#quickstart-declare-build-ask">quickstart</a>.</p>
+<p>While the build has failed, <code>lm search query</code> does not call the index "not built yet" (rebuilding would
+fail again): it says the last build failed, and why. Quoted:</p>
+<div class="highlight"><pre><span></span><code>SearchIndex "customers" over AcmeCustomer has nothing built: its last build failed: IllegalStateException: entity 'AcmeCustomer' cannot be indexed: … — read it with `lm search status customers`, fix the cause, then lm search rebuild customers --wait
+</code></pre></div>
+<p>Three more answers are said by the command when it can know them; they cannot be replayed on a hub that
+has a provider and a healthy index, so they are quoted:</p>
+<table>
+<thead>
+<tr>
+<th>You see</th>
+<th>It means</th>
+<th>Do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search is not installed on this hub — no Search provider is built into it …</code></td>
+<td>the hub has no Search provider; this is <strong>not</strong> an empty result</td>
+<td>build the hub with one: <code>deploy/selfhost/up.sh --search</code> (PostgreSQL) or <code>--search-cluster</code> (OpenSearch), closed edition</td>
+</tr>
+<tr>
+<td><code>search is degraded: &lt;reason&gt; — retry in 60s</code></td>
+<td>the provider is installed but failing. Reasons: <code>backend_unreachable</code> (the search backend cannot be reached), <code>backend_auth_failed</code> (it refused the hub's credentials), <code>unsupported_distribution</code> (a distribution the provider does not support), <code>cluster_red</code> (the cluster reports red health)</td>
+<td>fix the backend named by the reason; an outage never stops ingestion and is never shown as zero hits</td>
+</tr>
+<tr>
+<td><code>SearchIndex "NAME" over ENTITY is invalid: &lt;reason&gt;</code></td>
+<td>an entity was re-applied without a column the index declares</td>
+<td>fix the manifest and apply it again</td>
+</tr>
+</tbody>
+</table>
+<p>The build state (<em>not built</em>, <em>being built</em>) is read from the integrator's status door, so only an
+integrator is told it; any user is told the other cases.</p>
+<h2 id="over-http">Over HTTP</h2>
+<p>The CLI is a thin layer over one request:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>q</code></td>
+<td>the query, 1 to 200 characters (required)</td>
+</tr>
+<tr>
+<td><code>entity</code></td>
+<td>one entity name; absent means every entity you may read</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>1 to 100, default 20; outside the range is refused with <code>400</code></td>
+</tr>
+<tr>
+<td><code>cursor</code></td>
+<td>the <code>nextCursor</code> of the previous page</td>
+</tr>
+<tr>
+<td><code>facet.&lt;field&gt;</code></td>
+<td>a filter on a declared facet field; at most 10 fields, each once</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>$ curl -s -H "Authorization: Bearer $TOKEN" \
+    "$LUMNIK_URL/api/search?q=hydraulique&amp;entity=AcmeCustomer&amp;limit=1" | jq
+{
+  "hits": [
+    {
+      "entity": "AcmeCustomer",
+      "key": {
+        "code": "P-1000"
+      },
+      "score": 0.5454545617103577,
+      "fields": {
+        "city": "Lyon",
+        "name": "Hydraulique Lyon 1000",
+        "code": "P-1000",
+        "segment": "GOLD"
+      },
+      "highlights": {
+        "city": [
+          "Lyon"
+        ]
+      },
+      "canonicalLink": "/api/entities/AcmeCustomer?code=P-1000"
+    }
+  ],
+  "facets": {
+    "segment": [
+      {
+        "value": "GOLD",
+        "count": 1
+      },
+      {
+        "value": "SILVER",
+        "count": 1
+      }
+    ],
+    "city": [
+      {
+        "value": "Lyon",
+        "count": 1
+      },
+      {
+        "value": "Milano",
+        "count": 1
+      }
+    ]
+  },
+  "nextCursor": "eyJzY29yZSI6MC41NDU0NTQ1NjE3MTAzNTc3LCJzZWFyY2hJbmRleCI6ImN1c3RvbWVycyIsImRvY3VtZW50SWQiOiIxfDY6UC0xMDAwIiwiZmluZ2VycHJpbnQiOiJzaGEyNTY6MzllODY0N2M5N2NjMzFkMDQyMGJmZjNmM2U1MDcwN2YxMTU4ODYyMDJjODY5MWJlMTBkOTk4ZTc1MmZkZTBiMSIsImVsaWdpYmxlIjp7ImN1c3RvbWVycyI6MTh9fQ",
+  "asOf": "2026-10-06T06:49:57.211808Z"
+}
+</code></pre></div>
+<p>The answer has <code>hits</code> (each with <code>key</code>, <code>score</code>, <code>fields</code>, <code>highlights</code> and a <code>canonicalLink</code> to the
+record), <code>facets</code>, <code>nextCursor</code> (<code>null</code> on the last page) and <code>asOf</code>. Refusals keep their meaning:
+<code>400</code> for what you sent wrong (the message says what), <code>403 {"error":"scope not granted"}</code>, <code>501</code>
+when no provider is installed, <code>503</code> with a <code>reason</code> when it is degraded. To check the engine without
+searching, ask for its capability:</p>
+<div class="highlight"><pre><span></span><code>$ curl -s -H "Authorization: Bearer $TOKEN" "$LUMNIK_URL/api/search/capability"
+{"state":"available","provider":"postgres","reason":null,"version":null}
+</code></pre></div>
+<h2 id="who-sees-which-hits">Who sees which hits</h2>
+<p>A hit is shown to whoever may read its entity: the index inherits the entity's scopes and they are
+checked when you ask, not when the index was built. A user bound to some scopes sees the entities where
+they hold at least one of them. An entity that does not exist and one you may not read answer the same
+<code>403</code> on purpose:</p>
+<div class="highlight"><pre><span></span><code>$ lm search query hydraulique --entity Unknown
+Error: access refused (403): scope not granted
+</code></pre></div>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../search-indexes/">Search indexes — declaring them</a>: the manifest, the match modes, the purge, choosing a provider.</li>
+<li><a href="../../cli/lm-reference/">CLI reference</a>: every <code>lm search</code> command.</li>
+<li><a href="../../rag/http-api/">Ask your data</a>: the other way in, for questions rather than keywords.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

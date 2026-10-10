@@ -1,0 +1,69 @@
+# 50-total-witness.yaml — the row count the source publishes, used as a witness.
+#
+# `/liar/partners` serves 2 300 of its 2 400 partners and still declares `"total": 2400`. The
+# pagination ends the way a complete read ends — no error, no short page the strategy can see —
+# so without `total_path` this run lands Completed with 2 300 rows and agrees with itself.
+#
+# With `total_path` pointed at that number, the run compares what it returned against what the
+# source declared, and fails naming both figures. That comparison is exact and reads both ways,
+# which is why it must point at a ROW count published by the source — never at a page count,
+# never at an estimate.
+#
+# The second endpoint is the same shape against `/hdr/partners`, which answers 400 to any
+# request without `X-Api-Version` — the declarative header at spec level below. Headers are
+# connector-level only; a `headers:` key on an endpoint is refused at apply.
+#
+# Expect: `liar` FAILS on the mismatch, `hdr` completes with 2 400.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-witness
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  headers:
+    - { name: X-Api-Version, value: "2026-01" }   # sent on EVERY request of this connector
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: incomplete
+      path: /liar/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+        total_path: "$.total"       # the witness
+      target:
+        kind: hybrid
+        table: ext.acme_witness_incomplete
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+    - id: versioned
+      path: /hdr/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+        total_path: "$.total"
+      target:
+        kind: hybrid
+        table: ext.acme_witness_versioned
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }

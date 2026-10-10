@@ -1,0 +1,28 @@
+# 10-sftp-daily.yaml — the desk's customers, every night at 04:00 UTC, to a partner's SFTP.
+#
+# The entity is the demo's AcmeCustomer (docs/apps/demo/entities/10-customer.yaml); `desk` is
+# one of its declared scopes. No credential is written here: key_env names a secret.
+apiVersion: apps.lumnik.io/v1
+kind: Export
+metadata:
+  name: customers-daily
+spec:
+  scope: desk
+  source:
+    entity: AcmeCustomer
+  columns: [code, name, city, segment, email]
+  order: [code]
+  format:
+    kind: csv
+    delimiter: ";"
+    header: true
+  destination:
+    kind: sftp
+    host: sftp.partner.example
+    port: 22
+    user: lumnik
+    path: /inbound/customers-${date}.csv
+    key_env: PARTNER_SFTP_KEY
+    host_key_fingerprint: "SHA256:M0Is0aG8ubOr0cLpQs6QcDwVSxMkvmlfuW4K9Q6CJuc"
+  mode: snapshot
+  schedule: "0 4 * * *"

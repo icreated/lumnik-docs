@@ -1,0 +1,24 @@
+# 90-refused.yaml — five mistakes in one manifest, every one named at validate.
+#
+# `lm validate` refuses what `lm apply` would refuse, field by field, before anything is
+# written. This file is not to be fixed: a clean validate on it is the defect.
+#
+# Expect: exit 1, five errors and one warning — the warning is `poll_timeout`, a key the
+#         connector reads nowhere (the real one is poll_timeout_ms).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-refused
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: 9acme                        # not a plain identifier: cannot become connector.t_9acme
+  brokers: host.docker.internal:29092
+  topic: acme/partners               # a slash is not in [a-zA-Z0-9._-]
+  format: avro                       # v1 reads json only
+  poll_timeout: 50                   # unknown key — the real one is poll_timeout_ms
+  max_poll_records: 0                # must be a positive integer
+  auth:
+    kind: oauth                      # none | sasl-plain

@@ -1,0 +1,18 @@
+kind: Entity
+name: ProductWithCategory
+description: One row per product, enriched with its category — a join, not a fusion.
+match: [product_id]
+scopes: [catalogue]
+sources:
+  - table: t_products
+    map:
+      m_product_id: product_id
+      m_product_category_id: category_id
+      name: product_name
+joins:
+  - table: t_product_categories   # the lookup: it fuses nothing and adds no row
+    from: category_id             # a canonical column of the fused entity
+    to: m_product_category_id     # a physical column of the lookup table
+    map:
+      name: category_name
+      description: category_description
