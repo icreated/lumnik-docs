@@ -1,0 +1,19 @@
+# 63-refused-fused-view.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: the trigger is the RAW table the connector writes; a fused view receives no
+# data.row.changed, so a process declared on one can never fire. The refusal names the raw
+# tables the view is built from, so the fix is one edit away (icreated/lumnik#482).
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: refused-view
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.v_acmecustomer
+  when:
+    - city=Lyon
+  emit:
+    type: decision.lyon
+    message: "Client {name} à Lyon"

@@ -1,0 +1,14 @@
+# The one gesture 94-soap-session.yaml needs: a variable inside the HUB'S container.
+#
+# `{{env:NAME}}` in a SOAP header/body template resolves from the hub's own process
+# environment, never from the `lm secret` registry — so the value has to be there when the
+# hub starts:
+#
+#   docker compose -f docker-compose.selfhost.yml \
+#                  -f docs/connectors/rest/demo/soap-session.override.yml up -d hub
+#
+# Everything else about the stack is unchanged; `up.sh` without this file puts it back.
+services:
+  hub:
+    environment:
+      ACME_SESSION_TOKEN: demo-session-42

@@ -1,0 +1,11 @@
+# 63-refused-unknown-key.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `scope:` is not `scopes:` — without this guard the entity would apply with an empty scope list and a clean 200, invisible to every métier.
+
+kind: Entity
+name: AcmeRefusedTypo
+match: [code]
+scope: desk
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: name }

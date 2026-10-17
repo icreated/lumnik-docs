@@ -1,0 +1,22 @@
+# 50-drift.yaml — a schema that changes halfway through the topic.
+#
+# The first 1 200 messages carry six fields; from message 1 201 the producer added
+# `vat_number` and `segment`. Nothing in this manifest says so: the table's columns are
+# inferred from the messages, and a field that appears later becomes a column when it does
+# (ALTER TABLE ADD COLUMN, mid-run), NULL for the rows written before it existed.
+#
+# Expect: 2 400 rows, eight columns, `vat_number` filled 1 200 times.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-drift
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_drift
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-drift
+  format: json

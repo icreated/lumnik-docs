@@ -1,0 +1,20 @@
+# 30-orders.yaml — the orders export, with the status column exactly as the ERP spells it.
+#
+# Lands connector.t_acme_desk_orders. Twelve orders whose `status` reads En cours, encours,
+# fini, TERMINE (trailing space), BROUILLON, Terminé, EN LITIGE, and once nothing at all —
+# twenty years of keyboard habits, which is what kind:Workflow is for.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-desk-orders
+  connector_type: csv-file
+  scopes: [desk]                  # the métier: every table of the desk is askable, viewable, watchable under it
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/acme-orders.csv      # on the HUB's filesystem — see the demo page for the docker cp
+  parser:
+    has_header: true
+  after_process: none

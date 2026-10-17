@@ -1,0 +1,73 @@
+# 94-soap-session.yaml — the credential that does not travel in a header.
+#
+# Legacy EAI services often want their session token INSIDE the envelope, in <soap:Header>,
+# where no auth provider can put it. That is what the endpoint's own `header:` template is for —
+# same substitution as `body:`, same placeholders, same fail-fast.
+#
+# ── The placeholder that is NOT `lm secret` ───────────────────────────────────────────────
+# This is the one thing in this corpus that will surprise you, and it is worth reading twice:
+#
+#   {{secret:NAME}} and {{env:NAME}} both resolve from the HUB'S PROCESS ENVIRONMENT
+#   (an OS env var, or a JVM system property as a dev/test fallback).
+#   The DB-backed `lm secret` registry is NOT consulted.
+#
+# Every other credential here goes the other way: `password_env` / `value_env` read `lm secret`
+# first and the hub's environment second. Here there is no first — and the two placeholder
+# spellings are synonyms.
+#
+# So `lm secret set ACME_SESSION_TOKEN ...` does nothing for this manifest. The hub runs in a
+# container, which means the variable has to exist in THAT container:
+#
+#   docker compose -f docker-compose.selfhost.yml \
+#                  -f docs/connectors/rest/demo/soap-session.override.yml up -d hub
+#
+# That override file sits beside this one and adds exactly one variable to the hub service;
+# `deploy/selfhost/up.sh` puts the stack back the way it was.
+#
+# An unresolved placeholder FAILS THE RUN before the request is sent — the template never goes
+# on the wire with a literal {{...}} inside it, and the value is never echoed in the error.
+#
+# Expect (token exported in the container): 2 400 rows.
+# Expect (token absent): a run that fails fast naming the placeholder, NOT a 401 — the refusal
+# happens in the hub, before the service is ever asked.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-session
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  # Transport auth is still HTTP Basic — the session token is a SECOND credential, carried in
+  # the envelope. Both are needed, and they resolve through two different registries.
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /session/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      header: |
+        <SessionToken>{{env:ACME_SESSION_TOKEN}}</SessionToken>
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_session
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }

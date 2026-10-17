@@ -1,0 +1,43 @@
+# 30-link-header.yaml — the next page is in a HEADER, and the credential is an API key.
+#
+# RFC 5988: the response body says nothing about paging; `Link: <url>; rel="next"` does. The
+# strategy follows that URL until the header stops carrying a `next` relation. `rel` defaults
+# to next and is spelled out here for readability; `response_path` is what unwraps the rows.
+#
+# Where the key goes is declarative — `in: header` + `name:`. Use `in: query` and the key rides
+# the query string instead, which is what APIs that pre-date bearer tokens tend to want.
+#
+#   lm secret set ACME_API_KEY        # the demo API answers to demo-key
+#
+# Expect: 2 400 rows in ext.acme_header_partners.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-header
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: api-key
+    in: header
+    name: X-API-Key
+    value_env: ACME_API_KEY   # ApiKeyAuthProviderFactory has NO inline value field
+
+  endpoints:
+    - id: partners
+      path: /link/partners?limit=500
+      method: GET
+      pagination:
+        kind: link-header
+        rel: next
+        response_path: "$.data"
+      target:
+        kind: hybrid
+        table: ext.acme_header_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }

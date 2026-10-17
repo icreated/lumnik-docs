@@ -1,0 +1,26 @@
+# 70-trimmed.yaml — the broker deletes what the cursor still points at.
+#
+# Retention, compaction or an administrative trim moves a partition's log start forward. A
+# stored position below it names messages that no longer exist. Replay it in three gestures:
+#
+#   lm connector run acme-kafka-trimmed                              # run 1: 5 000, cursor at 5 000
+#   python3 …/acme-topics.py feed --topic acme.partners-trimmed --rate 500 --seconds 2   # ~1 000 more
+#   python3 …/acme-topics.py trim 5500                               # offsets 0..5499 are gone
+#   lm connector run acme-kafka-trimmed                              # run 2
+#
+# Expect: run 2 ends `Partial`, its error names offsets 5000..5499 as unreadable, and the
+#         hub log carries the same sentence at WARN.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-trimmed
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_trimmed
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-trimmed
+  format: json

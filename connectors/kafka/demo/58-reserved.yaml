@@ -1,0 +1,22 @@
+# 58-reserved.yaml — a top-level `id` in the message.
+#
+# This is the REST demo's partner record verbatim, `id` included. `id` is one of the seven
+# columns the hub adds to every connector.t_* table, and a kafka manifest has no mapping hook
+# to rename a field — so the run is refused at write time, on a message that names all seven
+# and says what each connector family can do about it.
+#
+# Expect: Failed — `source column 'id' collides with a hub system column`. No table.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-reserved
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_reserved
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-reserved
+  format: json

@@ -1,0 +1,18 @@
+apiVersion: apps.lumnik.io/v1
+kind: View
+metadata:
+  name: categories
+spec:
+  scope: catalogue
+  table: connector.v_category
+  title: Catégories
+  columns: [category_id, name, description, active]
+  links:
+    # click the name: open the articles view, already filtered on this category
+    - column: name
+      targetView: articles
+      filters:
+        category_id: "{category_id}"
+    # click the id: open the same category in the ERP
+    - column: category_id
+      url: "https://erp.example.com/categories/{category_id}"
