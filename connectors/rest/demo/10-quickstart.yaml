@@ -1,0 +1,45 @@
+# 10-quickstart.yaml — one endpoint, a preset instead of a pagination block.
+#
+# `pagination: {kind: spring-page}` expands at apply time into the real strategy, read out of
+# SpringPagePreset:
+#   kind: page · page_param: page · size_param: size · start_page: 0
+#   total_pages_path: $.totalPages · response_path: $.content
+# Everything a Spring Data `Page` emits is covered, so `size` is the only field worth
+# overriding — the strategy's own default is 50, which turns 2 400 partners into 48 requests.
+#
+# The password is never in this file. `password_env` names an entry the hub resolves at run
+# time: the `lm secret` registry first, then its own environment.
+#   lm secret set ACME_BASIC_PW        # the demo API answers to demo-user / demo-pass
+#
+# Expect: 2 400 rows in ext.acme_partners.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-partners
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW   # BasicAuthProviderFactory has NO inline password field
+
+  endpoints:
+    - id: partners
+      path: /spring/partners
+      method: GET
+      pagination: { kind: spring-page, size: 500 }
+      target:
+        kind: hybrid
+        table: ext.acme_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name,         path: "$.name",         type: text }
+          - { name: city,         path: "$.city",         type: text }
+          - { name: credit_limit, path: "$.credit_limit", type: bigint }
+          - { name: updated_at,   path: "$.updated_at",   type: timestamptz, transform: parse_iso8601 }

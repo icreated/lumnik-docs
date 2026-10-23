@@ -1,0 +1,11 @@
+# 62-refused-reserved.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `_conflicts`, `_src` and `_ord` belong to the fusion machinery.
+
+kind: Entity
+name: AcmeRefusedReserved
+match: [code]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: _src }

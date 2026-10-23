@@ -1,0 +1,25 @@
+# 30-cadence.yaml — a topic kept current on a cron, inside a quiet window.
+#
+# `schedule` is evaluated in UTC by the hub's own scheduler; each slot is a fresh catch-up
+# from the stored cursor. `window` fences the slots — one due outside it is skipped, never
+# queued — and a manual `lm connector run` ignores the fence. A slot that fires while a run
+# is still active on the endpoint is skipped too (per-endpoint advisory lock), so an
+# aggressive cadence degrades to back-to-back catch-ups, never to double ingestion.
+#
+# Expect: the same 2 400 rows as the quickstart, and SCHED filled in `lm connector list`.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-cadence
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_cadence
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners
+  format: json
+  schedule: "*/5 * * * *"      # every five minutes, UTC
+  window: "06:00-22:00"        # UTC, end exclusive — a slot due at night is skipped

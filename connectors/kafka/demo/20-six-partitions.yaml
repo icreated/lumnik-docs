@@ -1,0 +1,22 @@
+# 20-six-partitions.yaml — the per-partition cursor.
+#
+# acme.orders is keyed by partner over six partitions, so one partner's orders sit together
+# and the topic is read six offsets at a time. The stored cursor is a map {partition -> next
+# offset}: a single-partition topic could never show that the map is really per partition.
+#
+# Expect: 24 000 rows in connector.t_acme_orders and a cursor carrying SIX keys whose
+#         offsets sum to 24 000.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-orders
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_orders
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.orders
+  format: json

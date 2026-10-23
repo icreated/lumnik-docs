@@ -1,0 +1,19 @@
+# 50-product-categories.yaml — the category lookup.
+#
+# Lands connector.t_product_categories. Category C2 is deliberately listed twice: a lookup that
+# is not unique on its key makes every product pointing at it export with empty category cells.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: product-categories
+  connector_type: csv-file
+  scopes: [catalogue]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-catalogue/m_product_category.csv
+  parser:
+    has_header: true
+  after_process: none

@@ -1,0 +1,78 @@
+# 80-graphql-errors.yaml — the two ways a GraphQL server says no on HTTP 200.
+#
+# GraphQL does not use status codes to report a failed query. A server that cannot resolve a
+# field answers 200 with an `errors` array; one whose resolver blew up answers 200 with
+# `"data": null`. Read as transport, both are successes — and a run that reads them as data
+# ingests nothing and completes green.
+#
+# Both endpoints below must FAIL, and `lm source rest test acme-graphql-errors` must refuse
+# them before any run is started.
+#
+# The demo API triggers them from the query text: a query mentioning `boom` gets the errors
+# array, one mentioning `nullData` gets the null envelope.
+#
+# Expect: both endpoints Failed, each naming what came back.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-graphql-errors
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+  graphql_path: /graphql
+
+  auth:
+    kind: api-key
+    in: header
+    name: X-API-Key
+    value_env: ACME_API_KEY
+
+  endpoints:
+    - id: errors-array
+      kind: graphql
+      query: |
+        query($after: String) {
+          boom(first: 500, after: $after) {
+            edges { cursor node { id } }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      pagination:
+        kind: relay
+        cursor_binding: variable
+        cursor_var: after
+        cursor_path: "$.data.boom.pageInfo.endCursor"
+        has_more_path: "$.data.boom.pageInfo.hasNextPage"
+        response_path: "$.data.boom.edges[*].node"
+      target:
+        kind: hybrid
+        table: ext.acme_gql_errors
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }
+
+    - id: null-data
+      kind: graphql
+      query: |
+        query($after: String) {
+          nullData(first: 500, after: $after) {
+            edges { cursor node { id } }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      pagination:
+        kind: relay
+        cursor_binding: variable
+        cursor_var: after
+        cursor_path: "$.data.nullData.pageInfo.endCursor"
+        has_more_path: "$.data.nullData.pageInfo.hasNextPage"
+        response_path: "$.data.nullData.edges[*].node"
+      target:
+        kind: hybrid
+        table: ext.acme_gql_nulldata
+        unique_key: "$.id"
+        promote:
+          - { name: name, path: "$.name", type: text }

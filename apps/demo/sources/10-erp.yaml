@@ -1,0 +1,19 @@
+# 10-erp.yaml — the ERP's customer export: twelve partners, the source of record.
+#
+# Lands connector.t_acme_desk_erp. Two cells are empty on purpose — P-1005 has no city and
+# P-1011 no segment — because a NULL is how one source lets another fill the gap.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-desk-erp
+  connector_type: csv-file
+  scopes: [desk]                  # the métier: every table of the desk is askable, viewable, watchable under it
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/acme-erp.csv      # on the HUB's filesystem — see the demo page for the docker cp
+  parser:
+    has_header: true
+  after_process: none

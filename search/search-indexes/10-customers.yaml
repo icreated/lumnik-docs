@@ -1,0 +1,17 @@
+apiVersion: search.lumnik.io/v1
+kind: SearchIndex
+metadata:
+  name: customers
+spec:
+  entity: AcmeCustomer
+  language: french
+  fields:
+    - name: name
+      match: fuzzy
+    - name: code
+      match: exact
+    - name: city
+      match: text
+      facet: true
+    - name: segment
+      facet: true

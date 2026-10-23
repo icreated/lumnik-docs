@@ -1,0 +1,20 @@
+# 61-refused-alias-collision.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: an alias may not collide with another state's code — the same string would mean two things.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-alias
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  states:
+    - { code: BROUILLON, initial: true, aliases: [en_cours] }
+    - { code: EN_COURS }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }

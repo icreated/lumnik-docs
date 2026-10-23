@@ -1,0 +1,4117 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/quickstart/installer/">
+      
+      
+        <link rel="prev" href="../prerequisites/">
+      
+      
+        <link rel="next" href="../../how-it-works/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Quickstart - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installer-60-second-quickstart" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Quickstart
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours — the guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../choosing-what-your-hub-offers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choosing what your hub offers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites — prepare the ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#once-per-workstation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Once per workstation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Once per workstation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-lm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install lm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-lumnik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run lumnik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#point-lm-at-the-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point lm at the hub
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-a-demo-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a demo shape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choose a demo shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-a-rest-via-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario A — REST via OpenAPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-b-one-shot-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario B — one-shot CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-c-combined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario C — combined
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-d-nightly-sftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario D — nightly SFTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-e-s3-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario E — S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-a-stripe-via-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario A — Stripe via OpenAPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-b-one-shot-csv_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario B — one-shot CSV
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-c-combined_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario C — combined
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-d-nightly-sftp-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario D — nightly SFTP export
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scenario D — nightly SFTP export">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-it-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Make it nightly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-e-s3-prefix_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario E — S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-demo-to-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From demo to production
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="From demo to production">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#customize-the-generated-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Customize the generated manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#promote-the-csv-to-recurring-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Promote the CSV to recurring ingestion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enter-a-secret-without-a-shell-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enter a secret without a shell trace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#show-the-customer-what-the-demo-actually-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Show the customer what the demo actually read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#take-the-demo-back-off-the-customers-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Take the demo back off the customer's machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-a-scope-answerable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a scope answerable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, step by step
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../demo/wow-customer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW, hands-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_17_3" id="__nav_17_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_17_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_17_4" id="__nav_17_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_17_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_17_5" id="__nav_17_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_17_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities — resolve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_20" >
+        
+          
+          <label class="md-nav__link" for="__nav_20" id="__nav_20_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/querying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_21" >
+        
+          
+          <label class="md-nav__link" for="__nav_21" id="__nav_21_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_21">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_22" >
+        
+          
+          <label class="md-nav__link" for="__nav_22" id="__nav_22_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The five guards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/providers-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced provider configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_23" >
+        
+          
+          <label class="md-nav__link" for="__nav_23" id="__nav_23_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_23_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The métier PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Honesty & transparency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_27" >
+        
+          
+          <label class="md-nav__link" for="__nav_27" id="__nav_27_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_27_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_28" >
+        
+          
+          <label class="md-nav__link" for="__nav_28" id="__nav_28_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_28_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_28">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29" >
+        
+          
+          <label class="md-nav__link" for="__nav_29" id="__nav_29_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_29_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_30" >
+        
+          
+          <label class="md-nav__link" for="__nav_30" id="__nav_30_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_30_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_30">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#once-per-workstation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Once per workstation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Once per workstation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-lm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install lm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-lumnik" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run lumnik
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#point-lm-at-the-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point lm at the hub
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-a-demo-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a demo shape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choose a demo shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-a-rest-via-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario A — REST via OpenAPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-b-one-shot-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario B — one-shot CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-c-combined" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario C — combined
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-d-nightly-sftp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario D — nightly SFTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-e-s3-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario E — S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-a-stripe-via-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario A — Stripe via OpenAPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-b-one-shot-csv_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario B — one-shot CSV
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-c-combined_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario C — combined
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-d-nightly-sftp-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario D — nightly SFTP export
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scenario D — nightly SFTP export">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-it-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Make it nightly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-e-s3-prefix_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario E — S3 prefix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-demo-to-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From demo to production
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="From demo to production">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#customize-the-generated-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Customize the generated manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#promote-the-csv-to-recurring-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Promote the CSV to recurring ingestion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enter-a-secret-without-a-shell-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enter a secret without a shell trace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#show-the-customer-what-the-demo-actually-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Show the customer what the demo actually read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#take-the-demo-back-off-the-customers-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Take the demo back off the customer's machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-a-scope-answerable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a scope answerable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="installer-60-second-quickstart">Installer — 60-second Quickstart</h1>
+<section class="lm-hero">
+<p class="lm-eyebrow">Quickstart</p>
+<p class="lm-lead">Show the customer their own data in under a minute — from an ERP export, an API or a folder of CSV files.</p>
+<div class="lm-meta">
+<div class="lm-meta-item">
+<p><strong>Audience</strong></p>
+<p>System integrators and installers.</p>
+</div>
+<div class="lm-meta-item">
+<p><strong>Outcome</strong></p>
+<p>One live connector, rows you can see, and a first question answered in the scope you named —
+see <a href="#what-makes-a-scope-answerable">what makes a scope answerable</a>.</p>
+</div>
+<div class="lm-meta-item">
+<p><strong>Before this page</strong></p>
+<p>The hub should already be <a href="../../deploy/">running</a>.</p>
+</div>
+<div class="lm-meta-item lm-meta-item--accent">
+<p><strong>Fastest demo path</strong></p>
+<p>CSV or REST first. Recurrence and polish come after proof.</p>
+</div>
+</div>
+</section>
+<h2 id="once-per-workstation">Once per workstation</h2>
+<h3 id="install-lm">Install <code>lm</code></h3>
+<p>Take the archive for your platform from the
+<a href="https://github.com/icreated/lumnik-open/releases/latest">Releases page</a>. Five are published:
+macOS (Intel and Apple Silicon), Linux (x86-64 and arm64), Windows x86-64.</p>
+<div class="highlight"><pre><span></span><code>tar<span class="w"> </span>-xzf<span class="w"> </span>lm_&lt;version&gt;_darwin_arm64.tar.gz<span class="w">          </span><span class="c1"># your platform's archive</span>
+install<span class="w"> </span>-d<span class="w"> </span>~/.local/bin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>install<span class="w"> </span>-m<span class="w"> </span><span class="m">0755</span><span class="w"> </span>lm<span class="w"> </span>~/.local/bin/lm
+shasum<span class="w"> </span>-a<span class="w"> </span><span class="m">256</span><span class="w"> </span>-c<span class="w"> </span>lm_&lt;version&gt;_checksums.txt<span class="w"> </span>--ignore-missing
+</code></pre></div>
+<ul>
+<li><strong>Windows:</strong> the archive is a <code>.zip</code> holding <code>lm.exe</code> — unpack it into a directory on your <code>PATH</code>.</li>
+<li><strong>Version numbers:</strong> the archive carries <code>lm</code>'s own version, which is not the hub's release number.</li>
+<li><strong>From source</strong> (Go 1.26+): <code>cd lm &amp;&amp; make install</code> copies the binary to <code>~/.local/bin</code>, no <code>sudo</code>.</li>
+</ul>
+<p>If the shell cannot find <code>lm</code>, add <code>~/.local/bin</code> to your <code>PATH</code>. Then check it:</p>
+<div class="highlight"><pre><span></span><code>$ lm version
+lm version dev (commit 94ae18cc9667, built from 2026-10-19T05:34:15Z)
+</code></pre></div>
+<p>A source build prints <code>dev</code>, as above; a downloaded binary prints its release number instead. Put this line in a bug report.</p>
+<h3 id="run-lumnik">Run lumnik</h3>
+<p>Start the hub with <code>deploy/selfhost/up.sh</code> — see <a href="../../deploy/">Deploy</a>. It writes every
+secret the hub needs into <code>.env</code>; there is nothing to set by hand.</p>
+<blockquote>
+<p>Running the hub outside compose (systemd, Kubernetes)? Set <code>LUMNIK_SECRET_MASTER_KEY</code>
+yourself (<code>openssl rand -base64 32</code>) — the hub refuses to start without it.</p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title"><code>lm ask</code> needs lumnik Pro</p>
+<p><code>lm ask</code> and <code>lm chat</code> answer <code>404</code> on the open edition, and on a Pro hub with the AI
+switched off. Every other gesture on this page runs on both editions.
+See <a href="../../editions/#which-edition-am-i-running">which edition you installed</a>.</p>
+</div>
+<h3 id="point-lm-at-the-hub">Point <code>lm</code> at the hub</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span>selfhost<span class="w"> </span>--server<span class="w"> </span>http://localhost:8080<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--oidc-issuer<span class="w"> </span>http://localhost:8180/realms/lumnik
+lm<span class="w"> </span>config<span class="w"> </span>use-context<span class="w"> </span>selfhost
+lm<span class="w"> </span>login
+</code></pre></div>
+<p><code>lm login</code> prints a link and a code, then waits. Open the link in any browser and sign in as
+<code>integrator</code> (password: <code>INTEGRATOR_PASSWORD</code> in <code>.env</code>); the terminal continues on its own:</p>
+<div class="highlight"><pre><span></span><code>$ lm login
+To sign in, open:
+  http://localhost:8180/realms/lumnik/device?user_code=EYQP-LLJN
+and enter code: EYQP-LLJN
+
+Waiting...
+</code></pre></div>
+<p>Check the round trip — an empty table is the right answer on a fresh hub:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector list
+NAME  TYPE  TENANT  SCHED  WINDOW  STATUS  LAST RUN
+</code></pre></div>
+<p>Every scenario below needs this login: without it, every <code>lm</code> call answers <code>401</code>.</p>
+<h2 id="choose-a-demo-shape">Choose a demo shape</h2>
+<!-- The `_1` in three of the card hrefs below is POSITIONAL, not decoration. Those cards'
+     <h3> text matches a `##` section further down, and mkdocs suffixes the SECOND heading it
+     sees with the same slug. The cards come first, so the SECTION is the one that gets `_1`.
+     Rename either heading of a pair, or reorder this grid, and the suffix moves — the card
+     link then lands on the card itself. If you change a card title, read the id back out of
+     the built HTML. scripts/check-docs-render.sh catches this (`make docs-build`, and the
+     docs-publish workflow). -->
+<div class="lm-grid">
+<article class="lm-card">
+<div class="lm-kicker">2 min</div>
+<h3 id="scenario-a-rest-via-openapi"><a href="#scenario-a-stripe-via-openapi">Scenario A — REST via OpenAPI</a></h3>
+<p>Generates a manifest from an OpenAPI spec. A big spec yields a long manifest: trim the endpoints you don't want before you apply it.</p>
+</article>
+<article class="lm-card lm-card--accent">
+<div class="lm-kicker">Start here · 30 sec</div>
+<h3 id="scenario-b-one-shot-csv"><a href="#scenario-b-one-shot-csv_1">Scenario B — one-shot CSV</a></h3>
+<p>Best when the customer can hand you one export immediately — the shortest path from nothing to an answer.</p>
+</article>
+<article class="lm-card">
+<div class="lm-kicker">90 sec</div>
+<h3 id="scenario-c-combined"><a href="#scenario-c-combined_1">Scenario C — combined</a></h3>
+<p>Best when one question should span an API and a file at once — needs Scenario A's manifest first.</p>
+</article>
+<article class="lm-card">
+<div class="lm-kicker">90 sec</div>
+<h3 id="scenario-d-nightly-sftp"><a href="#scenario-d-nightly-sftp-export">Scenario D — nightly SFTP</a></h3>
+<p>Best when the customer already has a scheduled export ritual.</p>
+</article>
+<article class="lm-card">
+<div class="lm-kicker">60 sec</div>
+<h3 id="scenario-e-s3-prefix"><a href="#scenario-e-s3-prefix_1">Scenario E — S3 prefix</a></h3>
+<p>Best for object-store exports or S3-compatible storage like MinIO or R2.</p>
+</article>
+</div>
+<h2 id="scenario-a-stripe-via-openapi">Scenario A — Stripe via OpenAPI</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>STRIPE_API_KEY<span class="w">          </span><span class="c1"># prompts; what you type is not shown</span>
+
+lm<span class="w"> </span><span class="nb">source</span><span class="w"> </span>rest<span class="w"> </span>from-openapi<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>stripe<span class="w"> </span>--scope<span class="w"> </span>billing<span class="w"> </span>-o<span class="w"> </span>stripe.yaml<span class="w">     </span><span class="c1"># -o keeps the file; --apply posts it instead</span>
+
+lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>stripe.yaml
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>stripe.yaml
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>stripe<span class="w">               </span><span class="c1"># applying declares it; this starts the first run</span>
+</code></pre></div>
+<ul>
+<li>Stripe's spec is about 8 MB: the manifest lists every endpoint. Delete the ones you don't
+  want before <code>lm apply</code>.</li>
+<li><code>validate</code> stops at the first envelope error (<code>kind</code>, <code>metadata.connector_type</code>). Fix it and
+  run it again to see the rest.</li>
+<li>Endpoint ids come from the whole path: <code>/v1/charges</code> is <code>v1-charges</code>. Narrow a noisy import
+  with <code>lm endpoint disable stripe/v1-charges</code> — <code>stripe/charges</code> is not found.</li>
+<li><code>lm endpoint enable</code> and <code>disable</code> print nothing on success. They start no run.</li>
+</ul>
+<p>Then ask <strong>in the scope you declared</strong> (Pro). Without <code>--scope</code>, the ask goes to your default
+scope (<code>lm scope</code>), where this connector put nothing:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>ask<span class="w"> </span><span class="s2">"how many charges above 1000?"</span><span class="w"> </span>--scope<span class="w"> </span>billing
+<span class="c1"># answers once the connector has completed a run</span>
+</code></pre></div>
+<p>If the ask finds nothing to query, look at the scope — see
+<a href="#what-makes-a-scope-answerable">what makes a scope answerable</a>.</p>
+<h2 id="scenario-b-one-shot-csv_1">Scenario B — one-shot CSV</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>customers.csv<span class="w"> </span>--scope<span class="w"> </span>sales
+</code></pre></div>
+<p>On a three-row stock file:</p>
+<div class="highlight"><pre><span></span><code>$ lm csv ingest stock.csv --scope retail --name stock-count
+Ingested stock.csv into ext.stock_count
+  • rows written:    3
+  • promoted cols:   4
+      - sku (text)
+      - label (text)
+      - qty (bigint)
+      - warehouse (text)
+
+A one-shot: no run recorded, nothing indexed for chat.
+The rows are in ext.stock_count, and a dormant connector is registered — see `lm connector list`.
+</code></pre></div>
+<p>On a hub with the chat (Pro), the last two lines name the question to try instead:</p>
+<div class="highlight"><pre><span></span><code>  • askable:         scope 'retail' — try: lm ask --scope retail "how many rows are in ext.stock_count?"
+A dormant connector is registered — see `lm connector list`.
+</code></pre></div>
+<p>The one-shot registers a dormant connector and records no run:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector list
+NAME         TYPE      TENANT  SCHED  WINDOW  STATUS  LAST RUN
+stock_count  csv-file  1                              
+$ lm run list
+ID  CONNECTOR  ENDPOINT  STATUS  IN  OUT  SKIPPED  DEAD-LETTERS  STARTED  ENDED
+</code></pre></div>
+<p>Nothing runs again on its own. To make it recurring, see <a href="#from-demo-to-production">from demo to production</a>.</p>
+<h2 id="scenario-c-combined_1">Scenario C — combined</h2>
+<p>Needs the <code>stripe.yaml</code> from <a href="#scenario-a-stripe-via-openapi">Scenario A</a>.</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>STRIPE_API_KEY
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>stripe.yaml
+lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>contacts.csv<span class="w"> </span>--scope<span class="w"> </span>billing
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>stripe
+</code></pre></div>
+<p>Both halves carry <code>--scope billing</code>, so one question spans the API and the file. The CSV half is
+askable at once; the API half once the run completes.</p>
+<h2 id="scenario-d-nightly-sftp-export">Scenario D — nightly SFTP export</h2>
+<p>The most common shape: a customer ERP exports to an SFTP server every night.</p>
+<div class="highlight"><pre><span></span><code>ssh-keyscan<span class="w"> </span>sftp.acme.io<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh-keygen<span class="w"> </span>-lf<span class="w"> </span>-<span class="w">    </span><span class="c1"># read the server's SHA256:… fingerprint</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ACME_SFTP_KEY<span class="w"> </span>-<span class="w">                  </span><span class="c1"># paste the private SSH key, then Ctrl+D (PowerShell: Ctrl+Z, Enter)</span>
+lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>sftp://lumnik@sftp.acme.io/export/billing-latest.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--key-secret<span class="w"> </span>ACME_SFTP_KEY<span class="w"> </span>--host-key-fingerprint<span class="w"> </span><span class="s2">"SHA256:…"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--scope<span class="w"> </span>billing<span class="w"> </span>--name<span class="w"> </span>acme-billing
+</code></pre></div>
+<p>Without <code>--host-key-fingerprint</code> the hub refuses to connect. A server reached by password
+takes <code>--password-secret</code> instead of <code>--key-secret</code>:</p>
+<div class="highlight"><pre><span></span><code>$ lm secret set SFTP_EXPORT_PASSWORD --description "nightly export server"
+Value for SFTP_EXPORT_PASSWORD: 
+Created secret "SFTP_EXPORT_PASSWORD"
+$ lm secret list
+NAME                           ROTATED_AT                     DESCRIPTION
+SFTP_EXPORT_PASSWORD           -                              nightly export server
+</code></pre></div>
+<p>No command ever prints a secret's value back. If it is lost, set it again.</p>
+<h3 id="make-it-nightly">Make it nightly</h3>
+<p>The one-shot leaves no manifest behind: you write a <code>csv-file</code> manifest — fields on
+<a href="../../connectors/csv/">CSV &amp; files</a> — and validate and apply it.</p>
+<div class="admonition warning">
+<p class="admonition-title">Reuse the exact registered name</p>
+<p>The one-shot replaces each run of non-alphanumerics in <code>--name</code> with <code>_</code>: <code>acme-billing</code> is
+registered as <strong><code>acme_billing</code></strong>. A manifest under any other name creates a <strong>second</strong>
+connector, and both ingest the same files. Read the name in <code>lm connector list</code> first.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectors.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Connector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme_billing</span><span class="w">                  </span><span class="c1"># the name lm connector list shows</span>
+<span class="w">  </span><span class="nt">connector_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv-file</span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">billing</span><span class="p p-Indicator">]</span><span class="w">                   </span><span class="c1"># without it the tables are not askable — validate warns</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">"0</span><span class="nv"> </span><span class="s">6</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+<span class="w">  </span><span class="nt">transport</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp.acme.io</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lumnik</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/export/*.csv</span>
+<span class="w">    </span><span class="nt">key_env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ACME_SFTP_KEY</span>
+<span class="w">    </span><span class="nt">host_key_fingerprint</span><span class="p">:</span><span class="w"> </span><span class="s">"SHA256:…"</span><span class="w">  </span><span class="c1"># required unless strict_host_key: false — validate refuses it missing</span>
+<span class="w">  </span><span class="nt">after_process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">move</span>
+<span class="w">  </span><span class="nt">archive_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/archive/</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>acme-nightly.yaml<span class="w">       </span><span class="c1"># names any block you left out, field by field</span>
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>acme-nightly.yaml
+lm<span class="w"> </span>connector<span class="w"> </span>resume<span class="w"> </span>acme_billing<span class="w">       </span><span class="c1"># the one-shot registered it dormant; apply does not change that</span>
+</code></pre></div>
+<h2 id="scenario-e-s3-prefix_1">Scenario E — S3 prefix</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>AWS_ACCESS_KEY_ID<span class="w">          </span><span class="c1"># both prompt; neither value is echoed</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>AWS_SECRET_ACCESS_KEY
+lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>s3://acme-exports/billing/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--region<span class="w"> </span>eu-west-3<span class="w"> </span>--suffix<span class="w"> </span>.csv<span class="w"> </span>--scope<span class="w"> </span>billing
+</code></pre></div>
+<p><code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> are the secret names the S3 source reads by
+default. Credentials stored under other names are named on the command line:</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>csv<span class="w"> </span>ingest<span class="w"> </span>s3://acme-exports/billing/<span class="w"> </span>--region<span class="w"> </span>eu-west-3<span class="w"> </span>--scope<span class="w"> </span>billing<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--access-key-secret<span class="w"> </span>ACME_S3_KEY<span class="w"> </span>--secret-key-secret<span class="w"> </span>ACME_S3_SECRET
+</code></pre></div>
+<p>For MinIO, Cloudflare R2 or GCS in S3 mode, add <code>--endpoint https://...</code>.</p>
+<h2 id="from-demo-to-production">From demo to production</h2>
+<h3 id="customize-the-generated-manifest">Customize the generated manifest</h3>
+<div class="highlight"><pre><span></span><code><span class="nv">$EDITOR</span><span class="w"> </span>stripe.yaml<span class="w">         </span><span class="c1"># set spec.schedule, promote columns, adjust pagination</span>
+lm<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>stripe.yaml
+lm<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>stripe.yaml
+</code></pre></div>
+<ul>
+<li><strong>Schedule:</strong> <code>spec.schedule</code> (a cron) is the only key that schedules runs. A
+  <code>default_schedule</code> inside the connector config schedules nothing.</li>
+<li><strong>Keep the file:</strong> generate with <code>-o</code>. <code>lm connector get</code> prints the stored fields, not the manifest you applied.</li>
+</ul>
+<h3 id="promote-the-csv-to-recurring-ingestion">Promote the CSV to recurring ingestion</h3>
+<p>Write a <code>csv-file</code> manifest under the connector's registered name, <code>lm apply -f</code> it, then
+<code>lm connector resume</code> it — exactly as in <a href="#make-it-nightly">Make it nightly</a>.</p>
+<h3 id="enter-a-secret-without-a-shell-trace">Enter a secret without a shell trace</h3>
+<table>
+<thead>
+<tr>
+<th>Gesture</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lm secret set NAME</code></td>
+<td>prompts; the value stays out of shell history and <code>ps</code></td>
+</tr>
+<tr>
+<td><code>lm secret set NAME -</code></td>
+<td>a value that spans lines (a private SSH key): paste, then Ctrl+D (PowerShell: Ctrl+Z, Enter)</td>
+</tr>
+<tr>
+<td><code>lm secret set NAME VALUE</code></td>
+<td>works, and warns on stderr that the value is in your history</td>
+</tr>
+</tbody>
+</table>
+<h3 id="production-security">Production security</h3>
+<ul>
+<li><strong>Master-key rotation:</strong> not supported.</li>
+<li><strong>Audit:</strong> every secret write, and every read from the database, emits a
+  <code>platform.secret.{created,updated,deleted,read}</code> event.</li>
+<li><strong>Roles:</strong> creating, updating and deleting secrets needs the realm role <code>lm_admin</code>.</li>
+<li><strong>No command returns a secret's value</strong> — a lost value is set again.</li>
+</ul>
+<h2 id="how-to">How to…</h2>
+<h3 id="show-the-customer-what-the-demo-actually-read">Show the customer what the demo actually read</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>connector<span class="w"> </span>list
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>&lt;connector&gt;
+lm<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--connector<span class="w"> </span>&lt;connector&gt;
+lm<span class="w"> </span>run<span class="w"> </span>get<span class="w"> </span>&lt;ID&gt;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm connector list
+NAME          TYPE      TENANT  SCHED  WINDOW  STATUS     LAST RUN
+customers     csv-file  1                      Completed  2026-09-05 05:38
+orders        csv-file  1                      Completed  2026-09-05 05:38
+products      csv-file  1                      Failed     2026-09-05 05:38
+crm-contacts  csv-file  1                      Completed  2026-09-05 05:39
+$ lm run list --connector orders
+ID        CONNECTOR  ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+f0466804  orders     default   Completed  10  8    2        2             2026-09-05 05:38  2026-09-05 05:38
+$ lm run get f0466804
+ID        CONNECTOR  ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+f0466804  orders     default   Completed  10  8    2        2             2026-09-05 05:38  2026-09-05 05:38
+⚠ 2 rows quarantined — see: lm dlq list --run f0466804-0824-4eb4-8aa2-54e263dccafe
+</code></pre></div>
+<p>On every run <code>IN = OUT + SKIPPED</code>. <code>lm run get</code> names a failure, and points at
+<code>lm dlq list --run &lt;ID&gt;</code> when rows were quarantined.</p>
+<p>An empty <code>lm run list</code> means one of two things:</p>
+<ul>
+<li><strong>No run has happened.</strong> Scheduled runs need <code>spec.schedule</code> <em>and</em> an enabled connector
+  (<code>lm connector resume &lt;name&gt;</code> for one a one-shot registered). <code>lm connector run &lt;name&gt;</code>
+  starts one by hand either way.</li>
+<li><strong>You took a one-shot path.</strong> <code>lm csv ingest</code> records no run (Scenarios B, D and E).</li>
+</ul>
+<h3 id="take-the-demo-back-off-the-customers-machine">Take the demo back off the customer's machine</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>connector<span class="w"> </span>list<span class="w">               </span><span class="c1"># the registered names</span>
+lm<span class="w"> </span>connector<span class="w"> </span>delete<span class="w"> </span>acme_billing
+</code></pre></div>
+<p><code>lm</code> names what goes and asks you to type <code>delete</code>; any other answer deletes nothing.
+<code>--dry-run</code> stops at the statement; a script passes <code>--force</code> (it ends the
+<a href="#what-makes-a-scope-answerable">next section</a>):</p>
+<div class="highlight"><pre><span></span><code>$ lm connector delete stock_count --dry-run
+Would delete connector stock_count (csv-file) — 3 rows of ext.stock_count, its run history and RAG chunks (dry run, nothing deleted)
+$ lm connector delete stock_count &lt;/dev/null
+Type 'delete' to delete connector stock_count (csv-file) — 3 rows of ext.stock_count, its run history and RAG chunks: Error: aborted: no confirmation read (EOF) — pass --force in a script
+</code></pre></div>
+<p>The delete takes the connector, its endpoints, its table and its RAG chunks. A table another
+connector also writes stays, with only the other connector's rows. The deleted tables leave
+their scopes' <a href="#what-makes-a-scope-answerable">schema cards</a>.</p>
+<p>A connector whose table feeds a <a href="../../entities/">fused entity</a> is refused until the entity is gone:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector delete cust-csv
+Error: API error 409: table connector.t_cust_csv feeds entity customer — remove the entity first (lm entity delete customer)
+$ lm entity delete customer
+Type 'delete' to delete entity customer — its view, for every tenant: delete
+deleted: customer
+$ lm connector delete cust-csv
+Type 'delete' to delete connector cust-csv (csv-file) — 9 rows of connector.t_cust_csv, its run history and RAG chunks: delete
+deleted: cust-csv
+</code></pre></div>
+<h2 id="what-makes-a-scope-answerable">What makes a scope answerable</h2>
+<p><code>lm ask</code> answers only over a scope that holds a <strong>schema card</strong> — the list of its tables and
+columns. No card, no answer: the ask refuses at once.</p>
+<p>A card is written, with nothing to configure, when:</p>
+<ul>
+<li>a <strong>connector run completes</strong> with a new or changed table;</li>
+<li>a <strong>one-shot <code>lm csv ingest</code></strong> finishes;</li>
+<li>an <a href="../../entities/">entity</a> is applied over the scope.</li>
+</ul>
+<p><code>lm source schema</code> shows what a scope's card holds. Changing a connector's scopes moves its
+tables between cards; deleting the connector removes them, and a scope with no table left has no card:</p>
+<div class="highlight"><pre><span></span><code>$ lm source schema --scope retail
+scope: retail
+
+ext.stock_count
+  external_id              TEXT
+  sku                      TEXT
+  label                    TEXT
+  qty                      BIGINT
+  warehouse                TEXT
+  data                     JSONB
+$ lm connector scope set stock_count stock
+scopes: stock
+$ lm source schema --scope retail
+Error: API error 404: No schema card found for scope: retail
+$ lm connector delete stock_count --force
+deleted: stock_count
+$ lm source schema --scope stock
+Error: API error 404: No schema card found for scope: stock
+</code></pre></div>
+<p>An empty card prints the command that rebuilds it: <code>lm source rediscover --scope &lt;tag&gt;</code>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Bearer token unavailable (env=STRIPE_API_KEY)</code></td>
+<td>the secret is set neither in the hub nor as an env var</td>
+<td><code>lm secret list</code>, then <code>lm secret set STRIPE_API_KEY</code></td>
+</tr>
+<tr>
+<td><code>apply failed: …</code> (400) right after <code>from-openapi --apply</code></td>
+<td>the hub refused the manifest — a hand-edit broke it, or <code>metadata.tenant</code> does not match your own</td>
+<td>generate with <code>-o</code>, then <code>lm validate -f</code> to see which field the hub names</td>
+</tr>
+<tr>
+<td>a second connector appears after <code>lm apply -f</code></td>
+<td><code>metadata.name</code> did not match the registered name, so apply created a new one</td>
+<td><code>lm connector list</code> for the real name, <code>lm connector delete</code> the duplicate, re-apply</td>
+</tr>
+<tr>
+<td><code>429 Too Many Requests</code> from the vendor</td>
+<td>too many calls for the quota</td>
+<td>edit <code>default_rate_limit: 50/s</code> in the YAML, then <code>lm apply -f</code></td>
+</tr>
+<tr>
+<td><code>lumnik.secret.master-key is still the placeholder</code> at hub startup</td>
+<td><code>LUMNIK_SECRET_MASTER_KEY</code> is not set</td>
+<td><code>openssl rand -base64 32</code>, export it, restart the hub</td>
+</tr>
+<tr>
+<td><code>lumnik.secret.master-key is too short</code> at hub startup</td>
+<td><code>LUMNIK_SECRET_MASTER_KEY</code> is under 16 characters</td>
+<td>the same</td>
+</tr>
+<tr>
+<td><code>secret with this name already exists</code></td>
+<td><code>lm</code> updates an existing secret; a direct <code>POST</code> does not</td>
+<td>through <code>lm</code>, nothing to do. To replace: <code>lm secret rm NAME --force</code>, then <code>set</code></td>
+</tr>
+<tr>
+<td><code>403 {"error":"scope not granted"}</code> on <code>lm apply</code></td>
+<td>your user holds <code>scope:</code> roles and the manifest declares a scope you do not hold (or none)</td>
+<td>declare only scopes you hold, or apply as a user with no <code>scope:</code> role</td>
+</tr>
+<tr>
+<td><code>WARN metadata.scopes — no scopes declared</code> on validate</td>
+<td>the manifest names no scope, so its tables are not askable</td>
+<td>add <code>scopes: [&lt;scope&gt;]</code> under <code>metadata</code></td>
+</tr>
+</tbody>
+</table>
+<p>For connector details: <a href="../../connectors/rest/">REST</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
