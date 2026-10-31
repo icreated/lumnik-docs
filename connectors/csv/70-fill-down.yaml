@@ -1,0 +1,20 @@
+# 70-fill-down.yaml — a bank statement writes the account once, on the first row of its block.
+# fill-down copies it onto the rows below, until the next account.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: bank-statement
+  connector_type: csv-file
+  scopes: [finance]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/bank-statement.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - fill-down: { columns: [account] }

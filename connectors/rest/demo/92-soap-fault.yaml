@@ -1,0 +1,59 @@
+# 92-soap-fault.yaml — the run that must fail.
+#
+# A SOAP service says "no" with a <soap:Fault>, sent with HTTP 500 or with HTTP 200. Both fail
+# the run, naming the faultstring. A Fault is the service's answer: it is never retried.
+# Compare 93, the same status with a retry.
+#
+# Expect: BOTH endpoints Failed, 0 rows written, the run message naming the faultstring.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-fault
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: fault-on-500
+      kind: soap
+      path: /fault/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_fault500
+        unique_key: "$.Id"
+        promote: []
+
+    - id: fault-on-200
+      kind: soap
+      path: /fault200/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_fault200
+        unique_key: "$.Id"
+        promote: []

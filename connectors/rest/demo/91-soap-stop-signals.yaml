@@ -1,0 +1,92 @@
+# 91-soap-stop-signals.yaml — the three ways a QueryPage loop ends, side by side.
+#
+# A SOAP run stops on exactly one signal, chosen by what you declare:
+#
+#   last_page_path set → continue only while the flag reads "false"
+#   else has_more_path → continue only while the flag reads "true"
+#   else               → stop on the first page shorter than page_size
+#
+# A missing or unreadable flag stops the run.
+#
+# The `tail` endpoint reads 201 rows, 100 per page: its last page holds ONE row. All 201 must
+# land — a last page of one row is still read.
+#
+# Expect: 2 400 (more-records), 2 400 (short-page), 201 (single-element-tail).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-stops
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    # ── has_more_path — the SAP PI flavour: "there are more", not "this is the last" ────────
+    - id: more-records
+      kind: soap
+      path: /sap/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        has_more_path: "$.Body.CustomerQueryPage_Output.MoreRecords"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_moreflag
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }
+
+    # ── no flag at all — the service announces nothing, the short page is the only signal ───
+    - id: short-page
+      kind: soap
+      path: /mute/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 700          # 2 400 = 3 x 700 + 300 — the fourth page is the short one
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_shortpage
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }
+
+    # ── the single-element last page — all 201 rows must land ────────────────
+    - id: single-element-tail
+      kind: soap
+      path: /tail/start.swe
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 100          # 201 rows = 100 + 100 + ONE
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_tail
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }

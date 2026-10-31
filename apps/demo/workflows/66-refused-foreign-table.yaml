@@ -1,0 +1,20 @@
+# 66-refused-foreign-table.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `on.table` must name a table ingestion owns — connector.t_<table> or connector.v_<entity> — never the hub's own.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-table
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: identity.app_user
+    column: status
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, aliases: [en cours] }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }

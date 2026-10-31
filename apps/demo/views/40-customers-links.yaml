@@ -1,0 +1,20 @@
+# 40-customers-links.yaml — the desk's customers, with two cells that lead somewhere.
+#
+# Tap a customer's name: the orders view opens, already filtered on that customer.
+# Tap a customer's code: the customer's page in the ERP opens in a new tab.
+apiVersion: apps.lumnik.io/v1
+kind: View
+metadata:
+  name: acme-customers-linked
+spec:
+  scope: desk
+  table: connector.v_acmecustomer
+  title: Clients ACME — liens
+  columns: [code, name, city, segment]
+  links:
+    - column: name
+      targetView: acme-orders
+      filters:
+        code: "{code}"
+    - column: code
+      url: "https://erp.example.com/customers/{code}"

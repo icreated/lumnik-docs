@@ -1,0 +1,6 @@
+account,booked_on,label,amount
+FR76-3000-0001,2026-10-01,Solde initial,1200.00
+,2026-10-03,Virement client ACME,450.00
+,2026-10-05,Prélèvement URSSAF,-320.00
+FR76-3000-0002,2026-10-01,Solde initial,800.00
+,2026-10-04,Carte bancaire,-42.50

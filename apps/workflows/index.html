@@ -1,0 +1,5488 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/apps/workflows/">
+      
+      
+        <link rel="prev" href="../processes/">
+      
+      
+        <link rel="next" href="../proposal-dossier/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Workflows — declare - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kind-workflow-declare" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Workflows — declare
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/other-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other first sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understand
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understand
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CSV & files
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv-quick-look/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One file, one command
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/when-the-topic-misbehaves/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When the topic misbehaves
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Transformers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repair the data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kotlin-hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin hooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading a run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Entities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dates and numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-joins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resolve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/querying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When Ask refuses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The rules, in detail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-scope-must-exist-the-table-need-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scope must exist, the table need not
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#names-the-source-chose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names the source chose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-column-one-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One column, one lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alias-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alias semantics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-data-truth-report-never-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The data-truth report — never blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-each-import-speccheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After each import — spec.check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-chat-answers-from-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the chat answers from it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dormancy-the-memory-of-the-breathing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dormancy — the memory of the breathing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#due-date-a-deadline-the-data-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Due date — a deadline the data carries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-current-version-speconorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The current version — spec.on.order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-decision-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a decision carries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applying-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applying it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#declare-the-lifecycle-a-legacy-status-column-already-has" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declare the lifecycle a legacy status column already has
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-a-document-stops-moving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when a document stops moving
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-value-the-report-says-nobody-declared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add the value the report says nobody declared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-a-new-spelling-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when a new spelling arrives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-a-proposal-dossier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From a proposal dossier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-the-sweep-in-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced: the sweep in detail
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced: the sweep in detail">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-sweep-does-not-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the sweep does not see
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-alert-verbatim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The alert, verbatim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-alert-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-alert semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-tape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the tape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-undeclared-value-can-never-be-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An undeclared value can never be terminal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposal-dossier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal dossiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../choosing-what-your-hub-offers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choosing what your hub offers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/echoed-credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credentials a source writes back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a JDBC provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Background
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Background
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-scope-must-exist-the-table-need-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scope must exist, the table need not
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#names-the-source-chose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names the source chose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-column-one-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One column, one lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alias-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alias semantics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-data-truth-report-never-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The data-truth report — never blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-each-import-speccheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After each import — spec.check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-chat-answers-from-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the chat answers from it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dormancy-the-memory-of-the-breathing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dormancy — the memory of the breathing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#due-date-a-deadline-the-data-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Due date — a deadline the data carries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-current-version-speconorder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The current version — spec.on.order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-decision-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a decision carries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applying-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applying it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to…
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to…">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#declare-the-lifecycle-a-legacy-status-column-already-has" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declare the lifecycle a legacy status column already has
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-a-document-stops-moving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when a document stops moving
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-value-the-report-says-nobody-declared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add the value the report says nobody declared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-told-when-a-new-spelling-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get told when a new spelling arrives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-a-proposal-dossier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From a proposal dossier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-the-sweep-in-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced: the sweep in detail
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced: the sweep in detail">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-sweep-does-not-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the sweep does not see
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-alert-verbatim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The alert, verbatim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-alert-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-alert semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-tape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the tape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-undeclared-value-can-never-be-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An undeclared value can never be terminal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kind-workflow-declare">kind: Workflow — declare</h1>
+<blockquote>
+<p>The fourth rung: a <strong>declarative document lifecycle</strong> over a status column ingestion already
+landed — states, aliases for the spellings the source really uses, the transition graph, and a
+threshold past which a document that has not moved is a decision.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kind</strong></td>
+<td><code>Workflow</code> — <code>apps.lumnik.io/v1</code></td>
+</tr>
+<tr>
+<td><strong>Over</strong></td>
+<td>one column of one table: a raw <code>connector.t_*</code>, or a fused <code>connector.v_*</code> (dormancy there needs <code>spec.on.order</code>)</td>
+</tr>
+<tr>
+<td><strong>Declares</strong></td>
+<td>states with aliases, transitions, <code>provenance: declared</code>; optionally a business key and a dormancy threshold</td>
+</tr>
+<tr>
+<td><strong>Produces</strong></td>
+<td>a report at apply on what the data holds, and after each import when asked (<code>workflow.undeclared.&lt;name&gt;</code>); answers in the chat (Pro); <code>decision.dormant.&lt;name&gt;</code> and <code>decision.overdue.&lt;name&gt;</code> alerts, and an observation tape, when watched</td>
+</tr>
+<tr>
+<td><strong>Commands</strong></td>
+<td><code>lm workflow apply</code> · <code>list</code> · <code>get</code> · <code>disable</code> · <code>enable</code> · <code>rm</code> — <code>lm_integrator</code>, scope-bound; one lifecycle per column</td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open</td>
+</tr>
+</tbody>
+</table>
+<p>Legacy exports carry dirty statuses — <code>En cours</code>, <code>encours</code>, <code>fini</code>, <code>TERMINE</code> with a trailing
+space. A workflow declares what they mean, so the chat answers lifecycle questions from a
+declared graph instead of inventing one.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong><a href="#alias-semantics">Dirty values resolve to declared states.</a></strong> Alias matching is trim and
+  case-insensitive.</li>
+<li><strong><a href="#the-data-truth-report-never-blocks">A data-truth report that never blocks.</a></strong> Apply
+  compares the declaration with the column — undeclared values, unobserved codes, blanks — and
+  stores the manifest either way.</li>
+<li><strong><a href="#after-each-import-speccheck">The same check after each import.</a></strong> <code>spec.check.trigger: ingestion</code>
+  re-checks the column when a run writes it, and a value no report named raises
+  <code>workflow.undeclared.&lt;name&gt;</code>.</li>
+<li><strong><a href="#what-the-chat-answers-from-it">Grounded answers</a> (Pro).</strong> The chat answers lifecycle
+  questions from the declared graph.</li>
+<li><strong><a href="#dormancy-the-memory-of-the-breathing">Dormancy.</a></strong> A key and a threshold turn the
+  declaration into a watch: a document unmoved in a non-terminal state past the threshold is a
+  <code>decision.dormant.*</code> in the inbox.</li>
+<li><strong><a href="#reading-the-tape">A tape that outlives the alert.</a></strong> Every watched document's state, since
+  when, and whether it alerted.</li>
+<li><strong><a href="#one-column-one-lifecycle">One column, one lifecycle.</a></strong> A second lifecycle on the same
+  column is refused, naming the first.</li>
+</ul>
+<h2 id="quickstart">Quickstart</h2>
+<div class="admonition note">
+<p class="admonition-title">Every screen on this page reads the demo desk that ships with the repo</p>
+<p>An order book whose <code>status</code> column carries seven spellings and one blank, under
+<code>docs/apps/demo/</code>. Land it first — <a href="../demo-desk/#landing-the-sources">The demo desk</a> has the
+commands and the hand count. The screens below start on <strong>day 1</strong>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 10-order-lifecycle.yaml — the lifecycle the orders' status column already has.</span>
+<span class="c1">#</span>
+<span class="c1"># Four declared states with aliases for the spellings the export really carries, a</span>
+<span class="c1"># transition graph, and a dormancy threshold that turns the declaration into a watched one.</span>
+<span class="c1"># `ANNULE` is declared and never seen; `EN LITIGE` and `Terminé` are seen and never declared.</span>
+<span class="c1"># Apply reports both — and refuses neither: a fact about the data is not a contradiction in</span>
+<span class="c1"># the declaration.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: 200, dataTruth.undeclared = EN LITIGE (2 rows) + Terminé (1), unobserved = [ANNULE],</span>
+<span class="c1">#         nullOrBlank = 1, keyNullOrBlank = 0.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-order-lifecycle</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">provenance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">declared</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_acme_desk_orders</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_no</span>
+<span class="w">  </span><span class="nt">dormancy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">after</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30d</span>
+<span class="w">  </span><span class="nt">states</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BROUILLON</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"Brouillon"</span>
+<span class="w">      </span><span class="nt">initial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EN_COURS</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"En</span><span class="nv"> </span><span class="s">préparation"</span>
+<span class="w">      </span><span class="nt">aliases</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">en cours</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">encours</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TERMINE</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"Terminée"</span>
+<span class="w">      </span><span class="nt">aliases</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">fini</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">terminal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ANNULE</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"Annulée"</span>
+<span class="w">      </span><span class="nt">terminal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">transitions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">BROUILLON</span><span class="p p-Indicator">],</span><span class="nt"> to</span><span class="p">:</span><span class="w"> </span><span class="nv">EN_COURS</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">BROUILLON</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">EN_COURS</span><span class="p p-Indicator">],</span><span class="nt"> to</span><span class="p">:</span><span class="w"> </span><span class="nv">ANNULE</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">EN_COURS</span><span class="p p-Indicator">],</span><span class="nt"> to</span><span class="p">:</span><span class="w"> </span><span class="nv">TERMINE</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>The same manifest, as the graph it declares:</p>
+<pre class="mermaid"><code>stateDiagram-v2
+  direction LR
+  [*] --&gt; BROUILLON
+  BROUILLON --&gt; EN_COURS
+  BROUILLON --&gt; ANNULE
+  EN_COURS --&gt; ANNULE
+  EN_COURS --&gt; TERMINE
+  TERMINE --&gt; [*]
+  ANNULE --&gt; [*]
+  note right of EN_COURS
+    «En préparation»
+    aliases: "en cours", "encours"
+    dormancy: unmoved 30d → alert
+  end note
+  note right of TERMINE
+    alias: "fini" — terminal
+  end note</code></pre>
+<p><code>lm workflow apply</code> prints what it stored, then the report: one line per disagreement between the
+declaration and the data. With <code>-o json</code>, the hub's answer: the report is under <code>dataTruth</code>.</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/10-order-lifecycle.yaml
+Applied workflow "acme-order-lifecycle" → connector.t_acme_desk_orders.status, scope desk
+  in the data, not declared: EN LITIGE (2 rows), Terminé (1 row)
+  declared, not in the data: ANNULE
+  status null or blank: 1 row
+$ lm workflow list
+NAME                  TABLE                         COLUMN  SCOPE  ENABLED
+acme-order-lifecycle  connector.t_acme_desk_orders  status  desk   true
+</code></pre></div>
+<p>One <code>200</code>, stored and indexed, with what the declaration and the data disagree on:</p>
+<ul>
+<li><code>EN LITIGE</code> sits on two orders and nobody declared it; <code>Terminé</code> (with its accent) on one;</li>
+<li><code>ANNULE</code> is declared and no order has reached it;</li>
+<li>one order has no status at all.</li>
+</ul>
+<p><code>EN LITIGE</code> is deliberately <strong>not</strong> in the graph: it stays visible in the report, and the
+<a href="#an-undeclared-value-can-never-be-terminal">dormancy sweep</a> still watches it.</p>
+<h2 id="the-manifest">The manifest</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>metadata.name</code></td>
+<td>yes</td>
+<td>kebab-case identifier (<code>[a-z0-9-]+</code>) — the name <code>apply</code> updates under, and the alert's <code>decision.dormant.&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>spec.scope</code></td>
+<td>yes</td>
+<td>the business scope the lifecycle belongs to; must be a <strong>discovered</strong> scope — <a href="#the-scope-must-exist-the-table-need-not">below</a></td>
+</tr>
+<tr>
+<td><code>spec.provenance</code></td>
+<td>yes</td>
+<td><strong>must be <code>declared</code></strong> — the only accepted value; the chat cites it</td>
+</tr>
+<tr>
+<td><code>spec.on.table</code></td>
+<td>yes</td>
+<td>the table to watch — an ingest table (<code>connector.t_&lt;table&gt;</code>) or a fused entity view (<code>connector.v_&lt;entity&gt;</code>, always lower-case)</td>
+</tr>
+<tr>
+<td><code>spec.on.column</code></td>
+<td>yes</td>
+<td>the column whose values this taxonomy explains — <strong>whatever the source called it</strong></td>
+</tr>
+<tr>
+<td><code>spec.on.key</code></td>
+<td>no (required by <code>dormancy</code> and <code>due</code>)</td>
+<td>the business key linking a document's successive versions</td>
+</tr>
+<tr>
+<td><code>spec.on.order</code></td>
+<td>no (required by <code>dormancy</code> on a fused view)</td>
+<td>the column ordering a document's versions: a date, a timestamp, a number, or ISO 8601 text with <code>Z</code> or an offset — requires <code>spec.on.key</code>, <a href="#the-current-version-speconorder">below</a></td>
+</tr>
+<tr>
+<td><code>spec.check.trigger</code></td>
+<td>no</td>
+<td><code>ingestion</code>: re-check the declaration after each completed run that writes <code>spec.on.table</code> — <a href="#after-each-import-speccheck">below</a>. The apply always checks; any other value is refused</td>
+</tr>
+<tr>
+<td><code>spec.dormancy.after</code></td>
+<td>no (required by <code>dormancy</code>)</td>
+<td>the sweep threshold, <code>[0-9]+[mhd]</code> (<code>30d</code>) — requires <code>spec.on.key</code>, and <code>spec.on.order</code> on a fused view</td>
+</tr>
+<tr>
+<td><code>spec.dormancy.message</code></td>
+<td>no</td>
+<td>the alert text, in the team's language: <code>{doc_key}</code>, <code>{state}</code>, <code>{state_label}</code>, <code>{since}</code>, <code>{first_observed_at}</code>, <code>{threshold}</code>, <code>{workflow}</code>; any other <code>{name}</code> is a column of <code>spec.on.table</code>, checked at apply when the table exists — <a href="#what-a-decision-carries">what a decision carries</a>. Absent: the English default <a href="#the-alert-verbatim">below</a></td>
+</tr>
+<tr>
+<td><code>spec.dormancy.fields</code></td>
+<td>no</td>
+<td>columns of <code>spec.on.table</code> sent in the payload's <code>fields</code> and not in the sentence (<code>[owner_email]</code>)</td>
+</tr>
+<tr>
+<td><code>spec.due.column</code></td>
+<td>no (required by <code>due</code>)</td>
+<td>the column whose date is the document's deadline — an ingest table or a fused view</td>
+</tr>
+<tr>
+<td><code>spec.due.states</code></td>
+<td>no (required by <code>due</code>)</td>
+<td>the declared, <strong>non-terminal</strong> state codes in which a passed date makes the document overdue (<code>[CONFIRMED]</code>); an alias, an undeclared or a terminal state is refused</td>
+</tr>
+<tr>
+<td><code>spec.due.zone</code></td>
+<td>no</td>
+<td>the time zone a date-only column is read in (<code>Europe/Paris</code>): due at the end of that day there. Absent: <code>UTC</code>. An unknown zone is refused</td>
+</tr>
+<tr>
+<td><code>spec.due.message</code></td>
+<td>no</td>
+<td>the alert's sentence: <code>{doc_key}</code>, <code>{state}</code>, <code>{state_label}</code>, <code>{due}</code>, <code>{workflow}</code>; any other <code>{name}</code> is a column of <code>spec.on.table</code>, checked at apply when the table exists</td>
+</tr>
+<tr>
+<td><code>spec.due.fields</code></td>
+<td>no</td>
+<td>columns of <code>spec.on.table</code> sent in the payload's <code>fields</code> and not in the sentence</td>
+</tr>
+<tr>
+<td><code>spec.states[]</code></td>
+<td>yes (≥ 1)</td>
+<td>the declared states</td>
+</tr>
+<tr>
+<td><code>spec.transitions[]</code></td>
+<td>no</td>
+<td>the allowed edges of the graph</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>states[]</code></strong> — <code>code</code> (required; unique, case- and trim-insensitive), <code>label</code>, <code>aliases[]</code> (the
+dirty spellings that resolve to this code), <code>initial</code> (<strong>exactly one</strong> state must set it <code>true</code>),
+<code>terminal</code> (a terminal state may carry no outgoing transition).</p>
+<p><strong><code>transitions[]</code></strong> — <code>from[]</code> (one edge can fan in from several states) and <code>to</code>.</p>
+<p>An unknown key is refused, at every level:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/67-refused-unknown-key.yaml
+Error: API error 400: unknown key(s) in the manifest: spec.after — kind:Workflow honors root {apiVersion, kind, metadata, spec}, metadata {name}, spec {check, dormancy, due, on, provenance, scope, states, transitions}, spec.on {column, key, order, table}, spec.check {trigger}, spec.dormancy {after, fields, message}, spec.due {column, fields, message, states, zone}, states[] {aliases, code, initial, label, terminal}, transitions[] {from, to}
+</code></pre></div>
+<h3 id="the-scope-must-exist-the-table-need-not">The scope must exist, the table need not</h3>
+<p><code>spec.scope</code> must be a discovered scope; an unknown one is a <code>404</code>, as for a process:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/65-refused-unknown-scope.yaml
+Error: API error 404: no schema for scope 'dsk' — run discovery first
+</code></pre></div>
+<p>The table is <strong>not</strong> checked: you may declare a lifecycle before ingesting the data. The report
+then says <code>the table is not there yet</code>.</p>
+<h3 id="names-the-source-chose">Names the source chose</h3>
+<p><code>on.column</code> and <code>on.key</code> are the names <strong>your source</strong> uses, copied as they are — a Kafka
+message's JSON keys become columns verbatim:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_Commandes</span>
+<span class="w">  </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">"Statut</span><span class="nv"> </span><span class="s">Commande"</span>
+<span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">"N°</span><span class="nv"> </span><span class="s">Commande"</span>
+</code></pre></div>
+<p>Quote them in the YAML if they contain spaces or punctuation; the hub adds the SQL quotes.</p>
+<p><code>on.table</code> must be a table ingestion owns — <code>connector.t_&lt;table&gt;</code>, or <code>connector.v_&lt;entity&gt;</code> —
+spelled the way the hub created it (a connector's target keeps your capitals, a fused view is
+lower case, neither contains a space). Anything else is refused, the hub's own tables included:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/66-refused-foreign-table.yaml
+Error: API error 400: spec.on.table is required and must name a table in the 'connector' schema that ingestion owns (connector.t_&lt;table&gt;) or a fused entity view (connector.v_&lt;entity&gt;, always lower-case), spelled the way the hub created it (letters, digits and underscores — a space is a typo): identity.app_user
+</code></pre></div>
+<p>A fused view carries a <strong>taxonomy</strong> as it is. A <code>dormancy</code> on one needs <code>spec.on.order</code>, because a
+view has no ingest order: <a href="#the-current-version-speconorder">the current version</a>.</p>
+<h3 id="one-column-one-lifecycle">One column, one lifecycle</h3>
+<p>A <em>different</em> name declaring an already-declared <code>on.table</code> + <code>on.column</code> is refused, naming the
+holder:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/64-refused-same-column.yaml
+Error: API error 400: column connector.t_acme_desk_orders.status already has a declared lifecycle: workflow 'acme-order-lifecycle' — a column has exactly one lifecycle; re-apply under the name 'acme-order-lifecycle' to update it
+</code></pre></div>
+<p><code>apply</code> on the same name <strong>is</strong> the update. The rule is per tenant.</p>
+<h2 id="alias-semantics">Alias semantics</h2>
+<p>Alias and code matching is <strong>trim + case-insensitive</strong>: <code>"TERMINE "</code>, <code>"fini"</code>, <code>"En cours"</code> all
+resolve. On the demo desk, day 1:</p>
+<table>
+<thead>
+<tr>
+<th>Status as written</th>
+<th>Rows</th>
+<th>Resolves to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>En cours</code>, <code>encours</code></td>
+<td>4</td>
+<td><code>EN_COURS</code></td>
+</tr>
+<tr>
+<td><code>fini</code>, <code>TERMINE</code></td>
+<td>2</td>
+<td><code>TERMINE</code></td>
+</tr>
+<tr>
+<td><code>BROUILLON</code></td>
+<td>2</td>
+<td><code>BROUILLON</code></td>
+</tr>
+<tr>
+<td><code>EN LITIGE</code></td>
+<td>2</td>
+<td><strong>undeclared</strong></td>
+</tr>
+<tr>
+<td><code>Terminé</code></td>
+<td>1</td>
+<td><strong>undeclared</strong> — an accent is not an alias anyone declared</td>
+</tr>
+<tr>
+<td><em>(empty)</em></td>
+<td>1</td>
+<td><code>nullOrBlank</code></td>
+</tr>
+</tbody>
+</table>
+<p>Contradictions in the declaration are refused:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/61-refused-alias-collision.yaml
+Error: API error 400: alias 'en_cours' on state BROUILLON collides with state code
+$ lm workflow apply -f docs/apps/demo/workflows/60-refused-two-initial.yaml
+Error: API error 400: exactly one state must be initial: true (found 2)
+$ lm workflow apply -f docs/apps/demo/workflows/62-refused-terminal-outgoing.yaml
+Error: API error 400: terminal state 'TERMINE' has an outgoing transition
+</code></pre></div>
+<ul>
+<li>an alias that <strong>collides with a state code</strong>;</li>
+<li>an alias <strong>declared on two different states</strong>;</li>
+<li>not <strong>exactly one</strong> <code>initial: true</code>;</li>
+<li>a <code>terminal: true</code> state with an outgoing transition.</li>
+</ul>
+<h2 id="the-data-truth-report-never-blocks">The data-truth report — never blocks</h2>
+<p><code>apply</code> stores the manifest first, then compares it with what the column contains. The
+comparison never becomes a refusal. Read three lines:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th><code>-o json</code> field</th>
+<th>Means</th>
+<th>On the demo desk (day 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>in the data, not declared</code></td>
+<td><code>undeclared</code></td>
+<td>values in the data that no state declares, each with its row count</td>
+<td><code>EN LITIGE</code> ×2, <code>Terminé</code> ×1</td>
+</tr>
+<tr>
+<td><code>declared, not in the data</code></td>
+<td><code>unobserved</code></td>
+<td>declared states never seen in the data</td>
+<td><code>ANNULE</code></td>
+</tr>
+<tr>
+<td><code>&lt;column&gt; null or blank</code></td>
+<td><code>nullOrBlank</code></td>
+<td>rows with no status</td>
+<td><code>status null or blank: 1 row</code></td>
+</tr>
+</tbody>
+</table>
+<p>Nothing to report: <code>the data matches the declaration</code>.</p>
+<details class="note">
+<summary>The other lines</summary>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th><code>-o json</code> field</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>the table is not there yet</code></td>
+<td><code>tableMissing</code></td>
+<td>the table does not exist yet</td>
+</tr>
+<tr>
+<td><code>spec.on.key: the table has no such column</code></td>
+<td><code>keyColumnMissing</code></td>
+<td><code>spec.on.key</code> names a column the table does not have</td>
+</tr>
+<tr>
+<td><code>key null or blank</code></td>
+<td><code>keyNullOrBlank</code></td>
+<td>rows with no key: the dormancy watch skips them</td>
+</tr>
+<tr>
+<td><code>spec.due.column …</code></td>
+<td><code>dueProblem</code></td>
+<td>why <code>spec.due.column</code> cannot give a deadline; <code>null</code> when it can</td>
+</tr>
+<tr>
+<td><code>spec.on.order: N rows with no valid order, their documents are never watched</code></td>
+<td><code>invalidOrderValues</code></td>
+<td>rows whose order value cannot place them; <code>null</code> without <code>spec.on.order</code></td>
+</tr>
+<tr>
+<td><code>N keys hold several rows: declare spec.on.order to pick one</code></td>
+<td><code>keysWithSeveralRows</code></td>
+<td>a due date over a view without <code>spec.on.order</code>: the sweep reads every one of those rows</td>
+</tr>
+<tr>
+<td><code>not verified until the table exists: …</code></td>
+<td><code>columnsUnverified</code></td>
+<td>the declared columns an absent table left unchecked</td>
+</tr>
+<tr>
+<td><code>the data could not be checked</code></td>
+<td><code>checkUnavailable</code>, <code>unavailableReason</code></td>
+<td>the comparison could not run: the other fields are empty, <strong>not</strong> "the data agrees". Re-apply once fixed</td>
+</tr>
+</tbody>
+</table>
+<p>The comparison reads the 200 most frequent values: a rare undeclared value can be missed.</p>
+</details>
+<h2 id="after-each-import-speccheck">After each import — <code>spec.check</code></h2>
+<p>The report above is computed when you apply. Without more, a spelling that the next night's export
+brings stays unseen until someone re-applies. <code>spec.check.trigger: ingestion</code> runs the same comparison after
+each completed run that writes <code>spec.on.table</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_orders</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
+<span class="w">  </span><span class="nt">check</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ingestion</span>
+</code></pre></div>
+<ul>
+<li>A value that no earlier report named raises <strong>one</strong> <code>workflow.undeclared.&lt;name&gt;</code> event.</li>
+<li>What the last apply reported is not said again: you have read it. A value still undeclared on the
+  next run is not said twice.</li>
+<li>A re-apply resets what is known to its own report. A value the new declaration covers is forgotten,
+  and is news again if a later declaration drops it.</li>
+<li>A failed or cancelled run checks nothing. A fused view (<code>connector.v_*</code>) is checked after a run that
+  writes a table its entity fuses or looks up.</li>
+</ul>
+<p>The event reaches what you subscribe to it, like any other: <code>lm integration add --events 'workflow.undeclared.*'</code>
+or an e-mail rule (<a href="../../outputs/">Outputs</a>). It never appears in the inbox, which holds <code>decision.*</code> only.
+Its payload:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>1 new value of connector.t_orders.status matches no state of workflow orders-status — declare it as an alias, or correct the source</code>. It counts the values and never quotes them</td>
+</tr>
+<tr>
+<td><code>workflow</code>, <code>table</code>, <code>column</code></td>
+<td>what was checked</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td>the new values, each <code>{value, rows}</code></td>
+</tr>
+<tr>
+<td><code>undeclared</code></td>
+<td>how many undeclared values the column holds now, new or not</td>
+</tr>
+<tr>
+<td><code>null_or_blank</code></td>
+<td>rows with no status</td>
+</tr>
+<tr>
+<td><code>run_id</code></td>
+<td>the run that triggered the check</td>
+</tr>
+</tbody>
+</table>
+<p>The comparison costs one <code>GROUP BY</code> on the column per completed run of the table. On a large table
+imported every minute, that is one aggregate a minute.</p>
+<h2 id="what-the-chat-answers-from-it">What the chat answers from it</h2>
+<p><strong>lumnik Pro.</strong> Two gestures, two kinds of answer:</p>
+<table>
+<thead>
+<tr>
+<th>You ask with</th>
+<th>It answers about</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lm chat</code>, then <code>:scope desk</code></td>
+<td>the <strong>lifecycle</strong>: states, aliases, transitions</td>
+</tr>
+<tr>
+<td><code>lm ask --scope desk "…"</code>, the PWA's Chat tab</td>
+<td>the <strong>rows</strong>: a document's current status</td>
+</tr>
+</tbody>
+</table>
+<p>The lifecycle, asked in the chat:</p>
+<div class="highlight"><pre><span></span><code>$ lm chat
+[corpus=* scope=default topK=10] &gt; :scope desk
+scope → desk
+
+[corpus=* scope=desk topK=10] &gt; quels sont les états d une commande et quelles transitions sont autorisées ?
+Les états d'une commande sont :
+
+* Brouillon
+* En cours
+* Terminée (ou finie)
+* Annulée
+
+ Les transitions autorisées entre ces états sont :
+
+* Du brouillon vers l'état en cours ou l'état annulé
+* De l'état en cours vers l'état annulé ou le terme
+</code></pre></div>
+<p>Every transition it names is declared. The wording varies from one run to the next; the states
+and transitions must match the manifest. The chat does not know which state an order is in. <code>lm ask</code>
+does:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask --scope desk "Dans quel statut est la commande SO-000004 ?"
+La commande SO-000004 est en statut "BROUILLON".
+  data as of: 2026-10-16T08:43:46.474408Z (last completed run)
+
+  STATUS
+  BROUILLON
+  1 row returned
+
+  SQL: SELECT status FROM "connector"."t_acme_desk_orders" WHERE order_no = 'SO-000004'
+LIMIT 500
+</code></pre></div>
+<h2 id="dormancy-the-memory-of-the-breathing">Dormancy — the memory of the breathing</h2>
+<p>A legacy status is overwritten in place: the raw table says an order <em>is</em> <code>EN_COURS</code>, not since
+when. A scheduled sweep records each document's state from the moment lumnik starts watching,
+and alerts when one has sat unmoved, in a non-terminal state, past the declared threshold.</p>
+<ul>
+<li>Two fields switch it on: <code>spec.on.key</code> (<code>order_no</code> — links a document's successive rows) and
+  <code>spec.dormancy.after</code> (<code>30d</code>, any <code>[0-9]+[mhd]</code>).</li>
+<li>The sweep runs every 15 minutes (<code>lumnik.workflow.sweep.every</code>,
+  <a href="../../operations/observability/#scheduled-background-work">Observability</a>).</li>
+<li><strong>The clock starts at lumnik's first sighting</strong>, not at the real stall: declare <code>after: 14d</code>
+  today over orders stuck for weeks, and the earliest alert is in fourteen days.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ lm workflow apply -f docs/apps/demo/workflows/63-refused-dormancy-no-key.yaml
+Error: API error 400: spec.dormancy requires spec.on.key (dormancy is per-document; the key links a document's versions)
+</code></pre></div>
+<p>The tape after the first sweep that saw the desk (day 1):</p>
+<div class="highlight"><pre><span></span><code>$ lm observations list
+WORKFLOW              DOC        STATE      SINCE             ALERTED
+acme-order-lifecycle  SO-000001  EN_COURS   2026-10-19 01:51  
+acme-order-lifecycle  SO-000002  TERMINE    2026-10-19 01:51  
+acme-order-lifecycle  SO-000003  TERMINE    2026-10-19 01:51  
+acme-order-lifecycle  SO-000004  BROUILLON  2026-10-19 01:51  
+acme-order-lifecycle  SO-000005  EN_COURS   2026-10-19 01:51  
+acme-order-lifecycle  SO-000006  EN LITIGE  2026-10-19 01:51  
+acme-order-lifecycle  SO-000007  EN_COURS   2026-10-19 01:51  
+acme-order-lifecycle  SO-000008  Terminé    2026-10-19 01:51  
+acme-order-lifecycle  SO-000010  EN LITIGE  2026-10-19 01:51  
+acme-order-lifecycle  SO-000011  BROUILLON  2026-10-19 01:51  
+acme-order-lifecycle  SO-000012  EN_COURS   2026-10-19 01:51  
+$ lm observations stats
+WORKFLOW              WATCHED  DORMANT  MEDIAN_DETECTION_S
+acme-order-lifecycle  11       0        -
+</code></pre></div>
+<p>SO-000009 is absent: it has no status, so there is no state to watch. The states are the
+<strong>resolved</strong> codes where an alias matched (<code>fini</code> reads <code>TERMINE</code>), the raw value where none did.</p>
+<p>For the next screens the threshold was shortened to <code>after: 1m</code> and the manifest re-applied
+under the same name (the shipped file keeps <code>30d</code>). Then <strong>day 2</strong> was loaded:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span>cp<span class="w"> </span>docs/apps/demo/data/acme-orders-day2.csv<span class="w"> </span>hub:/tmp/acme-desk/acme-orders.csv
+lm<span class="w"> </span>connector<span class="w"> </span>run<span class="w"> </span>acme-desk-orders
+</code></pre></div>
+<p>Two ticks later:</p>
+<div class="highlight"><pre><span></span><code>$ lm observations list
+WORKFLOW              DOC        STATE      SINCE             ALERTED
+acme-order-lifecycle  SO-000001  EN_COURS   2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000002  TERMINE    2026-10-19 01:51  
+acme-order-lifecycle  SO-000003  TERMINE    2026-10-19 01:51  
+acme-order-lifecycle  SO-000004  BROUILLON  2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000005  EN_COURS   2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000006  EN LITIGE  2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000007  EN_COURS   2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000008  Terminé    2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000010  EN LITIGE  2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000011  BROUILLON  2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000012  EN_COURS   2026-10-19 01:51  2026-10-19 02:06
+acme-order-lifecycle  SO-000013  EN LITIGE  2026-10-19 02:06  2026-10-19 02:21
+$ lm observations stats
+WORKFLOW              WATCHED  DORMANT  MEDIAN_DETECTION_S
+acme-order-lifecycle  12       10       900
+</code></pre></div>
+<ul>
+<li><strong>Ten alerts</strong>: nine at the first tick past the threshold, then <code>SO-000013</code> — new on day 2,
+  first seen at 02:06 — one tick later.</li>
+<li>The two <code>TERMINE</code> orders never alert: a terminal state is excluded.</li>
+<li><code>SO-000008</code> <strong>does</strong> alert: <code>Terminé</code>, with its accent, matched no alias, and <a href="#an-undeclared-value-can-never-be-terminal">an undeclared
+  value can never be terminal</a>.</li>
+<li>The median detection delay is 900 s — one sweep interval, the floor.</li>
+</ul>
+<p>What each alert says, in the inbox:</p>
+<div class="highlight"><pre><span></span><code>$ lm inbox --limit 3
+ID  WHEN      PROCESS                        MESSAGE                                                                                                                                  ENTITY_KEY
+47  just now  workflow:acme-order-lifecycle  SO-000013: observed unmoved in "EN LITIGE" since 2026-10-19 (first observed 2026-10-19) — declared threshold 1m in acme-order-lifecycle  SO-000013
+46  15min     workflow:acme-order-lifecycle  SO-000012: observed unmoved in "EN_COURS" since 2026-10-18 (first observed 2026-10-18) — declared threshold 1m in acme-order-lifecycle   SO-000012
+45  15min     workflow:acme-order-lifecycle  SO-000011: observed unmoved in "BROUILLON" since 2026-10-18 (first observed 2026-10-18) — declared threshold 1m in acme-order-lifecycle  SO-000011
+note: result hit the limit of 3 — there may be more
+</code></pre></div>
+<p><code>ENTITY_KEY</code> is the business key. The wording names the date lumnik started watching, the date
+it first saw the document and the declared threshold — never how long the order sat in the ERP.
+The message's dates are UTC, while <code>lm observations list</code> shows your terminal's time zone: the
+01:51 (Paris) sighting was 23:51 UTC the day before.</p>
+<h2 id="due-date-a-deadline-the-data-carries">Due date — a deadline the data carries</h2>
+<p>Dormancy counts from the day lumnik first saw a document. A due date counts from a date the data
+carries: a delivery promised for 20 October, still on the road on the 24th, is late.</p>
+<p>The desk's carrier export holds a promised date per delivery:</p>
+<div class="highlight"><pre><span></span><code>delivery_no,status,promised_on
+DL-1,EN_ROUTE,2026-10-20
+DL-2,LIVREE,2026-10-20
+DL-3,EN_ROUTE,2030-01-15
+DL-4,EN_ROUTE,
+</code></pre></div>
+<p><strong>Type the date at the door.</strong> A CSV column is text, and a due date must be a date. The connector
+types it with <a href="../../connectors/transformers/#parse-date-dates-are-31122019"><code>parse-date</code></a>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cell</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parse-date</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> column</span><span class="p">:</span><span class="w"> </span><span class="nv">promised_on</span><span class="p p-Indicator">,</span><span class="nt"> formats</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"yyyy-MM-dd"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Without it, the apply says so, and no alert is ever raised:</p>
+<div class="highlight"><pre><span></span><code>  spec.due.column promised_on is text, not a date: no deadline can be read from it
+</code></pre></div>
+<p>The workflow declares the deadline:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 20-delivery-lifecycle.yaml — a delivery promised for a date and still on the road is late.</span>
+<span class="c1">#</span>
+<span class="c1"># Expect: one decision.overdue.acme-delivery-lifecycle, for DL-1 (promised 2026-10-20, EN_ROUTE).</span>
+<span class="c1">#         DL-2 is delivered; DL-3 is promised for 2030; DL-4 has no date.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme-delivery-lifecycle</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">provenance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">declared</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.t_acme_desk_deliveries</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery_no</span>
+<span class="w">  </span><span class="nt">due</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">promised_on</span>
+<span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">EN_ROUTE</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Europe/Paris</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"Livraison</span><span class="nv"> </span><span class="s">{doc_key}</span><span class="nv"> </span><span class="s">promise</span><span class="nv"> </span><span class="s">pour</span><span class="nv"> </span><span class="s">le</span><span class="nv"> </span><span class="s">{due},</span><span class="nv"> </span><span class="s">toujours</span><span class="nv"> </span><span class="s">{state_label}"</span>
+<span class="w">  </span><span class="nt">states</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EN_ROUTE</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"en</span><span class="nv"> </span><span class="s">route"</span>
+<span class="w">      </span><span class="nt">initial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LIVREE</span>
+<span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"livrée"</span>
+<span class="w">      </span><span class="nt">terminal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">transitions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> from</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">EN_ROUTE</span><span class="p p-Indicator">],</span><span class="nt"> to</span><span class="p">:</span><span class="w"> </span><span class="nv">LIVREE</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-desk-deliveries
+$ lm workflow apply -f docs/apps/demo/workflows/20-delivery-lifecycle.yaml -o json | jq -r .dataTruth.dueProblem
+null
+$ lm inbox --type decision.overdue.acme-delivery-lifecycle
+ID  WHEN      PROCESS                           MESSAGE                                                       ENTITY_KEY
+66  just now  workflow:acme-delivery-lifecycle  Livraison DL-1 promise pour le 2026-10-20, toujours en route  DL-1
+</code></pre></div>
+<ul>
+<li><strong>DL-1</strong> is late: promised for 20 October, still <code>EN_ROUTE</code>. <code>DL-2</code> is delivered. <code>DL-3</code> is
+  promised for 2030. <code>DL-4</code> has no date. None of them alerts.</li>
+<li>The check runs every 15 minutes, like dormancy: the alert lands in the inbox within that time.</li>
+<li><strong>One alert per deadline.</strong> A date moved to another past day alerts again; a date moved to the
+  future waits.</li>
+<li><code>zone</code> says where the deadline falls: a date passes at the end of that day in <code>zone</code>. Without
+  <code>zone</code>, UTC.</li>
+<li>A fused entity view is accepted. With several rows per key, declare <code>spec.on.order</code>: without it the
+  sweep reads every row, and the apply report counts the keys concerned.</li>
+<li>Files: <code>data/acme-deliveries.csv</code>, <code>sources/80-deliveries.yaml</code>,
+  <code>workflows/20-delivery-lifecycle.yaml</code>, landed like the <a href="../demo-desk/#landing-the-sources">demo desk</a>.</li>
+</ul>
+<h2 id="the-current-version-speconorder">The current version — <code>spec.on.order</code></h2>
+<p>A sweep needs one version per document. On an ingest table it takes the last one ingested. That is
+wrong when the source sends events out of order, as Kafka can, and impossible on a fused view, which
+has no ingest order and may hold one row per event. <code>spec.on.order</code> names the column that orders a
+document's versions:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.v_freezerdoorevent</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">door_state</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">door_incident_id</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">occurred_at</span>
+<span class="w">  </span><span class="nt">dormancy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">after</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Watched</th>
+<th>Without <code>order</code></th>
+<th>With <code>order</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connector.t_*</code></td>
+<td>the last version ingested</td>
+<td>the greatest <code>order</code> value; ingestion breaks a tie</td>
+</tr>
+<tr>
+<td><code>connector.v_*</code>, dormancy</td>
+<td>refused at apply</td>
+<td>the greatest <code>order</code> value; a tie follows the rule below</td>
+</tr>
+<tr>
+<td><code>connector.v_*</code>, due date</td>
+<td>every row, as before</td>
+<td>the greatest <code>order</code> value; a tie follows the rule below</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The column.</strong> A date, a timestamp or a number orders as itself, when it is finite: <code>NaN</code> and
+<code>infinity</code> are no position. Text must be an ISO 8601 instant with an explicit offset, and is
+compared as an instant, never as text:</p>
+<ul>
+<li>read: <code>2026-10-26T10:00:00Z</code>, <code>2026-10-26T10:00:00.123Z</code>, <code>2026-10-26T11:00:00+01:00</code>;</li>
+<li>never read: <code>2026-10-26T10:00:00</code> (no zone), <code>2026-10-26</code> (a date, not an instant), <code>01/07/2026</code>, a blank.</li>
+</ul>
+<p><code>2026-10-26T12:00:00+03:00</code> is <code>09:00Z</code>: it comes before <code>2026-10-26T10:00:00Z</code>. Two offsets of one
+instant are a tie.</p>
+<p><strong>A tie on a view.</strong> When the latest rows of one document disagree on the state, or on the deadline
+for a due date, the document is ambiguous: nothing is decided about it. When they agree, one row is
+picked by the view's canonical key. That pick is deterministic, not "the latest".</p>
+<p><strong>Unreadable documents.</strong> A document with one version whose order value is invalid or empty is not
+watched: lumnik cannot tell which version is current, and a bad date must never make an older state
+current. It raises nothing, its <code>SINCE</code> restarts on every sweep while it stays unreadable, and its
+history stays on the tape. When it is readable again, its clock runs from there.</p>
+<p>On an ingest table, a later valid version does not clear the bad one: the table keeps every version.</p>
+<div class="highlight"><pre><span></span><code>OPEN    2026-10-26T10:00:00Z
+CLOSED  not-a-date
+CLOSED  2026-10-26T10:05:00Z     ← the document stays unreadable
+</code></pre></div>
+<p>Correct or remove the malformed source row, or rebuild the table from a corrected full export. The
+hub log names the documents: <code>dormancy: 1 documents of tenant 1 workflow … are not watched: a version
+has no valid spec.on.order value — correct or remove the malformed source rows (e.g. DOOR-17)</code>. It says
+so again only when their number changes.</p>
+<p><strong>What it costs.</strong> At apply, the report reads the whole table to count the invalid values. On a fused
+view, every sweep computes the view once and ranks it: about 2 seconds for 100,000 documents, on top of
+the observations it writes.</p>
+<h2 id="what-a-decision-carries">What a decision carries</h2>
+<p>A dormancy or due decision can say where the document is and who must act. A <code>{name}</code> its message
+does not reserve is a column of <code>spec.on.table</code>, read from the very version the decision is about;
+on a fused view, that includes the columns its entity joins. <code>fields</code> lists columns the payload
+carries and the sentence does not:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connector.v_freezerdoorevent</span>
+<span class="w">    </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">door_state</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">door_incident_id</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">occurred_at</span>
+<span class="w">  </span><span class="nt">dormancy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">after</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"{freezer_id}</span><span class="nv"> </span><span class="s">({laboratory}):</span><span class="nv"> </span><span class="s">door</span><span class="nv"> </span><span class="s">{state}</span><span class="nv"> </span><span class="s">since</span><span class="nv"> </span><span class="s">{since}.</span><span class="nv"> </span><span class="s">Owner:</span><span class="nv"> </span><span class="s">{owner}"</span>
+<span class="w">    </span><span class="nt">fields</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">owner_email</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>FZ-17 (Cryobiology Lab): door OPEN since 2026-10-26. Owner: Dr. Lina Moreau
+</code></pre></div>
+<p>The payload keeps its usual keys and gains <code>fields</code>: each cited or declared column, once, with its
+value.</p>
+<ul>
+<li><strong>A reserved name wins in the sentence.</strong> With <code>message: "{doc_key} is still {state}"</code> and
+  <code>fields: [state]</code>, <code>{state}</code> is the workflow's resolved state (<code>OPEN</code>) and <code>fields.state</code> is the
+  raw value of a source column named <code>state</code> (<code>open</code>). The two differ by design.</li>
+<li>An empty value renders as nothing in the sentence and stays <code>null</code> in <code>fields</code>. A timestamp is
+  its UTC instant in both. A number loses its trailing zeros in the sentence (<code>-67.4</code>); <code>fields</code>
+  keeps it as the column holds it (<code>-67.4000</code>). A <a href="../processes/">Process</a> decision does the same.</li>
+<li>The order of the keys in <code>fields</code> is not part of the contract: the event log stores the payload
+  as <code>jsonb</code>.</li>
+<li>Without a cited column or <code>fields</code>, the payload is exactly what it was before.</li>
+<li>At apply, a cited or declared name the table lacks is refused, naming it. A sentence's refusal
+  also lists the reserved names, in case one was misspelt (<code>{sinse}</code>). A table not ingested yet is
+  not checked: the report says <code>not verified until the table exists</code>, with the names.</li>
+<li>A cited column the table no longer has, after an entity re-apply, renders empty: the alert still
+  fires, and the hub log says so once (<code>… cites owner, which … no longer has: it renders empty</code>).
+  Stop citing it and cite it again while it is still missing: the log says it again. So does a
+  workflow disabled or deleted, then applied again.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Who receives <code>fields</code></p>
+<p>Fields included in a decision payload can leave the hub through tenant-wide webhooks, e-mail
+rules and the administrative event stream. Declare only the columns those outputs may receive.
+The inbox shows a decision to the workflow's scope; the event itself carries no scope.</p>
+</div>
+<h2 id="applying-it">Applying it</h2>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>workflow<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/apps/demo/workflows/10-order-lifecycle.yaml
+lm<span class="w"> </span>workflow<span class="w"> </span>list
+lm<span class="w"> </span>workflow<span class="w"> </span>get<span class="w"> </span>acme-order-lifecycle<span class="w">      </span><span class="c1"># the stored manifest, verbatim, comments included</span>
+lm<span class="w"> </span>observations<span class="w"> </span>list<span class="w">                      </span><span class="c1"># the tape: what has not moved, stillest first</span>
+lm<span class="w"> </span>observations<span class="w"> </span>stats<span class="w">                     </span><span class="c1"># per workflow: watched, dormant, median detection delay</span>
+lm<span class="w"> </span>inbox<span class="w">                                  </span><span class="c1"># where decision.dormant.&lt;name&gt; lands</span>
+</code></pre></div>
+<p>Turn it off, or remove it:</p>
+<div class="highlight"><pre><span></span><code>$ lm workflow disable acme-order-lifecycle
+workflow acme-order-lifecycle enabled=false
+$ lm workflow list
+NAME                  TABLE                         COLUMN  SCOPE  ENABLED
+acme-order-lifecycle  connector.t_acme_desk_orders  status  desk   false
+$ lm workflow enable acme-order-lifecycle
+workflow acme-order-lifecycle enabled=true
+$ lm workflow rm acme-order-lifecycle
+workflow acme-order-lifecycle deleted
+$ lm workflow rm acme-order-lifecycle
+Error: API error 404: unknown workflow: acme-order-lifecycle
+</code></pre></div>
+<p><code>disable</code> stops the sweep (no new alerts) and removes the lifecycle from chat, keeping the
+manifest and the tape; <code>enable</code> restores both. <code>rm</code> removes it for good, with no prompt — its
+tape too (<code>lm observations stats</code> no longer lists it). Each gesture, and every apply, is recorded in the <a href="../../security/#the-audit-trail">audit trail</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Role</th>
+<th>Scope-bound</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lm workflow apply</code>, <code>list</code>, <code>get</code>, <code>disable</code>, <code>enable</code>, <code>rm</code></td>
+<td><code>lm_integrator</code></td>
+<td>yes — outside your grants, <code>403 scope not granted</code>; <code>list</code> shows only your scopes</td>
+</tr>
+<tr>
+<td><code>lm observations list</code>, <code>stats</code></td>
+<td><code>lm_integrator</code> <strong>and</strong> <code>lm_admin</code> (or <code>lm_superadmin</code>)</td>
+<td>yes — they list only the workflows of your scopes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to">How to…</h2>
+<h3 id="declare-the-lifecycle-a-legacy-status-column-already-has">Declare the lifecycle a legacy status column already has</h3>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>workflow<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>docs/apps/demo/workflows/10-order-lifecycle.yaml
+lm<span class="w"> </span>workflow<span class="w"> </span>get<span class="w"> </span>acme-order-lifecycle
+</code></pre></div>
+<p><strong>Result:</strong> the manifest is stored and indexed in one <code>200</code>, with the data-truth report. The
+semantic chat in that scope now answers transition questions from the declared graph.</p>
+<h3 id="get-told-when-a-document-stops-moving">Get told when a document stops moving</h3>
+<p>The demo manifest already carries <code>spec.on.key</code> and <code>spec.dormancy.after</code>: applying it switches
+the sweep on. Alerts land in <code>lm inbox</code> (and the PWA's <em>Inbox</em> tab) for users holding the
+workflow's scope and for users with no <code>scope:</code> role. To push them to an external system,
+<code>lm integration add</code> (<a href="../processes/#delivery-is-opt-in">Processes</a>).</p>
+<p><strong>Don't treat the inbox as a register of everything asleep.</strong> A document alerts once per stall,
+and the alert ages out with the event log (30 days by default). The tape keeps it — see
+<a href="#re-alert-semantics">Re-alert semantics</a>.</p>
+<h3 id="add-the-value-the-report-says-nobody-declared">Add the value the report says nobody declared</h3>
+<p>The report named <code>EN LITIGE</code> (<code>in the data, not declared</code>). Add it as a state (or an alias of one) and re-apply
+under the same name. <strong>Result:</strong> the report no longer lists it, the chat knows what it means, and
+the sweep watches it as a declared state. The documents the tape held as <code>EN LITIGE</code>, and the source still
+holds, read the declared code from the next tick; a meaning is not a movement, so their <code>SINCE</code>, their alert and
+the transition journal stay as they were.</p>
+<h3 id="get-told-when-a-new-spelling-arrives">Get told when a new spelling arrives</h3>
+<p>Add <code>check: { trigger: ingestion }</code> under <code>spec</code> and re-apply. <strong>Result:</strong> the apply reports what is undeclared
+today; each later run that brings a value nobody declared raises <code>workflow.undeclared.&lt;name&gt;</code>, once.</p>
+<h2 id="from-a-proposal-dossier">From a proposal dossier</h2>
+<p>A business person can describe a problem on lumnik.fr and download a <strong>proposal dossier</strong>. Turning
+it into a workflow, and checking it against your data: <a href="../proposal-dossier/">Proposal dossiers</a>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Gesture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apply refused: <code>unknown key(s) in the manifest: …</code></td>
+<td>a misspelled or misplaced field</td>
+<td>the message lists what <code>kind:Workflow</code> honors, level by level</td>
+</tr>
+<tr>
+<td>apply refused <code>404</code>: <code>no schema for scope '…' — run discovery first</code></td>
+<td><code>spec.scope</code> is not a discovered scope</td>
+<td><code>lm source rediscover --scope &lt;tag&gt;</code> (<code>lm_integrator</code> + <code>lm_admin</code>, a scope you hold), then re-apply</td>
+</tr>
+<tr>
+<td>apply refused: <code>column … already has a declared lifecycle: workflow '…'</code></td>
+<td>a <em>different</em> name declares this <code>on.table</code> + <code>on.column</code></td>
+<td>re-apply under the existing name, or point at a different column</td>
+</tr>
+<tr>
+<td>apply refused: <code>column … already has a declared lifecycle, in a scope you do not hold</code></td>
+<td>the same, in a scope you do not hold</td>
+<td>ask the integrator who owns that scope</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.dormancy requires spec.on.key …</code></td>
+<td><code>spec.dormancy.after</code> without <code>spec.on.key</code></td>
+<td>add <code>spec.on.key</code></td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.dormancy on a fused view needs spec.on.order …</code></td>
+<td><code>on.table</code> is a <code>connector.v_*</code> view with <code>spec.dormancy</code></td>
+<td>add <code>spec.on.order</code>, the column that orders a document's versions</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.order … is not a column of …</code></td>
+<td>the table exists and has no such column</td>
+<td>name a column it has</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.order … is boolean: a date, a timestamp, a number, or ISO 8601 text with an offset can order versions</code></td>
+<td>a column of another type</td>
+<td>order by a date, a timestamp, a number or an ISO 8601 text column</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.table … must name a table in the 'connector' schema that ingestion owns</code></td>
+<td>another schema, or one of the hub's own tables</td>
+<td><code>connector.t_&lt;the connector's target&gt;</code></td>
+</tr>
+<tr>
+<td>apply refused: <code>alias '…' … collides with state code</code> / <code>exactly one state must be initial</code> / <code>terminal state '…' has an outgoing transition</code></td>
+<td>a contradiction in the declaration</td>
+<td>fix the graph</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.check.trigger must be 'ingestion' …</code></td>
+<td>another trigger, <code>apply</code> included: the apply always checks</td>
+<td>write <code>ingestion</code>, or drop <code>spec.check</code></td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.due requires spec.on.key …</code></td>
+<td><code>spec.due</code> without <code>spec.on.key</code></td>
+<td>add <code>spec.on.key</code></td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.due.states names …</code></td>
+<td>an alias, an undeclared or a terminal state, or one named twice</td>
+<td>name the declared, non-terminal codes once</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.due.zone has no effect on …</code></td>
+<td>a <code>zone</code> over a <code>timestamptz</code> column</td>
+<td>drop <code>spec.due.zone</code></td>
+</tr>
+<tr>
+<td>due date declared, but no alert ever arrives</td>
+<td>the column is missing or not a date</td>
+<td>the apply report names it: <code>spec.due.column …</code></td>
+</tr>
+<tr>
+<td>dormancy declared, but no alert ever arrives</td>
+<td><code>spec.on.key</code> names a column the table does not have</td>
+<td>the apply report says <code>spec.on.key: the table has no such column</code></td>
+</tr>
+<tr>
+<td>a document stuck for weeks does not alert on day one</td>
+<td>the threshold counts from lumnik's first sighting</td>
+<td>wait <code>after</code> from the apply date; <code>lm observations list</code> shows <code>SINCE</code></td>
+</tr>
+<tr>
+<td>a document is missing from <code>lm observations list</code></td>
+<td>its key or its status is <code>NULL</code> or blank</td>
+<td>fix it at the source; the apply report counts them: <code>key null or blank</code>, <code>&lt;column&gt; null or blank</code></td>
+</tr>
+<tr>
+<td>with <code>spec.on.order</code>, a document's <code>SINCE</code> keeps restarting and it never alerts</td>
+<td>one of its versions has no valid order, or its latest versions disagree</td>
+<td>the hub log names it (<code>… are not watched: …</code>); correct or remove the source row</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.dormancy.message references {…} — not a column of …</code> (or <code>spec.due.message</code>)</td>
+<td>the message cites a column the table does not have</td>
+<td>fix the name, or use a reserved one</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.dormancy.fields names … — not a column of …</code> (or <code>spec.due.fields</code>)</td>
+<td>a declared field the table does not have</td>
+<td>fix the name, or drop it</td>
+</tr>
+<tr>
+<td>a decision's sentence has an empty gap where a column was</td>
+<td>the column left the table after apply</td>
+<td>the hub log names it (<code>… cites …, which … no longer has</code>); re-ingest, or re-apply without it</td>
+</tr>
+<tr>
+<td>apply refused: <code>spec.on.order requires spec.on.key …</code></td>
+<td>an order with no key</td>
+<td>add <code>spec.on.key</code>: the order sorts the versions of the document the key names</td>
+</tr>
+<tr>
+<td>a status value never shows up in chat answers</td>
+<td>undeclared</td>
+<td>the apply report lists it under <code>in the data, not declared</code>; add it, re-apply</td>
+</tr>
+<tr>
+<td><code>lm ask</code> abstains on a "why can't I close it" question</td>
+<td><code>lm ask</code> reads the rows, not the lifecycle</td>
+<td><code>lm chat</code> with the scope</td>
+</tr>
+<tr>
+<td><code>403 … scope not granted</code></td>
+<td>you do not hold the <code>spec.scope</code> role</td>
+<td>ask for that <code>scope:</code> role</td>
+</tr>
+<tr>
+<td><code>API error 403 (forbidden): no details from the server</code></td>
+<td>you lack <code>lm_integrator</code>, or <code>lm_admin</code> for <code>lm observations</code></td>
+<td>ask your administrator; no <code>lm</code> command lists your roles (<code>GET /api/bff/v1/me</code> returns them under <code>roles</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../demo-desk/">The demo desk</a> — the order book every screen here reads</li>
+<li><a href="../processes/">Processes</a> — react to a row landing</li>
+<li><a href="../inbox/">Inbox</a> — where a <code>decision.dormant.&lt;workflow&gt;</code> alert surfaces</li>
+<li><a href="../../cli/lm-reference/">CLI &amp; TUI reference</a> — <code>lm observations list</code> and the <code>:observations</code> screen</li>
+<li><a href="../../transparency/ask-honesty/">Ask &amp; honesty</a> — the abstention contract a grounded answer serves</li>
+</ul>
+<h2 id="advanced-the-sweep-in-detail">Advanced: the sweep in detail</h2>
+<details class="note">
+<summary>What the sweep skips, the alert's wording, re-alerts, the tape, and scale</summary>
+<h3 id="what-the-sweep-does-not-see">What the sweep does not see</h3>
+<p>A document with a <code>NULL</code> or blank <strong>key</strong>, or a <code>NULL</code> or blank <strong>status</strong>, is skipped —
+permanently: there is nothing to follow it by, or no state to watch (<code>SO-000009</code> on the demo
+desk). The apply report counts both: <code>key null or blank</code> and <code>status null or blank</code>.</p>
+<h3 id="the-alert-verbatim">The alert, verbatim</h3>
+<p>From the demo desk, with <code>dormancy.after</code> shortened to <code>1m</code>:</p>
+<div class="highlight"><pre><span></span><code>SO-000004: observed unmoved in "BROUILLON" since 2026-10-18 (first observed 2026-10-18) — declared threshold 1m in acme-order-lifecycle
+</code></pre></div>
+<p>The default shape — <code>&lt;key&gt;: observed unmoved in "&lt;state&gt;" since &lt;date&gt; (first observed &lt;date&gt;)
+— declared threshold &lt;after&gt; in &lt;workflow&gt;</code> — never asserts how long the document sat in the
+source. It is emitted as <code>decision.dormant.&lt;workflow&gt;</code> and appears in the <a href="../inbox/">inbox</a> as
+<code>workflow:&lt;workflow&gt;</code>.</p>
+<p>A workflow writes the sentence in the team's language with <code>spec.dormancy.message</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dormancy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">after</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14d</span>
+<span class="w">  </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"{doc_key}</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">immobile</span><span class="nv"> </span><span class="s">en</span><span class="nv"> </span><span class="s">«</span><span class="nv"> </span><span class="s">{state_label}</span><span class="nv"> </span><span class="s">»</span><span class="nv"> </span><span class="s">depuis</span><span class="nv"> </span><span class="s">le</span><span class="nv"> </span><span class="s">{since}</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">seuil</span><span class="nv"> </span><span class="s">{threshold}"</span>
+</code></pre></div>
+<p><code>{state_label}</code> is the state's declared <code>label</code> (its code when the state is undeclared); dates
+are the UTC day. Any other <code>{name}</code> is a column of the watched table:
+<a href="#what-a-decision-carries">what a decision carries</a>.</p>
+<h3 id="re-alert-semantics">Re-alert semantics</h3>
+<p>A document alerts <strong>once</strong> per stall. It alerts again only after it moved (a new state resets
+its clock) and then sat unmoved past the threshold once more.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A permanently stuck document</strong></td>
+<td>alerts once; the alert leaves <code>lm inbox</code> with the event retention (<code>lumnik.events.retention-days</code>, 30 by default)</td>
+</tr>
+<tr>
+<td><strong>What to do</strong></td>
+<td>ack the alert into your own tracker, or raise <code>lumnik.events.retention-days</code> beyond your review cadence</td>
+</tr>
+<tr>
+<td><strong>What stays</strong></td>
+<td>the tape: <code>lm observations list</code> keeps <code>ALERTED</code> until the document moves</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-the-tape">Reading the tape</h3>
+<p><code>lm observations list</code> — the watched documents of every workflow in your scopes, <strong>stillest
+first</strong> (<code>--workflow</code>, <code>--limit</code>: default 200, at most 1000). <code>SINCE</code> is when lumnik started observing that
+state; <code>ALERTED</code> is empty until the sweep alerts. <code>lm observations stats</code> sums it up per workflow. The TUI's
+<code>:observations</code> screen shows the same, with humanized ages. Both need <code>lm_admin</code> (or
+<code>lm_superadmin</code>) on top of <code>lm_integrator</code>.</p>
+<p><code>lm observations transitions</code> reads the journal: every observed move, <strong>newest first</strong>
+(<code>--workflow</code>, <code>--doc</code>, <code>--limit</code>). <code>IN_FROM_S</code> is the seconds the document spent in <code>FROM</code>,
+from <code>ENTERED</code> — its previous move, or its first observation for its first one (a lower bound,
+like <code>SINCE</code>). Moves are seen at sweep granularity: a document that moved twice between two
+ticks shows one move.</p>
+<h3 id="scale">Scale</h3>
+<ul>
+<li>On a table with millions of documents, lengthen <code>lumnik.workflow.sweep.every</code> (15 minutes by
+  default).</li>
+<li>The tape is kept until <code>lm workflow rm</code>.</li>
+<li>A workflow whose table is gone is skipped, and comes back by itself when the table returns.
+  The other workflows are never affected. The hub log names the workflow.</li>
+</ul>
+<h3 id="an-undeclared-value-can-never-be-terminal">An undeclared value can never be terminal</h3>
+<p><code>EN LITIGE</code> is not declared, so it cannot be <code>terminal: true</code>: a document sitting in it is
+watched like any non-terminal state. The apply report names the value; the sweep names the
+documents asleep in it.</p>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

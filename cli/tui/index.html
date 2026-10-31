@@ -1,0 +1,4662 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/cli/tui/">
+      
+      
+        <link rel="prev" href="../lm-reference/">
+      
+      
+        <link rel="next" href="../../integration-as-code/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>The TUI - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-tui" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The TUI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/other-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other first sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understand
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understand
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CSV & files
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv-quick-look/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One file, one command
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/when-the-topic-misbehaves/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When the topic misbehaves
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Transformers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repair the data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kotlin-hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin hooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading a run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Entities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dates and numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-joins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resolve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/querying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-around" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting around
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch-an-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch an ingestion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Watch an ingestion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stopping-a-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stopping a run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-status-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a status means
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explore &amp; ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#admin-corner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin corner
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Admin corner">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entities-and-ambiguous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :entities and :ambiguous
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When Ask refuses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The rules, in detail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/proposal-dossier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal dossiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../choosing-what-your-hub-offers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choosing what your hub offers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/echoed-credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credentials a source writes back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a JDBC provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Background
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Background
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-around" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting around
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch-an-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch an ingestion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Watch an ingestion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stopping-a-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stopping a run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-status-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a status means
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explore &amp; ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#admin-corner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admin corner
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Admin corner">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entities-and-ambiguous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        :entities and :ambiguous
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="the-tui">The TUI</h1>
+<blockquote>
+<p>Bare <code>lm</code> (or <code>lm ui</code>) opens the k9s-style console — the installer's daily screen. <code>:</code> is the
+command palette (type a page name, Tab/Enter to commit); <code>?</code> opens the in-app help; <code>q</code> quits.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code> lumnik 2026 · lm @ selfhost (localhost:18080) · :sources /desk (Esc clears) · scope: system · 00:32:33
+╔═════════════════════════════════════════════════ :sources ═════════════════════════════════════════════════╗
+║NAME                         TYPE           KIND       TENANT       SCHED       ENABLED       SCOPES        ║
+║● acme-desk-crm              csv-file       csv        1                        yes           desk          ║
+║● acme-desk-deliveries       csv-file       csv        1                        yes           desk          ║
+║● acme-desk-erp              csv-file       csv        1                        yes           desk          ║
+║● acme-desk-orders           csv-file       csv        1                        yes           desk          ║
+║● due-erp                    csv-file       csv        1                        yes           desk          ║
+║● due-partner                csv-file       csv        1                        yes           desk          ║
+║● stage-deliveries           csv-file       csv        1                        yes           desk          ║
+║● stage-orders               csv-file       csv        1                        yes           desk          ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ e: edit  t: scopes  d: describe  D: dead letters  ^R: run  ^P: pause  Del: delete  y: yank  s: sort  Enter:
+</code></pre></div>
+<p>The footer lists the keys of the page you are on. The <a href="#key-reference">key reference</a> lists them all.</p>
+<h2 id="getting-around">Getting around</h2>
+<p><code>:</code> opens the palette. Type the start of a page name (<code>:so</code> offers <code>:sources</code>), then Tab or Enter.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Pages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Your data</td>
+<td><code>:sources</code> (alias <code>:connectors</code>) <code>:endpoints</code> <code>:runs</code> <code>:dlq</code> <code>:tables</code> <code>:entities</code> <code>:conflicts</code> <code>:ambiguous</code></td>
+</tr>
+<tr>
+<td>Decide</td>
+<td><code>:inbox</code> <code>:outputs</code> <code>:observations</code></td>
+</tr>
+<tr>
+<td>Explore &amp; ask</td>
+<td><code>:ask</code> <code>:view</code> <code>:scopes</code> <code>:search</code></td>
+</tr>
+<tr>
+<td>Create &amp; declare</td>
+<td><code>:new</code> <code>:processes</code> <code>:views</code> <code>:apps</code> <code>:workflows</code> <code>:exports</code></td>
+</tr>
+<tr>
+<td>Admin</td>
+<td><code>:modules</code> <code>:hooks</code> <code>:migrations</code> <code>:rag</code> <code>:secrets</code> <code>:integrations</code> <code>:notify</code></td>
+</tr>
+</tbody>
+</table>
+<p>Global keys, from any page:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:</code></td>
+<td>open the command palette</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>refresh the current page</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>toggle the describe panel (full detail on the selected row)</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td>with the describe panel open: give it the keys, so <code>↑</code> <code>↓</code> <code>PgUp</code> <code>PgDn</code> scroll a long record; <code>Tab</code> or <code>Esc</code> gives them back to the list</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>on list pages: filter the table to the rows holding a text (<code>Esc</code> clears) — the <a href="#key-reference">key reference</a> lists the pages</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>copy the current row to your clipboard, through the terminal: works over SSH where the terminal allows it (iTerm2, kitty, WezTerm, Windows Terminal; not macOS Terminal)</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>quit</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>help screen (the same table, always at hand)</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>close a modal, cancel an input, or back out one level</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The header names the hub, the page, the session scope and the event stream: <code>[LIVE✓]</code>, or
+  <code>[RECONNECTING]</code> with the reason in the footer.</li>
+<li><code>:sources</code>, <code>:endpoints</code>, <code>:runs</code>, <code>:dlq</code> and <code>:inbox</code> update live; the cursor stays on your row.</li>
+<li><strong>Another hub:</strong> <code>:context</code> (or <code>:ctx</code>) lists your contexts. <code>Enter</code> switches for this session
+  only; <code>lm config use-context</code> sets the default.</li>
+<li><strong>Session expired:</strong> a window opens. <code>L</code> logs in again, as <code>lm login</code> does, and the TUI resumes.</li>
+</ul>
+<h2 id="watch-an-ingestion">Watch an ingestion</h2>
+<p><code>:sources</code> is the home page: one row per connector. <code>/desk</code> above kept the rows holding <code>desk</code>.</p>
+<ul>
+<li><code>^R</code> (or <code>R</code>) runs the selected connector now; <code>^P</code> pauses or resumes its schedule.</li>
+<li><code>e</code> opens its YAML in <code>$EDITOR</code>; <code>t</code> edits its scopes, then offers to re-stamp its chat chunks.</li>
+<li><code>Del</code> says what the delete takes, then asks:
+  <code>Delete connector "cust-csv"? Goes with it: 3 rows of connector.t_cust_csv, its run history and RAG chunks.</code>
+  A table an entity reads shows the refusal instead, naming the entity.</li>
+<li><code>Enter</code> opens a REST or JDBC source's <code>:endpoints</code>, any other connector's <code>:runs</code>.</li>
+</ul>
+<p><code>Enter</code> on <code>acme-desk-crm</code>, then <code>d</code> on its run:</p>
+<div class="highlight"><pre><span></span><code> lumnik 2026 · lm @ selfhost (localhost:18080) · :runs · scope: system · 00:32:36  [LIVE✓]
+╔══════════════════════════════════════ :runs › connector acme-desk-crm ═════════════════════════════════════╗
+║CONNECTOR          ENDPOINT      STATUS           STARTED          DURATION      RECORDS      TRIGGER       ║
+║acme-desk-crm      default       ● Completed      10-24 23:07      37ms          8/8/0        MANUAL        ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+── describe: cb24e3a8 ──
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│id:              cb24e3a8-c418-4985-8247-d5210ebc0687                                                       │
+│connector:       acme-desk-crm                                                                              │
+│endpoint:        default                                                                                    │
+│status:          ● Completed                                                                                │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Esc: clear filter  d: describe  D: dead letters  y: yank  s: sort  c: cancel  r: refresh  Tab: scroll the
+</code></pre></div>
+<ul>
+<li><code>RECORDS</code> is in/out/skip. Every dead letter is counted in <code>skip</code>.</li>
+<li><code>d</code> shows the run in full: for a failed or cancelled run, an <code>error:</code> section with the message.</li>
+<li><code>D</code> opens the run's dead letters in <code>:dlq</code>.</li>
+</ul>
+<p><strong><code>:endpoints</code></strong> (REST and JDBC sources) shows each endpoint's <code>SCHEDULE</code>, <code>LAST_RUN</code> and <code>STATUS</code>:
+where to check "did it even fire?". <code>T</code> tests the endpoint, nothing written; <code>P</code> probes a path and
+drafts its fragment; <code>C</code> resets its cursor (asks first); <code>Del</code> purges its rows, when the type
+allows it — the question names the count.</p>
+<h3 id="stopping-a-run">Stopping a run</h3>
+<p>Select a <code>Running</code> row in <code>:runs</code> and press <code>c</code>. The chunk in flight finishes; the run ends at the
+next one. A <code>Queued</code> run ends at once.</p>
+<table>
+<thead>
+<tr>
+<th>Refusal toasted</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run … already ended (STATUS)</code></td>
+<td>nothing left to stop</td>
+</tr>
+<tr>
+<td><code>run … is being started; try again in a moment</code></td>
+<td>a <code>Queued</code> run is starting — retry</td>
+</tr>
+<tr>
+<td><code>run … is not in flight on this hub</code></td>
+<td>the run started a moment ago — retry; refused again, no process runs it, and the hub marks it <code>Failed</code> on its own</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-a-status-means">What a status means</h3>
+<table>
+<thead>
+<tr>
+<th><code>STATUS</code></th>
+<th>What happened</th>
+<th>Look at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Queued</code></td>
+<td>waiting for a free slot (only with the <a href="../../operations/upgrade/#turning-on-the-run-queue">run queue</a> on)</td>
+<td>nothing: it starts on its own</td>
+</tr>
+<tr>
+<td><code>Running</code></td>
+<td>still going</td>
+<td><code>d</code></td>
+</tr>
+<tr>
+<td><code>Completed</code></td>
+<td>done. Rows in <code>:dlq</code> were set aside; other <code>skip</code> rows were filtered on purpose</td>
+<td><code>:dlq</code>, <code>RECORDS</code></td>
+</tr>
+<tr>
+<td><code>Partial</code></td>
+<td>read less than the source held; the next run resumes</td>
+<td><code>d</code>: the <code>error:</code> section</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>the run failed: source unreachable, bad credentials, refused config</td>
+<td><code>d</code>: the <code>error:</code> section</td>
+</tr>
+<tr>
+<td><code>Cancelled</code></td>
+<td>stopped by a user, or skipped: another run of the endpoint was active</td>
+<td><code>d</code></td>
+</tr>
+<tr>
+<td>no row at all</td>
+<td>the schedule has not fired yet</td>
+<td><code>:sources</code>, <code>:endpoints</code></td>
+</tr>
+</tbody>
+</table>
+<p>Found the cause? In <code>:sources</code>, <code>e</code> fixes the connector and <code>R</code> runs it again. The full
+walk: <a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a>.</p>
+<p><code>:dlq</code> lists the rows a run set aside, with reason and row. <code>^R</code> marks one replayed (naming the run
+that carried it again), <code>^D</code> discards it.</p>
+<h2 id="decide">Decide</h2>
+<p>Four pages answer "what needs me":</p>
+<ul>
+<li><strong><code>:inbox</code></strong> — the decisions your processes and workflows raised. <code>a</code> acks the selected one; it
+  leaves the list. <code>A</code> shows the acked ones too:</li>
+</ul>
+<div class="highlight"><pre><span></span><code> lumnik 2026 · lm @ selfhost (localhost:18080) · :inbox · scope: system · 00:34:00  [LIVE✓]
+╔══════════════════════════════════════════════════ :inbox ══════════════════════════════════════════════════╗
+║ID WHEN PROCESS                          MESSAGE                                                            ║
+║66 1h   workflow:acme-delivery-lifecycle Livraison DL-1 promise pour le 2026-10-20, toujours en route [acke…║
+║63 1h   litige-ouvert                    Commande SO-000013 du client P-1007 en litige — 860.00 €           ║
+║8  2h   lyon-client-arrive               Nouveau client Camille Roux à Lyon [acked]                         ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ a: ack · A: show disposed · d: describe · y: yank · r: refresh
+</code></pre></div>
+<ul>
+<li><strong><code>:outputs</code></strong> — what was sent out and whether it arrived, failures first. <code>^R</code> replays a failed
+  delivery.</li>
+<li><strong><code>:observations</code></strong> — the workflow tape: documents that have NOT moved, stillest first. The title
+  shows, per workflow, the documents watched, the dormant ones and the median detection time.</li>
+<li><strong><code>:conflicts</code></strong> — the fused rows with a source conflict or a lookup ambiguity. Read-only: <code>d</code>
+  shows which source said what; the fix is a source or manifest change.</li>
+</ul>
+<h2 id="explore-ask">Explore &amp; ask</h2>
+<p><code>:ask</code> is analytic chat: a plain-language question comes back as generated SQL, rows and an answer.
+It asks the session scope shown in the header — your default (<code>lm scope</code>) at startup, changed with
+<code>:scopes</code> → <code>Enter</code> or <code>:scope &lt;tag&gt;</code>. A question continues the last one answered, as
+<a href="../lm-reference/"><code>lm ask --previous</code></a> does: "Et SUP-004 ?" is answered as the full question, shown
+in the headline after <code>understood as:</code>. An answer that ran no SQL keeps the question it continues; changing the scope starts over.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>run the question</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>yank the generated SQL</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>export the result rows to a CSV file</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>new question — the next one stands alone</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>clear the page — the next question stands alone</td>
+</tr>
+</tbody>
+</table>
+<p><code>:view</code> renders a <a href="../../apps/views/"><code>kind: View</code></a> manifest file. The path field starts on the
+WOW's <code>docs/demo/wow-customer/clients-view.yaml</code>, relative to where you started <code>lm</code>: from the repo
+root, <code>Enter</code> renders it:</p>
+<div class="highlight"><pre><span></span><code> lumnik 2026 · lm @ selfhost (localhost:18080) · :view · scope: desk · 00:33:37  [LIVE✓]
+╔══════════════════════════════════════════════════ Clients ═════════════════════════════════════════════════╗
+║CODE CLIENT NOM              VILLE SEGMENT                                                                  ║
+║C-100       Jean Dupont      Paris GOLD                                                                     ║
+║C-200       Marie            Lyon  SILVER                                                                   ║
+║C-300       Solo             Nice                                                                           ║
+║C-400       Camille Roux     Lyon                                                                           ║
+║C-500       Claire Martin    Lyon                                                                           ║
+║C-600       Pierre Corneille Paris                                                                          ║
+║C-700       Maurice Druon    Paris                                                                          ║
+║C-800       Albert Camus     Lyon                                                                           ║
+║C-900       Saint Exupery    Lyon                                                                           ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ Enter: detail (_conflicts) · f: add filter · F: clear filters · g: generate (AI) · a: apply to hub · o: open
+</code></pre></div>
+<p><code>Enter</code> on a row opens the record, with its conflicts:</p>
+<div class="highlight"><pre><span></span><code> lumnik 2026 · lm @ selfhost (localhost:18080) · :view · scope: desk · 00:33:41  [LIVE✓]
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║Clients — C-100                                                                                             ║
+║Code client  C-100                                                                                          ║
+║Nom          Jean Dupont                                                                                    ║
+║Ville        Paris                                                                                          ║
+║Segment      GOLD                                                                                           ║
+║conflicts                                                                                                   ║
+║no conflicts or ambiguities                                                                                 ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ Esc: back to the list
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code> (on a rendered row)</td>
+<td>record detail, with the <code>_conflicts</code> ledger</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>add a server-side filter (a bad one is refused with the reason)</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td>clear all filters</td>
+</tr>
+<tr>
+<td><code>g</code></td>
+<td>generate a view from a sentence over the active scope (AI) — set the scope first with <code>:scopes</code> or <code>:scope &lt;tag&gt;</code></td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>apply the rendered view into the hub's saved-view store</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>open another file</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>refresh</td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">Create</h2>
+<p><code>:new</code> is the authoring loop. Pick a kind; every kind you can apply is offered — the connector
+types, <code>Entity</code>, <code>Process</code>, <code>Workflow</code>, <code>App</code>, <code>View</code>, <code>Export</code> and <code>SearchIndex</code> — each with a real
+example from these docs.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>open the kind's example in <code>$EDITOR</code>; on save it validates and applies, then jumps to where you observe it</td>
+</tr>
+<tr>
+<td><code>v</code></td>
+<td>edit, then validate <strong>without</strong> applying; <code>a</code> then applies the buffer you checked</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>after refusals (shown field by field): re-open the <em>same</em> buffer</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>abandon — your edits are kept in a temp file</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>guided setup: <code>jdbc-generic</code> (name, JDBC URL, user, password typed masked, schema → test → pick tables → one connector per table) · <code>csv-file</code> (ingest a local file once, then opens <code>:tables</code>)</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>the kind's example and, for a connector kind, its type's configuration schema (<code>lm describe connector-type</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>v</code> checks a connector through the hub's validator; any other kind by its YAML and <code>kind</code> only.</li>
+<li><code>graphql</code> and <code>soap</code> show <code>rest-generic</code>'s schema: they are request shapes of that type.</li>
+<li>In the JDBC picker, a table of an unsupported shape is listed but cannot be ticked.</li>
+</ul>
+<p><code>:processes</code> lists declared <a href="../../apps/processes/"><code>kind: Process</code></a> rules: <code>e</code> re-opens one in the
+same edit → validate → apply loop, <code>^P</code> enables or disables it (the manifest stays), <code>Del</code> deletes
+it after a confirmation.</p>
+<h2 id="admin-corner">Admin corner</h2>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it lists</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:modules</code></td>
+<td>installed business modules</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>:hooks</code></td>
+<td>installed Kotlin hooks (read-only: they load from deployment manifests at startup)</td>
+<td><code>d</code> the binding: handler, events, priority (<code>lm hook get</code>)</td>
+</tr>
+<tr>
+<td><code>:migrations</code></td>
+<td>migration status per schema; a pending one is applied at the hub's next start</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>:rag</code></td>
+<td>chunks indexed per scope (connectors, last indexed); the title shows the platform corpus</td>
+<td><code>R</code> reindex the platform corpus (asks first)</td>
+</tr>
+<tr>
+<td><code>:tables</code></td>
+<td>the <code>t_*</code> tables your connectors landed, with your row count</td>
+<td><code>Enter</code> the raw rows in landing order, a timestamp as its UTC instant (<code>2026-10-19T21:20:04.123456Z</code>) (<code>n</code>/<code>p</code> page, <code>d</code> whole row, <code>Esc</code> back)</td>
+</tr>
+<tr>
+<td><code>:entities</code></td>
+<td>the entities you may read</td>
+<td>see <a href="#entities-and-ambiguous"><code>:entities</code> keys</a></td>
+</tr>
+<tr>
+<td><code>:ambiguous</code></td>
+<td>the identities one entity's resolution could not settle</td>
+<td><code>Enter</code> type an entity name / load a row's history · <code>^R</code> re-run the pass · <code>d</code> the row</td>
+</tr>
+<tr>
+<td><code>:views</code></td>
+<td>the saved views the hub serves the PWA</td>
+<td><code>Enter</code> render in <code>:view</code> · <code>e</code> edit in <code>:new</code> · <code>Del</code> delete (asks first)</td>
+</tr>
+<tr>
+<td><code>:apps</code></td>
+<td>the business apps (title, scope, default, tabs)</td>
+<td><code>e</code> edit in <code>:new</code> (rebuilt from the app's fields) · <code>Del</code> delete (asks first)</td>
+</tr>
+<tr>
+<td><code>:workflows</code></td>
+<td>the declared document lifecycles</td>
+<td><code>e</code> edit in <code>:new</code> · <code>^P</code> enable/disable · <code>Del</code> delete (asks first)</td>
+</tr>
+<tr>
+<td><code>:exports</code></td>
+<td><code>kind: Export</code> manifests: entity, schedule, destination, last run (integrator role only)</td>
+<td><code>Enter</code> its runs · <code>R</code> run now · <code>^R</code> retry a Failed run · <code>e</code> edit in <code>:new</code></td>
+</tr>
+<tr>
+<td><code>:search</code></td>
+<td>whether this hub has a Search provider, then the declared indexes (status, documents, last rebuild)</td>
+<td><code>/</code> query, bound to the session scope · <code>R</code> rebuild · <code>c</code> cancel the rebuild · <code>Del</code> delete (asks first)</td>
+</tr>
+<tr>
+<td><code>:secrets</code></td>
+<td>the credentials connectors refer to by name (values never shown)</td>
+<td><code>n</code> store one (typed masked) · <code>e</code> rotate its value · <code>Del</code> delete (asks first)</td>
+</tr>
+<tr>
+<td><code>:integrations</code></td>
+<td>the webhook targets <code>:outputs</code> delivers to, with recent delivery health; URLs shown to the host only</td>
+<td><code>n</code> register (URL and secret typed masked) · <code>T</code> fire a test event · <code>d</code> registration and latest deliveries · <code>Del</code> remove (asks first; history kept)</td>
+</tr>
+<tr>
+<td><code>:notify</code></td>
+<td>the email rules</td>
+<td><code>n</code> add one (events, recipient, entity filter, template) · <code>Del</code> remove (asks first)</td>
+</tr>
+<tr>
+<td><code>:scopes</code></td>
+<td>the tenant's business scopes</td>
+<td><code>Enter</code> set the active scope</td>
+</tr>
+</tbody>
+</table>
+<p>What the pages show when a feature is absent:</p>
+<ul>
+<li><code>:rag</code> with the AI switched off says so (the module stays installed, its chunks are kept); in an
+  Open build it says the module is not in the build.</li>
+<li><code>:search</code> on a hub without a Search provider says <em>not installed</em>.</li>
+<li><code>:exports</code> for an <code>lm_user</code> says the page needs the integrator role.</li>
+</ul>
+<h3 id="entities-and-ambiguous"><code>:entities</code> and <code>:ambiguous</code></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>the entity's canonical rows (no View needed; <code>Esc</code> back to the list)</td>
+</tr>
+<tr>
+<td><code>n</code> / <code>p</code></td>
+<td>next / previous page</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>the whole row, ledger included</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>the entity's ambiguous identities in <code>:ambiguous</code></td>
+</tr>
+<tr>
+<td><code>Del</code></td>
+<td>delete the entity (asks first)</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>mark a row (on a <a href="../../entities-resolution/"><code>resolution:</code></a> entity)</td>
+</tr>
+<tr>
+<td><code>=</code> / <code>!</code></td>
+<td>assert this row and the marked one are the <strong>same</strong> / <strong>different</strong> entities — asks a reason, then confirms naming both rows</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>the row's resolution history</td>
+</tr>
+<tr>
+<td><code>^R</code></td>
+<td>re-run the resolution pass so the assertion takes effect</td>
+</tr>
+</tbody>
+</table>
+<h2 id="key-reference">Key reference</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Where</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:</code> <code>r</code> <code>d</code> <code>y</code> <code>q</code> <code>?</code> <code>Esc</code></td>
+<td>global</td>
+<td>palette · refresh · describe · yank row · quit · help · close</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td><code>:sources</code> <code>:runs</code></td>
+<td>the dead letters of the connector / the run, in <code>:dlq</code></td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td>global, describe panel open</td>
+<td>scroll the panel (<code>↑</code> <code>↓</code> <code>PgUp</code> <code>PgDn</code>) · <code>Tab</code> / <code>Esc</code> back to the list</td>
+</tr>
+<tr>
+<td><code>:context</code></td>
+<td>global</td>
+<td>switch to another configured hub, for this session (<code>Enter</code> switches, <code>Esc</code> leaves)</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td><code>:sources</code> <code>:runs</code> <code>:dlq</code> <code>:endpoints</code> <code>:processes</code> <code>:views</code> <code>:apps</code> <code>:workflows</code> <code>:inbox</code> <code>:secrets</code> <code>:integrations</code> <code>:notify</code> <code>:exports</code></td>
+<td>filter to the rows holding a text (any column, case-insensitive); survives the live refresh, <code>Esc</code> clears it</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td><code>:sources</code> <code>:runs</code> <code>:dlq</code> <code>:conflicts</code> <code>:ambiguous</code> <code>:scopes</code></td>
+<td>cycle the sort column</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td><code>:runs</code></td>
+<td>request cancellation of the selected <code>Running</code> run</td>
+</tr>
+<tr>
+<td><code>e</code> / <code>R</code> (or <code>^R</code>) / <code>^P</code> / <code>Del</code> / <code>t</code></td>
+<td><code>:sources</code></td>
+<td>edit YAML in <code>$EDITOR</code> · run now · pause/resume · delete · edit tags (then offers to re-stamp the indexed chunks)</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td><code>:sources</code></td>
+<td>REST / JDBC → its <code>:endpoints</code>; others → its <code>:runs</code></td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>Esc</code></td>
+<td><code>:endpoints</code></td>
+<td>the endpoint's <code>:runs</code> · back to <code>:sources</code></td>
+</tr>
+<tr>
+<td><code>T</code> / <code>P</code> / <code>^P</code> / <code>C</code> / <code>Del</code></td>
+<td><code>:endpoints</code></td>
+<td>test · probe · enable/disable · reset cursor · purge</td>
+</tr>
+<tr>
+<td><code>^R</code> / <code>^D</code></td>
+<td><code>:dlq</code></td>
+<td>mark replayed, naming the run that carried it (Enter: the connector's latest; with no run, <code>^D</code> instead) · discard</td>
+</tr>
+<tr>
+<td><code>^R</code></td>
+<td><code>:outputs</code></td>
+<td>replay the selected failed delivery</td>
+</tr>
+<tr>
+<td><code>a</code> / <code>A</code></td>
+<td><code>:inbox</code></td>
+<td>ack the selected decision · show/hide disposed (<code>[acked]</code>)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>n</code> <code>p</code> / <code>a</code> / <code>Del</code> / <code>m</code> <code>=</code> <code>!</code> / <code>h</code> / <code>^R</code></td>
+<td><code>:entities</code></td>
+<td>rows · page · ambiguous · delete · mark, same, distinct · history · re-resolve</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>^R</code></td>
+<td><code>:ambiguous</code></td>
+<td>list an entity / load a row's history · re-run the pass</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td><code>:rag</code></td>
+<td>reindex the platform corpus (asks first)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>d</code></td>
+<td><code>:tables</code></td>
+<td>the raw rows (<code>n</code> <code>p</code> page, <code>d</code> whole row, <code>Esc</code> back) · describe</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>e</code> / <code>Del</code></td>
+<td><code>:views</code></td>
+<td>render in <code>:view</code> · edit in <code>:new</code> · delete (asks first)</td>
+</tr>
+<tr>
+<td><code>e</code> / <code>Del</code></td>
+<td><code>:apps</code></td>
+<td>edit in <code>:new</code> · delete (asks first)</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td><code>:hooks</code></td>
+<td>the hook's binding (<code>lm hook get</code>)</td>
+</tr>
+<tr>
+<td><code>n</code> / <code>e</code> / <code>Del</code></td>
+<td><code>:secrets</code></td>
+<td>store a secret · rotate its value · delete it (asks first)</td>
+</tr>
+<tr>
+<td><code>n</code> / <code>T</code> / <code>Del</code></td>
+<td><code>:integrations</code></td>
+<td>register a target · fire a test event · remove it (asks first)</td>
+</tr>
+<tr>
+<td><code>n</code> / <code>Del</code></td>
+<td><code>:notify</code></td>
+<td>add an email rule · remove it (asks first)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>R</code> / <code>^R</code> / <code>e</code></td>
+<td><code>:exports</code></td>
+<td>the export's runs · run it now · retry a Failed run · edit the stored manifest</td>
+</tr>
+<tr>
+<td><code>/</code> / <code>R</code> / <code>c</code> / <code>Del</code></td>
+<td><code>:search</code></td>
+<td>query (scope-bound) · rebuild · cancel the rebuild · delete (asks first)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>v</code> / <code>a</code> / <code>e</code> / <code>w</code> / <code>d</code> / <code>Esc</code></td>
+<td><code>:new</code></td>
+<td>edit the example · validate only · apply the validated buffer · re-edit after refusals · guided setup · describe · abandon (buffer kept)</td>
+</tr>
+<tr>
+<td><code>e</code> / <code>^P</code> / <code>Del</code></td>
+<td><code>:processes</code> <code>:workflows</code></td>
+<td>edit the stored manifest · enable/disable · delete (asks first)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>f</code> <code>F</code> / <code>g</code> / <code>a</code> / <code>o</code> / <code>r</code></td>
+<td><code>:view</code></td>
+<td>record detail · add/clear filters · generate (AI) · apply to the hub · open another file · refresh</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td><code>:scopes</code></td>
+<td>set the active scope (used by <code>:ask</code>)</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>y</code> / <code>e</code> / <code>n</code></td>
+<td><code>:ask</code></td>
+<td>run · yank the SQL · export rows to CSV · new question</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../lm-reference/">CLI reference</a> — the same surface, from scripts and CI.</li>
+<li><a href="../../recipes/diagnose-a-run/">Diagnosing a failed run</a> — from a failed run to a fix, with the
+  dead-letter reasons table.</li>
+<li><a href="../../connectors/">Connectors overview</a> — what a source, an endpoint and a run are.</li>
+<li><a href="../../apps/inbox/">Inbox</a> — the decisions <code>:inbox</code> surfaces.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

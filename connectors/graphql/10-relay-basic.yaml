@@ -1,0 +1,43 @@
+# 10-relay-basic.yaml — GraphQL source over the rest-generic engine: the query lives
+# in the manifest, relay pagination re-injects endCursor into the variables.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/graphql/10-relay-basic.yaml
+#   lm connector run shop
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata: { name: shop, connector_type: rest-generic, scopes: [commerce] }
+spec:
+  base_url: https://myshop.example.com
+  graphql_path: /api/graphql        # the single POST endpoint (default: /graphql)
+  auth: { kind: bearer, token_env: SHOP_TOKEN }
+  headers:                          # applied to every request (static or env)
+    - { name: X-Api-Version, value: "2024-10" }
+    - { name: X-Tenant,      value_env: SHOP_TENANT_HDR }
+  default_rate_limit: 50/s
+  endpoints:
+    - id: orders                    # endpoint identifier (kebab-case)
+      kind: graphql
+      query: |
+        query Orders($after: String) {
+          orders(first: 100, after: $after) {
+            edges { node { id name totalPrice updatedAt } }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      variables: { someFlag: true } # static variables merged into every request
+      pagination:
+        kind: relay
+        cursor_binding: variable     # cursor goes into variables, not the URL
+        cursor_var: after
+        cursor_path:   $.data.orders.pageInfo.endCursor
+        has_more_path: $.data.orders.pageInfo.hasNextPage
+        response_path: $.data.orders.edges[*].node
+      incremental: { mode: full }
+      target:
+        kind: hybrid
+        table: ext.shop_orders
+        unique_key: $.id
+        promote:
+          - { name: total,      path: $.totalPrice, type: decimal }
+          - { name: updated_at, path: $.updatedAt,  type: timestamptz }

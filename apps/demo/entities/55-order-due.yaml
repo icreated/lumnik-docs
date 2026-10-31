@@ -1,0 +1,13 @@
+# 55-order-due.yaml — the ERP's and a partner's copy of the same orders, fused on the order number.
+#
+# Expect, partner left as written (71): every due date and amount in _conflicts.
+#         Partner typed (72): SO-1 agrees, SO-2 disagrees on its due day (3 vs 4 July).
+kind: Entity
+name: OrderDue
+match: [order_no]
+scopes: [desk]
+sources:
+  - table: t_due_erp
+    map: { order_no: order_no, due_at: due, amount: amount }
+  - table: t_due_partner
+    map: { order_no: order_no, due: due, amount: amount }

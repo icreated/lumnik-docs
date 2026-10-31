@@ -1,0 +1,42 @@
+# 96-mapping-hooks.yaml — hooks over an endpoint's promoted columns: a filter, then a Kotlin script.
+#
+# The script is the operator's: docs/connectors/rest/hooks/credit-band.kts, copied into the hub's
+# hooks directory (docs/deploy.md#offer-kotlin-scripts-to-the-integrators).
+#
+# Expect: 300 rows in ext.acme_partner_bands (the French partners), 2 100 skipped.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-partner-bands
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  endpoints:
+    - id: partners
+      path: /open/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        total_path: "$.total"
+        response_path: "$.data"
+      target:
+        kind: hybrid
+        table: ext.acme_partner_bands
+        unique_key: "$.id"
+        promote:
+          - { name: name,         path: "$.name",         type: text }
+          - { name: country,      path: "$.country",      type: text }
+          - { name: credit_limit, path: "$.credit_limit", type: bigint }
+          - { name: credit_band,  type: text }      # no path: the mapping fills it
+      mapping:
+        dataset:
+          - filter-where: { column: country, equals: FR }
+        cell:
+          - kotlin: { script: hooks:credit-band.kts }

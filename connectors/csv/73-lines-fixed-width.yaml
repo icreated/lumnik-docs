@@ -1,0 +1,25 @@
+# 73-lines-fixed-width.yaml — a fixed-width payroll export: no separator, only positions.
+# lines: true reads one line as one row; regex-extract cuts it by position.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: payroll
+  connector_type: csv-file
+  scopes: [finance]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/payroll-fixed.txt
+  parser:
+    lines: true
+  after_process: none
+  mapping:
+    cell:
+      - regex-extract:                     # employee 6, name 30, salary 10
+          column: line
+          pattern: "^(.{6})(.{30})(.{10})"
+          groups: { 1: employee, 2: name, 3: salary }
+      - clean: { columns: [employee, name, salary], strip: true }
+      - parse-number: { column: salary, decimal-separator: "." }

@@ -1,0 +1,58 @@
+# 90-soap-querypage.yaml — the Siebel QueryPage shape, on the REST connector.
+#
+# `connector_type` stays rest-generic. `kind: soap` sends a SOAP envelope by POST; the page
+# offset goes inside the body. `kind: soap` and `pagination.kind: soap` go together: one
+# without the other is refused at apply.
+#
+# The body's placeholders: {{page_size}}, {{cursor}} (row offset from 0), {{page}} (page
+# number from 1), {{secret:NAME}}, {{env:NAME}}.
+#
+# Write paths without namespace prefixes (Customer, not ns:Customer). `response_path` is a
+# plain dotted path to the repeated element: no [*], no `..`.
+#
+# XML has no types: `promote` gives each column its type.
+#
+#   lm secret set ACME_BASIC_PW        # the demo API answers to demo-user / demo-pass
+#
+# Expect: 2 400 rows in ext.acme_soap_partners, read 500 at a time.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /siebel/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+          <ListOfCustomer><Customer><Id query="*"/><Name query="*"/></Customer></ListOfCustomer>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_partners
+        unique_key: "$.Id"
+        promote:
+          - { name: name,         path: "$.Name",        type: text }
+          - { name: city,         path: "$.City",        type: text }
+          - { name: credit_limit, path: "$.CreditLimit", type: decimal }
+          - { name: updated_at,   path: "$.UpdatedAt",   type: timestamptz, transform: parse_iso8601 }

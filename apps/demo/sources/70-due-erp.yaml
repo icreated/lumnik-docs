@@ -1,0 +1,21 @@
+# 70-due-erp.yaml — the ERP's orders: a due date with its time, an amount.
+# Both are typed at the door: a timestamp and a number.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: due-erp
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/due-erp.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - parse-date: { column: due_at, formats: ["yyyy-MM-dd HH:mm:ss"] }
+      - parse-number: { column: amount, decimal-separator: "." }
