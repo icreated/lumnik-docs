@@ -1,0 +1,20 @@
+# 20-six-partitions.yaml — a topic over six partitions.
+#
+# acme.orders is keyed by partner over six partitions. Each partition keeps its own position:
+# the next run starts where each one stopped.
+#
+# Expect: 24 000 rows in connector.t_acme_orders.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-orders
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_orders
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.orders
+  format: json

@@ -1,0 +1,59 @@
+# 95-soap-watermark.yaml — incremental over SOAP.
+#
+# `incremental: watermark` sends the last mark on the first request of a run, under the
+# parameter named by `incremental.param`. On SOAP, that parameter goes in the URL's query
+# string, not in the body:
+#
+#   POST /siebel/start.swe?updated_since=2026-01-02T15:59:00Z
+#
+# The body template has no {{watermark}} placeholder: `lm apply` refuses one. A service that
+# wants the filter inside the body cannot be read incrementally today.
+#
+#   lm connector run acme-soap-incremental      # run 1 — the full 2 400
+#   lm connector run acme-soap-incremental      # run 2 — only what changed
+#   lm endpoint reset-cursor acme-soap-incremental/partners
+#
+# Expect: run 1 = 2 400 in / 2 400 out. Run 2 = 1 in / 1 out: the row holding the latest
+# instant comes back, and replaces itself.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-incremental
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /siebel/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      incremental:
+        mode: watermark
+        param: updated_since          # a query parameter on the POST — not a body element
+        watermark_path: "$.UpdatedAt"
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_incremental
+        unique_key: "$.Id"
+        promote:
+          - { name: name,       path: "$.Name",      type: text }
+          - { name: updated_at, path: "$.UpdatedAt", type: timestamptz, transform: parse_iso8601 }

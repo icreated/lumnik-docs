@@ -1,0 +1,23 @@
+# 68-refused-check-on-rest.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `check.trigger: ingestion` cannot watch a REST table — a run does not report it as written.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: lab-result-review
+spec:
+  scope: lab
+  provenance: declared
+  on:
+    table: ext.lab_results
+    column: review_state
+    key: sample
+  dormancy:
+    after: 7d
+  check:
+    trigger: ingestion
+  states:
+    - { code: to_be_verified, initial: true }
+    - { code: verified, terminal: true }
+  transitions:
+    - { from: [to_be_verified], to: verified }

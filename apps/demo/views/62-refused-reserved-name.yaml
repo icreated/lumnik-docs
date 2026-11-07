@@ -1,0 +1,11 @@
+# 62-refused-reserved-name.yaml — must be refused. A clean render or apply on this file is the defect.
+#
+# The rule: `apply`, `render`, `detail` and `generate` would shadow a sibling endpoint in the saved-view store: the view would list but never fetch.
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: render
+spec:
+  scope: desk
+  table: connector.v_acmecustomer
+  columns: [code, name]

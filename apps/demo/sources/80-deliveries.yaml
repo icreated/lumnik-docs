@@ -1,0 +1,20 @@
+# 80-deliveries.yaml — the carrier's deliveries, each with the date it was promised for.
+# parse-date types promised_on: a workflow's due date must be a date, not text.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-desk-deliveries
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/acme-deliveries.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - parse-date: { column: promised_on, formats: ["yyyy-MM-dd"] }

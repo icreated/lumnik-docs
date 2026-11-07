@@ -1,0 +1,17 @@
+# 60-refused-unknown-column.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: a `when` column must exist in the trigger table — a process that could never fire is never accepted silently.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: refused-column
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.t_acme_desk_orders
+  when:
+    - montant>1000
+  emit:
+    type: decision.big-order
+    message: "Grosse commande {order_no}"

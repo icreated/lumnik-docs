@@ -1,0 +1,22 @@
+# 57-promote-refused.yaml — two promote entries refused at validate.
+#
+# promote reads one scalar into one typed column. A nested object already lands as jsonb under its
+# top-level field, and `id` is one of the hub's seven reserved columns.
+#
+# Expect: exit 1, two errors, each naming its entry.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-probes-refused
+  connector_type: kafka
+  scopes: [cold-chain]
+
+spec:
+  name: acme_probes_refused
+  brokers: host.docker.internal:29092
+  topic: acme.probes
+  format: json
+  promote:
+    - { name: reading, path: $.object, type: jsonb }          # the whole object: it is already a column
+    - { name: id, path: $.deduplicationId, type: text }       # id is a hub column: reserved

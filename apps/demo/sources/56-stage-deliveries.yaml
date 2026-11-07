@@ -1,0 +1,16 @@
+# 56-stage-deliveries.yaml — the delivery notes, each stamped DELIVERED (for conflicts: false on the Entities page).
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: stage-deliveries
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/stage-deliveries.csv
+  parser:
+    has_header: true
+  after_process: none

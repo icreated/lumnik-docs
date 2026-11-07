@@ -1,0 +1,54 @@
+# 40-watermark.yaml — read only what changed since the last run.
+#
+# `mode: watermark` sends the last mark on the first request of the run, and the API returns
+# only what is newer:  GET /offset/partners?updated_since=2026-01-02T15:59:00Z&offset=0&limit=500
+#
+# Run 1: no mark yet — a full read, 2 400 rows.
+# Run 2: only the rows changed since run 1 (a little before, so nothing changed during run 1 is
+#        missed). They replace their earlier version: the table stays at 2 400.
+#
+# The mark moves only when a run completes: a failed run leaves it where it was.
+#
+#   lm endpoint reset-cursor acme-incremental/partners     # the next run is full again
+#
+# Point `watermark_path` at a field the source updates on every change, or every run re-reads
+# everything.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-incremental
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      path: /offset/partners
+      method: GET
+      pagination:
+        kind: offset
+        offset_param: offset
+        limit_param: limit
+        limit: 500
+        response_path: "$.data"
+        # No total_path here on purpose: an incremental endpoint returns a filtered slice, and
+        # the source's unfiltered $.total is not the number it should be checked against.
+      incremental:
+        mode: watermark
+        param: updated_since        # the query parameter the API filters on
+        watermark_path: "$.updated_at"
+      target:
+        kind: hybrid
+        table: ext.acme_incremental_partners
+        unique_key: "$.id"
+        promote:
+          - { name: name,       path: "$.name",       type: text }
+          - { name: updated_at, path: "$.updated_at", type: timestamptz, transform: parse_iso8601 }

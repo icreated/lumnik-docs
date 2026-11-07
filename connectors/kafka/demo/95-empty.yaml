@@ -1,0 +1,19 @@
+# 95-empty.yaml — a topic with nothing in it.
+#
+# Expect: Completed, in=0 out=0, no table created — an honest empty run, which is exactly
+#         what a poll that timed out before its first fetch would also look like. The page
+#         says how to tell them apart.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-empty
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_empty
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.empty
+  format: json

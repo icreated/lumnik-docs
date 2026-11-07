@@ -1,0 +1,18 @@
+# 40-rest-over-limit.yaml — a process on a REST connector's table (ext.*).
+#
+# `on.table` is the connector's `target.table`; `when` and `{col}` name its promoted columns.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: lab-over-limit-c
+spec:
+  scope: lab
+  on:
+    event: data.row.changed
+    table: ext.lab_results
+  when:
+    - result>100
+  emit:
+    type: decision.lab-over-limit-c
+    key: sample
+    message: "{sample} ({research_group}): {result} {unit}, a clean plate holds at most 100 — state {review_state}"

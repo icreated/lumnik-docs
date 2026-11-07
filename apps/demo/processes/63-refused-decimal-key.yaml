@@ -1,0 +1,17 @@
+# 63-refused-decimal-key.yaml — REFUSED: the Entity matches on a decimal (entities/66-partner-by-amount.yaml).
+#
+# Each change would read the whole source table, so the hub refuses the process instead of running it slowly.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: partner-by-amount
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.v_partnerbyamount
+  when:
+    - order_no=SO-1
+  emit:
+    type: decision.partner
+    message: "Order {order_no}"

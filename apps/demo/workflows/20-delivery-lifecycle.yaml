@@ -1,0 +1,29 @@
+# 20-delivery-lifecycle.yaml — a delivery promised for a date and still on the road is late.
+#
+# Expect: one decision.overdue.acme-delivery-lifecycle, for DL-1 (promised 2026-10-20, EN_ROUTE).
+#         DL-2 is delivered; DL-3 is promised for 2030; DL-4 has no date.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: acme-delivery-lifecycle
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_deliveries
+    column: status
+    key: delivery_no
+  due:
+    column: promised_on
+    states: [EN_ROUTE]
+    zone: Europe/Paris
+    message: "Livraison {doc_key} promise pour le {due}, toujours {state_label}"
+  states:
+    - code: EN_ROUTE
+      label: "en route"
+      initial: true
+    - code: LIVREE
+      label: "livrée"
+      terminal: true
+  transitions:
+    - { from: [EN_ROUTE], to: LIVREE }

@@ -1,0 +1,6 @@
+type,order_no,customer,sku,qty
+H,SO-1,ACME,,
+L,,,PMP-100,2
+L,,,VAN-200,1
+H,SO-2,,,
+L,,,FLT-300,5

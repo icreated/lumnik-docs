@@ -1,0 +1,23 @@
+# 55-raw.yaml — what the producer sends is what lands.
+#
+# acme.partners-raw carries field names a database column is not supposed to have
+# ("Partner Name", "credit.limit", "MONTANT_€"), a nested object and an array. A kafka
+# manifest has no mapping block, so nothing renames or flattens them: each top-level key
+# becomes a column under that exact name (quoted), and a nested value lands as jsonb.
+#
+# Expect: 500 rows; columns "Partner Name", "credit.limit", "MONTANT_€", address (jsonb),
+#         tags (jsonb) — and every one of them askable by name in chat.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-raw
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_raw
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-raw
+  format: json

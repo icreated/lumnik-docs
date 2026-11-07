@@ -1,0 +1,12 @@
+# 61-refused-unknown-key.yaml — must be refused. A clean render or apply on this file is the defect.
+#
+# The rule: `titel:` is not a key kind:View honors; a silently missing title is what the refusal prevents.
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: acme-refused-key
+spec:
+  scope: desk
+  table: connector.v_acmecustomer
+  titel: Clients
+  columns: [code, name]

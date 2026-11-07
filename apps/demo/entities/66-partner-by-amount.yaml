@@ -1,0 +1,13 @@
+# 66-partner-by-amount.yaml — an Entity whose match key is a DECIMAL (the typed `amount` of 72-due-partner-typed).
+#
+# The Entity applies. A Process on it is refused (processes/63-refused-decimal-key.yaml): the hub could not
+# make the lookup by a decimal key fast. Match on a text or a whole number instead.
+kind: Entity
+name: PartnerByAmount
+match: [amount]
+scopes: [desk]
+sources:
+  - table: t_due_partner
+    map:
+      order_no: order_no
+      amount: amount

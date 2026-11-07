@@ -1,0 +1,36 @@
+# One Redpanda node — the broker every screen on docs/connectors/kafka.md reads.
+#
+# Two advertised listeners, because one cannot serve both worlds:
+#   host   -> localhost:19092              acme-topics.py, from your shell
+#   docker -> host.docker.internal:29092   the hub, from its container — what the manifests carry
+# Get these wrong and the hub connects, is handed an address it cannot reach, and hangs until
+# the client's metadata timeout with nothing useful in the error.
+#
+# Automatic topic creation is OFF: acme.absent must stay absent, or the refusal the page shows
+# for a topic that does not exist can never be reached (the hub's own consumer refuses to
+# create topics too — see the page).
+name: lumnik-kafka-demo
+
+services:
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.3.5
+    container_name: lumnik-demo-redpanda
+    command:
+      - redpanda
+      - start
+      - --mode=dev-container
+      - --node-id=0
+      - --kafka-addr=internal://0.0.0.0:9092,host://0.0.0.0:19092,docker://0.0.0.0:29092
+      - --advertise-kafka-addr=internal://redpanda:9092,host://localhost:19092,docker://host.docker.internal:29092
+      # `--set` takes TWO tokens: written `--set=k=v`, rpk hands the flag to the redpanda
+      # binary, which dies with "Argument parse error: unrecognised option".
+      - --set
+      - redpanda.auto_create_topics_enabled=false
+    ports:
+      - "19092:19092"
+      - "29092:29092"
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster info --brokers localhost:9092 >/dev/null 2>&1"]
+      interval: 2s
+      timeout: 5s
+      retries: 30

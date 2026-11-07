@@ -1,0 +1,16 @@
+# 20-crm.yaml — the CRM's contacts, with no ERP code. Lands connector.t_res_crm.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: res-crm
+  connector_type: csv-file
+  scopes: [sales]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-resolution/crm-contacts.csv    # on the HUB's filesystem
+  parser:
+    has_header: true
+  after_process: none
