@@ -1,0 +1,16 @@
+# 10-erp.yaml — the ERP's customers. Lands connector.t_res_erp.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: res-erp
+  connector_type: csv-file
+  scopes: [sales]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-resolution/erp-customers.csv   # on the HUB's filesystem
+  parser:
+    has_header: true
+  after_process: none

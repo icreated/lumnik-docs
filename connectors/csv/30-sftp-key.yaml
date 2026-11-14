@@ -1,0 +1,34 @@
+# 30-sftp-key.yaml — pull CSVs from an SFTP server into the hub.
+#   lm apply -f docs/connectors/csv/30-sftp-key.yaml
+#   lm connector run csv-sftp
+#
+# Credentials are never inline: `password_env` names a secret stored with `lm secret set`.
+# Use `key_env` instead for an SSH key (the value is the private key).
+#
+# Each run reads only the files that are new or rewritten since the last run.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: csv-sftp
+  connector_type: csv-file
+  scopes: [demo]
+
+spec:
+  transport:
+    kind: sftp
+    host: localhost
+    port: 2222                       # the dev compose 'sftp' service; from a hub in Docker,
+                                     # use host.docker.internal
+    user: csvuser
+    path: /upload/seed/*.csv         # glob on the remote side (seed/ subdir from the read-only mount)
+    password_env: CSV_SFTP_PASSWORD  # the secret's name, never the password itself
+    strict_host_key: false           # DEMO ONLY: this test server gets a new host key at every
+                                     # restart. Against a real server, drop this line and declare
+                                     # host_key_fingerprint: "SHA256:…" instead. Without the check,
+                                     # an impostor server would receive the password.
+
+  parser:
+    has_header: true
+
+  after_process: none              # archive | delete | move | none (leave the file in place)

@@ -1,0 +1,22 @@
+# 63-refused-dormancy-no-key.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: dormancy is per-document; `spec.on.key` is what links a document's versions.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-no-key
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  dormancy:
+    after: 7d
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, aliases: [en cours] }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }

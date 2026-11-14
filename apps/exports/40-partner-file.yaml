@@ -1,0 +1,45 @@
+# 40-partner-file.yaml — the same customers, in the shape a partner's file spec asks for.
+#
+# The partner wants its own header names, its own segment codes (A/B instead of GOLD/SILVER),
+# amounts with a decimal comma, no readable email, and only GOLD and SILVER customers.
+# The filter picks the rows; each column's `format` steps then run top to bottom.
+apiVersion: apps.lumnik.io/v1
+kind: Export
+metadata:
+  name: partner-customers
+spec:
+  scope: desk
+  source:
+    entity: AcmeCustomer
+  columns:
+    - name: code
+      as: CUST_NO
+    - name: name
+      as: RAISON_SOCIALE
+    - name: segment
+      as: CAT
+      format:
+        - lookup: { table: { GOLD: A, SILVER: B }, on-missing: error }
+    - name: credit_limit
+      as: ENCOURS
+      format:
+        - format-number: { decimal-separator: ",", scale: 2 }
+    - name: email
+      as: EMAIL
+      format:
+        - mask: { keep-first: 2, keep-last: 8 }
+  filter:
+    - column: segment
+      in: [GOLD, SILVER]
+  order: [code]
+  format:
+    kind: csv
+    delimiter: ";"
+  destination:
+    kind: s3
+    bucket: acme-outbound
+    prefix: partner/
+    filename: customers-${date}.csv
+    access_key_env: OUTBOUND_S3_ACCESS_KEY
+    secret_key_env: OUTBOUND_S3_SECRET_KEY
+  mode: snapshot

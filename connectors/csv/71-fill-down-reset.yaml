@@ -1,0 +1,21 @@
+# 71-fill-down-reset.yaml — an order export: one H (header) row, then its L (line) rows.
+# reset-when forgets the carried values at each H row, so an order without a customer
+# never inherits the previous order's.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: order-lines
+  connector_type: csv-file
+  scopes: [sales]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/order-lines.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - fill-down: { columns: [order_no, customer], reset-when: { column: type, in: [H] } }

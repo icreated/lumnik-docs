@@ -1,0 +1,58 @@
+# 94-soap-session.yaml — the credential that does not travel in a header.
+#
+# Legacy EAI services often want their session token INSIDE the envelope, in <soap:Header>,
+# where no auth provider can put it. That is what the endpoint's own `header:` template is for —
+# same substitution as `body:`, same placeholders, same fail-fast.
+#
+# {{secret:NAME}} reads the `lm secret` registry first and the hub's environment second, like
+# password_env below. ({{env:NAME}} would read the hub's environment only.) So:
+#
+#   lm secret set ACME_SESSION_TOKEN        # demo-session-42
+#
+# An unresolved placeholder FAILS THE RUN before the request is sent — the template never goes
+# on the wire with a literal {{...}} inside it, and the value is never echoed in the error.
+#
+# Expect (secret set): 2 400 rows.
+# Expect (secret absent): a run that fails fast naming the placeholder, NOT a 401 — the refusal
+# happens in the hub, before the service is ever asked.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-soap-session
+  connector_type: rest-generic
+  scopes: [billing]
+
+spec:
+  base_url: http://host.docker.internal:8099
+
+  # Transport auth is still HTTP Basic — the session token is a SECOND credential, carried in
+  # the envelope. Both are needed.
+  auth:
+    kind: basic
+    username: demo-user
+    password_env: ACME_BASIC_PW
+
+  endpoints:
+    - id: partners
+      kind: soap
+      path: /session/start.swe
+      soap_action: "document/urn:acme:CustomerQueryPage"
+      header: |
+        <SessionToken>{{secret:ACME_SESSION_TOKEN}}</SessionToken>
+      body: |
+        <CustomerQueryPage_Input>
+          <PageSize>{{page_size}}</PageSize>
+          <StartRowNum>{{cursor}}</StartRowNum>
+        </CustomerQueryPage_Input>
+      pagination:
+        kind: soap
+        page_size: 500
+        last_page_path: "$.Body.CustomerQueryPage_Output.LastPage"
+        response_path: "$.Body.CustomerQueryPage_Output.ListOfCustomer.Customer"
+      target:
+        kind: hybrid
+        table: ext.acme_soap_session
+        unique_key: "$.Id"
+        promote:
+          - { name: name, path: "$.Name", type: text }

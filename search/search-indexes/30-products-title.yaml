@@ -1,0 +1,14 @@
+apiVersion: search.lumnik.io/v1
+kind: SearchIndex
+metadata:
+  name: products
+spec:
+  entity: Product
+  titleField: reference
+  fields:
+    - name: reference
+      match: prefix
+    - name: description
+      match: text
+    - name: family
+      facet: true

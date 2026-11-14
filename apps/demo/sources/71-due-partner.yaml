@@ -1,0 +1,17 @@
+# 71-due-partner.yaml — a partner's copy of the same orders, left as written: 01/07/2026, 1500.00.
+# Fused with the ERP, every date and amount disagrees. 72-due-partner-typed.yaml types them.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: due-partner
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/due-partner.csv
+  parser:
+    has_header: true
+  after_process: none

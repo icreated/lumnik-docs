@@ -1,0 +1,21 @@
+# 72-due-partner-typed.yaml — the same connector, its date and amount typed at the door.
+# Apply it only after deleting the connector: a table keeps the types it was created with.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: due-partner
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: /tmp/acme-desk/due-partner.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - parse-date: { column: due, formats: ["dd/MM/yyyy"] }
+      - parse-number: { column: amount, decimal-separator: "." }

@@ -1,0 +1,20 @@
+# 60-refused-two-initial.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: exactly one state is `initial: true`.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-two-initial
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, initial: true }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }

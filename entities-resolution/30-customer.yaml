@@ -1,0 +1,26 @@
+# 30-customer.yaml — one Customer across the ERP and the CRM, which share no key.
+# The two are matched on the email address, compared in lower case.
+
+kind: Entity
+name: Customer
+scopes: [sales]
+sources:
+  - table: t_res_erp
+    map:
+      code: code
+      name: name
+      email: email
+  - table: t_res_crm
+    map:
+      contact_id: crm_id
+      company: name
+      mail: email
+resolution:
+  identity:               # the column that identifies a row in each source
+    t_res_erp: code
+    t_res_crm: crm_id
+  cascade:
+    - id: email
+      exact:
+        fields: [email]
+        normalize: [lower]

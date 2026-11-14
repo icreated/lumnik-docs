@@ -1,0 +1,18 @@
+# 40-customer-crm-city.yaml — each system for its own fields: the CRM is the reference for the city.
+#
+# Same two tables as 10-customer.yaml, the ERP still first. `prefer` puts the CRM first for the
+# city alone: the ERP keeps every other column.
+#
+# Expect: P-1008 reads Villeurbanne (the CRM's), its name and segment still the ERP's, and the
+#         disagreement still in _conflicts, the CRM's value first.
+kind: Entity
+name: AcmeCustomerCrmCity
+match: [code]
+scopes: [desk]
+columns:
+  city: { prefer: t_acme_desk_crm }
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: name, city: city, segment: segment, credit_limit: credit_limit }
+  - table: t_acme_desk_crm
+    map: { customer: code, company: name, town: city, email: email }

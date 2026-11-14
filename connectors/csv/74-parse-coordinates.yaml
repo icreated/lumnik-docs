@@ -1,0 +1,26 @@
+# 74-parse-coordinates.yaml — delivery sites whose GPS points were typed by several tools.
+# parse-coordinates reads each pair as two numbers, exchanges a swapped pair, and says why it emptied one.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: delivery-sites
+  connector_type: csv-file
+  scopes: [dispatch]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/delivery-sites.csv
+  parser:
+    has_header: true
+    delimiter: ";"
+  after_process: none
+  mapping:
+    cell:
+      - parse-coordinates:
+          lat: latitude
+          lon: longitude
+          within: [41.0, -5.5, 51.5, 10.0]   # south, west, north, east: mainland France
+          swapped: fix                        # exchange a swapped pair instead of emptying it
+          reason: coord_issue                 # the column that says why

@@ -1,0 +1,19 @@
+# 30-lyon-customer.yaml — a process on a FUSED entity (icreated/lumnik#1833).
+#
+# The trigger is the Entity's view. A change in either source (the ERP or the CRM table) re-evaluates
+# the fused row it belongs to, so `when:` may read columns that no single source holds. Both source
+# tables must be ones a connector fills, and the Entity must be a match: Entity without joins:.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: lyon-customer
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.v_acmecustomer
+  when:
+    - city=Lyon
+  emit:
+    type: decision.lyon
+    message: "Client {name} à Lyon"

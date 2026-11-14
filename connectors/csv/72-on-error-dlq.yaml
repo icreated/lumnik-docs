@@ -1,0 +1,23 @@
+# 72-on-error-dlq.yaml — an invoice without a readable amount is a wrong row, not an empty cell.
+# on-error sends that row to the dead letters; every other column stays soft.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: invoices
+  connector_type: csv-file
+  scopes: [finance]
+
+spec:
+  transport:
+    kind: local
+    path: docs/connectors/csv/data/invoices.csv
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    on-error:
+      fields: { amount_eur: dlq }
+      default: soft
+    cell:
+      - parse-number: { column: amount_eur, decimal-separator: "." }

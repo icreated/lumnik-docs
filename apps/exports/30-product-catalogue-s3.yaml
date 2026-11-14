@@ -1,0 +1,26 @@
+# 30-product-catalogue-s3.yaml — the joined entity, delivered to an S3 bucket.
+#
+# One row per product, the category's name and description alongside. A product whose category
+# is unknown, or listed twice, is delivered with those cells empty. For a local MinIO add
+# `endpoint: http://minio:9000` under destination.
+apiVersion: apps.lumnik.io/v1
+kind: Export
+metadata:
+  name: product-catalogue
+spec:
+  scope: catalogue
+  source:
+    entity: ProductWithCategory
+  columns: [product_id, product_name, category_id, category_name, category_description]
+  order: [product_id]
+  format:
+    kind: csv
+  destination:
+    kind: s3
+    bucket: acme-outbound
+    prefix: catalogue/
+    filename: products.csv
+    region: eu-west-3
+    access_key_env: OUTBOUND_S3_ACCESS_KEY
+    secret_key_env: OUTBOUND_S3_SECRET_KEY
+  mode: snapshot
