@@ -1,0 +1,21 @@
+# 40-poison.yaml — messages that are not JSON objects go to the dead letters.
+#
+# acme.partners-poison holds 1 000 messages; 143 are not a JSON object: a truncated object, a
+# JSON array, a JSON scalar.
+#
+# Expect: Completed, in=1000 out=857 skipped=143, 143 dead letters under MalformedSource,
+#         857 rows in the table.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-poison
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_poison
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-poison
+  format: json

@@ -1,0 +1,5501 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/operations/upgrade/">
+      
+      
+        <link rel="prev" href="../backup-restore/">
+      
+      
+        <link rel="next" href="../observability/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Upgrade - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#upgrading-the-hub" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Upgrade
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/other-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other first sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understand
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understand
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CSV & files
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv-quick-look/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One file, one command
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/when-the-topic-misbehaves/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When the topic misbehaves
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Transformers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repair the data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kotlin-hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin hooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading a run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Entities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dates and numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-joins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resolve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/querying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When Ask refuses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The rules, in detail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/proposal-dossier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal dossiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apps/demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../choosing-what-your-hub-offers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choosing what your hub offers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/echoed-credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credentials a source writes back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/outbound-addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the hub connects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-short-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The short version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turning-on-the-run-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turning on the run queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-notes-that-need-a-gesture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release notes that need a gesture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release notes that need a gesture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-endpoint-sends-its-declared-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST endpoint sends its declared method, GET or POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-connects-without-a-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 connects without a proxy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-without-endpoint-goes-to-aws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 without endpoint goes to AWS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-jdbc-url-takes-only-the-listed-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A JDBC URL takes only the listed parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-credentials-are-no-longer-served-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A connector's inline credentials are no longer served back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-and-metrics-moved-to-port-9000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health and metrics moved to port 9000
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lm-sends-no-token-over-plain-http-to-another-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lm sends no token over plain http to another machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-tenants-on-one-table-name-see-only-their-own-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two tenants on one table name see only their own columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-a-view-or-an-app-belongs-to-the-tenant-that-applied-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An entity, a view or an app belongs to the tenant that applied it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-a-hub-with-several-tenants-lm-superadmin-writes-entities-views-and-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On a hub with several tenants, lm_superadmin writes entities, views and apps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tls-proxy-serves-the-lumnik-realm-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The TLS proxy serves the lumnik realm only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-runs-in-production-mode-on-postgresql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keycloak runs in production mode on PostgreSQL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-public-clients-take-no-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The public clients take no password
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-access-token-lives-5-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An access token lives 5 minutes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bundled-keycloak-realm-is-stricter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bundled Keycloak realm is stricter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-hub-judges-the-address-it-connects-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub checks the address it connects to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-connector-reads-only-the-secrets-whose-scopes-it-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A connector reads only the secrets whose scopes it carries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-declared-index-is-per-tenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A declared index is per tenant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-target-is-a-table-under-ext-or-connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST target is a table under ext or connector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-hub-writes-only-the-rest-tables-it-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub writes only the REST tables it made
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hook-override-carries-no-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A hook override carries no code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-secret-name-resolves-in-lm-secret-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A secret name resolves in lm secret only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-local-transport-reads-one-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The local transport reads one folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hub-started-by-hand-refuses-the-published-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A hub started by hand refuses the published defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-reads-connector-tables-only-within-their-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An Entity reads connector tables only, within their scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-caller-with-a-scope-role-is-refused-the-tenant-wide-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A caller with a scope role is refused the tenant-wide work
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ask-stays-closed-until-the-read-only-role-is-hardened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask stays closed until the read-only role is hardened
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rate-limit-is-per-user-under-a-tenant-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A rate limit is per user, under a tenant ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-host-stack-hsts-on-request-three-more-settings-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-host stack: HSTS on request, three more settings read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-helm-charts-pods-run-with-fewer-rights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Helm chart's pods run with fewer rights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-host-containers-run-with-fewer-rights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-host containers run with fewer rights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-header-reference-must-resolve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST header reference must resolve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscriptions-are-tenant-wide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscriptions are tenant-wide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-local-csv-file-is-now-the-tables-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One local csv file is the table's state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-jdbc-table-now-holds-one-row-per-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A jdbc table holds one row per key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running from source
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roll-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roll back
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-the-boot-fails-mid-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the boot fails mid-migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changing-the-public-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changing the public address
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dead-letters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event dead letters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a JDBC provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Background
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Background
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-short-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The short version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#turning-on-the-run-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Turning on the run queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-notes-that-need-a-gesture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release notes that need a gesture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release notes that need a gesture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-endpoint-sends-its-declared-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST endpoint sends its declared method, GET or POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-connects-without-a-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 connects without a proxy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s3-without-endpoint-goes-to-aws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S3 without endpoint goes to AWS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-jdbc-url-takes-only-the-listed-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A JDBC URL takes only the listed parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-credentials-are-no-longer-served-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A connector's inline credentials are no longer served back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-and-metrics-moved-to-port-9000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health and metrics moved to port 9000
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lm-sends-no-token-over-plain-http-to-another-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lm sends no token over plain http to another machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-tenants-on-one-table-name-see-only-their-own-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two tenants on one table name see only their own columns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-a-view-or-an-app-belongs-to-the-tenant-that-applied-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An entity, a view or an app belongs to the tenant that applied it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-a-hub-with-several-tenants-lm-superadmin-writes-entities-views-and-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On a hub with several tenants, lm_superadmin writes entities, views and apps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tls-proxy-serves-the-lumnik-realm-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The TLS proxy serves the lumnik realm only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keycloak-runs-in-production-mode-on-postgresql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keycloak runs in production mode on PostgreSQL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-public-clients-take-no-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The public clients take no password
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-access-token-lives-5-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An access token lives 5 minutes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bundled-keycloak-realm-is-stricter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bundled Keycloak realm is stricter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-hub-judges-the-address-it-connects-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub checks the address it connects to
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-connector-reads-only-the-secrets-whose-scopes-it-carries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A connector reads only the secrets whose scopes it carries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-declared-index-is-per-tenant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A declared index is per tenant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-target-is-a-table-under-ext-or-connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST target is a table under ext or connector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-hub-writes-only-the-rest-tables-it-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hub writes only the REST tables it made
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hook-override-carries-no-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A hook override carries no code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-secret-name-resolves-in-lm-secret-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A secret name resolves in lm secret only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-local-transport-reads-one-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The local transport reads one folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hub-started-by-hand-refuses-the-published-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A hub started by hand refuses the published defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-reads-connector-tables-only-within-their-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An Entity reads connector tables only, within their scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-caller-with-a-scope-role-is-refused-the-tenant-wide-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A caller with a scope role is refused the tenant-wide work
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ask-stays-closed-until-the-read-only-role-is-hardened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask stays closed until the read-only role is hardened
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rate-limit-is-per-user-under-a-tenant-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A rate limit is per user, under a tenant ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-host-stack-hsts-on-request-three-more-settings-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-host stack: HSTS on request, three more settings read
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-helm-charts-pods-run-with-fewer-rights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Helm chart's pods run with fewer rights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-self-host-containers-run-with-fewer-rights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self-host containers run with fewer rights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-rest-header-reference-must-resolve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A REST header reference must resolve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscriptions-are-tenant-wide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscriptions are tenant-wide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-local-csv-file-is-now-the-tables-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One local csv file is the table's state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-jdbc-table-now-holds-one-row-per-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A jdbc table holds one row per key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-from-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running from source
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roll-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roll back
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-the-boot-fails-mid-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the boot fails mid-migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changing-the-public-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changing the public address
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="upgrading-the-hub">Upgrading the hub</h1>
+<blockquote>
+<p>Migrations run forward-only at boot. The pre-upgrade backup is the only rollback.</p>
+</blockquote>
+<h2 id="the-short-version">The short version</h2>
+<ol>
+<li><strong>Take a backup</strong> — <a href="../backup-restore/">backup-restore.md</a>. The backup is the rollback.</li>
+<li>
+<p>Note the current schema versions:</p>
+<div class="highlight"><pre><span></span><code>$ lm migration status
+SCHEMA     VERSION  PENDING  LAST APPLIED
+core       83       0        2026-10-25 07:04
+identity   18       0        2026-10-24 21:55
+rag        6        0        2026-10-24 21:55
+search_pg  3        0        2026-10-25 00:13
+</code></pre></div>
+<p><code>search_pg</code> appears only on a hub built with Search.</p>
+</li>
+<li>
+<p>Point at the new image and restart:</p>
+<ul>
+<li>
+<p><strong>selfhost:</strong> set <code>LUMNIK_VERSION</code> in <code>.env</code> (or leave it unset to track <code>main</code>), then
+  <code>deploy/selfhost/up.sh</code>. It keeps the overlays the stack was started with (TLS proxy, Search).
+  A stack with Search is rebuilt from source, not pulled: <code>git pull</code> first, as in
+  <a href="#running-from-source">Running from source</a>.</p>
+</li>
+<li>
+<p><strong>Helm (cloud edition):</strong> bump <code>hub.image.tag</code>, then <code>helm upgrade</code>.</p>
+</li>
+<li>The hub migrates its database at boot, then reports healthy:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Boot budget</th>
+<th>On timeout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>selfhost compose</td>
+<td>~210 s (90 s grace + 12 × 10 s)</td>
+<td>the container shows <code>unhealthy</code>; it is not restarted</td>
+</tr>
+<tr>
+<td>Helm (cloud edition)</td>
+<td>~150 s (startup probe)</td>
+<td>Kubernetes restarts the pod</td>
+</tr>
+</tbody>
+</table>
+<p>Follow the boot with <code>./deploy/selfhost/logs.sh hub</code>.
+5. Run <code>lm migration status</code> again: a higher <code>VERSION</code> and <code>PENDING 0</code> on every schema means the
+   migrations are done.
+6. If an entity declares <a href="../../entities-resolution/"><code>resolution:</code></a>, apply it again with the same
+   manifest, then run <code>lm entity resolve NAME</code>.</p>
+</li>
+</ol>
+<h2 id="turning-on-the-run-queue">Turning on the run queue</h2>
+<p><code>LUMNIK_RUN_QUEUE_ENABLED=true</code> (Helm: <code>runQueue.enabled</code>) makes manual connector runs and
+on-demand export runs wait in status <code>Queued</code> (<a href="../../connectors/">connectors</a>,
+<a href="../../apps/exports/#runs-can-queue">exports</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LUMNIK_RUN_QUEUE_ENABLED</code></td>
+<td><code>false</code></td>
+<td>queue manual and on-demand runs</td>
+</tr>
+<tr>
+<td><code>LUMNIK_RUN_QUEUE_MAX_AGE</code></td>
+<td><code>1h</code></td>
+<td>a run still queued after this ends: <code>Cancelled</code> (connector), <code>Failed</code> (export)</td>
+</tr>
+<tr>
+<td><code>LUMNIK_RUN_QUEUE_POLL_INTERVAL</code></td>
+<td><code>5s</code></td>
+<td>how often a waiting run is picked up</td>
+</tr>
+<tr>
+<td><code>LUMNIK_CONNECTOR_MAX_CONCURRENT_SCHEDULED_RUNS</code></td>
+<td><code>4</code></td>
+<td>how many endpoint runs one hub drives at once. Each takes up to two connections of the <code>admin</code> pool: raise <code>quarkus.datasource."admin".jdbc.max-size</code> with it</td>
+</tr>
+</tbody>
+</table>
+<p>Set them in <code>.env</code>, then run <code>./deploy/selfhost/up.sh</code> (Helm: <code>runQueue.*</code>, and <code>hub.extraEnv</code>
+for the last one). The pool size is not a <code>.env</code> setting: it
+goes in an override file, as in <a href="../../recipes/logs/#turning-up-the-volume">Turning up the volume</a>.</p>
+<p>The run queue is global to the deployment: upgrade <strong>every</strong> hub replica to the same release first,
+then turn it on. Turning it off again:</p>
+<ul>
+<li>runs already queued still start, or end once they pass <code>LUMNIK_RUN_QUEUE_MAX_AGE</code>;</li>
+<li>new manual and on-demand runs start at once, except where a run is still queued: there a new
+  connector run is born <code>Cancelled</code> and a new export run answers <code>409</code>, until the queued one drains;</li>
+<li>nothing is left stuck.</li>
+</ul>
+<h2 id="release-notes-that-need-a-gesture">Release notes that need a gesture</h2>
+<p>Some releases change what existing data means. Each section below says what you see after
+upgrading and what to do.</p>
+<h3 id="a-rest-endpoint-sends-its-declared-method">A REST endpoint sends its declared method, GET or POST</h3>
+<p>Before, a REST endpoint always read with GET, whatever its <code>method</code> said. Now it sends the
+declared method.</p>
+<ul>
+<li><strong>An endpoint declared <code>PUT</code>, <code>PATCH</code> or <code>DELETE</code> is refused.</strong> <code>lm validate</code> and <code>lm apply</code>
+  refuse the manifest. An endpoint already on the hub stops at its next run, before anything is
+  sent: <code>endpoint method must be GET or POST: a read never sends another</code>. Set <code>method: GET</code>
+  (it was what the source received) and apply again.</li>
+<li><strong>An endpoint declared <code>POST</code> now sends POST.</strong> If the source answers GET only, the run now
+  fails with the source's status. Set <code>method: GET</code> and apply again.</li>
+<li><strong>A POST endpoint must only read.</strong> It is sent on every run and every page, and again after a
+  timeout or a <code>5xx</code>. Never point it at a POST that creates, sends or changes something.</li>
+</ul>
+<h3 id="s3-connects-without-a-proxy">S3 connects without a proxy</h3>
+<p><strong>Who is concerned:</strong> a hub that reaches its S3 stores through a proxy, set with
+<code>-Dhttps.proxyHost</code> or <code>-Dhttp.proxyHost</code>.</p>
+<p><strong>What you see:</strong> S3 sources and exports connect to the store directly. Where the network allows
+only the proxy, their runs fail with a connection timeout.</p>
+<p><strong>The gesture:</strong> open the route from the hub to the store. The hub checks the store's address at
+every connection, so it cannot go through a proxy that picks the address itself.</p>
+<p><strong>Also concerned:</strong> a hub with <code>lumnik.outbound.allow-private=false</code> (the Helm default) that
+reaches AWS S3 through a VPC endpoint with private DNS. The bucket's name resolves to a private
+address, and its runs fail: <code>the host resolves to a private address, which this hub refuses</code>.
+Reach S3 by its public address: drop the private DNS for S3, or route the hub to the public
+endpoint.</p>
+<p><code>lumnik.outbound.allow-private=true</code> (Helm: <code>--set outbound.allowPrivate=true</code>) also works, but it
+is a decision for the whole hub. It opens the private networks to every address a tenant
+chooses: every connector, export and webhook, not S3 only.</p>
+<h3 id="s3-without-endpoint-goes-to-aws">S3 without <code>endpoint</code> goes to AWS</h3>
+<p><strong>Who is concerned:</strong> a hub that sends S3 sources to MinIO, or to another store, through
+<code>AWS_ENDPOINT_URL</code>, <code>AWS_ENDPOINT_URL_S3</code> or a profile's <code>endpoint_url</code>.</p>
+<p><strong>What you see:</strong> an S3 source or export with no <code>endpoint:</code> goes to AWS. Its runs fail, because
+AWS does not know the key.</p>
+<p><strong>The gesture, before upgrading:</strong> write the store's address in each S3 transport and export:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">transport</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">  </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://minio:9000</span>
+</code></pre></div>
+<h3 id="a-jdbc-url-takes-only-the-listed-parameters">A JDBC URL takes only the listed parameters</h3>
+<p>A JDBC URL now takes only the parameters listed in
+<a href="../../security/outbound-addresses/#a-jdbc-url">Where the hub connects</a>. Any other is refused by
+name. The source does not connect, and its runs fail:</p>
+<div class="highlight"><pre><span></span><code>the hub cannot tell where this URL connects: it sets sslcert, which the hub does not take
+</code></pre></div>
+<ul>
+<li><strong>PostgreSQL:</strong> <code>sslcert</code>, <code>sslkey</code>, <code>sslrootcert</code>, <code>sslfactory</code> and the Kerberos settings name
+  the hub's own files or tickets. <code>sslmode=verify-ca</code>, <code>verify-full</code> and <code>ssl=true</code> alone are
+  refused too: they read a CA from the hub's files.</li>
+<li><strong>Oracle:</strong> TCPS is refused for now: the driver would use the hub's own certificates. Connect
+  over TCP, or wait for certificates from <code>lm secret</code>. The SSL settings are refused too, even over
+  TCP: <code>ssl_server_dn_match</code>, <code>ssl_server_cert_dn</code>, and <code>SECURITY</code> in a descriptor. Remove them.
+  A wallet, a token or a proxy is refused, in the URL or in a descriptor. So is a
+  descriptor keyword outside the list, and a <code>?</code> inside a descriptor.</li>
+<li><strong>The hub presents no client certificate any more.</strong> A server that requires one refuses the
+  connection.</li>
+<li><strong><code>lm validate</code> and <code>lm apply</code> refuse such a URL</strong> with the same reason.</li>
+</ul>
+<p><strong>The gesture:</strong> remove the refused parameter. For an encrypted PostgreSQL connection, write
+<code>sslmode=require</code>. The traffic stays encrypted, but the hub no longer checks the server's
+certificate: someone on the network path could pose as the database. If you relied on
+<code>verify-full</code>, keep the source on a network you trust until the hub can take a CA of yours.</p>
+<h3 id="inline-credentials-are-no-longer-served-back">A connector's inline credentials are no longer served back</h3>
+<p>A manifest may write a credential in plain text instead of naming a secret: jdbc's <code>password</code>, a
+<code>password=</code> in its URL, REST's <code>auth.token_value</code>, a credential header's <code>value</code>, the password in a
+<code>base_url</code>. The hub stores it in the connector's config, and returned it whole to every read of
+the connector or its endpoints. It now returns <code>&lt;redacted&gt;</code> in its place, <code>%3Credacted%3E</code> inside a
+URL or an endpoint's path.</p>
+<ul>
+<li><strong>Sending a config back as you read it keeps the stored value</strong>: <code>&lt;redacted&gt;</code> stands for it.</li>
+<li><strong>A new value replaces it</strong>, as before.</li>
+<li><strong><code>&lt;redacted&gt;</code> where nothing is stored</strong>, or inside a value whose rest changed, is refused:
+  write the value itself.</li>
+<li><strong>A changed address takes no stored credential</strong>: change <code>base_url</code>, <code>url</code>, <code>token_url</code> or a
+  host, and write the credentials again with it.</li>
+</ul>
+<p><strong>The gesture:</strong> none. Prefer naming a secret (<code>password_env</code>, <code>token_env</code>, <code>value_env</code>), stored
+with <code>lm secret set</code>: then nothing of the credential is in the connector at all.</p>
+<h3 id="health-and-metrics-moved-to-port-9000">Health and metrics moved to port 9000</h3>
+<p>The hub answered <code>/q/health</code>, <code>/q/metrics</code>, <code>/q/openapi</code> and <code>/q/swagger-ui</code> on 8080, without a
+token, and the TLS proxy forwarded them. They now answer on the hub's management port, 9000, which
+nothing routes.</p>
+<ul>
+<li><strong>On 8080 they answer 404</strong>, and so does the TLS proxy, for any <code>/q/*</code>.</li>
+<li><strong>The selfhost healthcheck and the Helm probes</strong> read port 9000 by themselves.</li>
+<li><strong>Swagger UI</strong> runs only on a hub started in dev mode.</li>
+<li><strong><code>./deploy/selfhost/health.sh</code></strong> prints the health, as <code>curl localhost:8080/q/health</code> did.</li>
+</ul>
+<p><strong>The gesture:</strong>
+- <strong>A Prometheus job</strong> scraping <code>&lt;hub&gt;:8080/q/metrics</code>: point it at <code>hub:9000/q/metrics</code> from inside
+  the hub's network (<a href="../observability/#scraping-with-prometheus">observability</a>).
+- <strong>A monitor</strong> reading <code>/q/health</code> from outside: read it from inside instead, or use
+  <code>GET /api/platform/health</code> with an <code>lm_integrator</code> token.
+- <strong>Postman's import by URL</strong>: save the spec from inside the container
+  (<a href="../../recipes/test-the-api/#import-the-whole-api">Test the API</a>).
+- <strong>Do not publish 9000</strong>, and do not give it a Service or a route.</p>
+<h3 id="lm-sends-no-token-over-plain-http-to-another-machine"><code>lm</code> sends no token over plain http to another machine</h3>
+<p><code>lm</code> now refuses to send a token, a refresh token or a login over <code>http://</code> to a host that is not
+this machine. <code>localhost</code>, <code>127.0.0.1</code> and names under <code>.localhost</code> or <code>.test</code> are unchanged.</p>
+<div class="highlight"><pre><span></span><code>Error: refusing to send your token to http://hub.example.com:8080 in clear text: use https (the TLS proxy), or allow this context: lm config set-context prod --allow-insecure-http
+</code></pre></div>
+<p><strong>The gesture:</strong> put the hub behind https (<a href="../../deploy/#one-https-origin-the-tls-proxy">the TLS proxy</a>), then
+point the context at it. On a network you trust, allow the context instead:
+<code>lm config set-context prod --allow-insecure-http</code>. <code>--allow-insecure-http=false</code> takes it back.
+<code>LUMNIK_ALLOW_HTTP=1</code> allows a single run.</p>
+<p><code>lm login</code> now checks the issuer that Keycloak names. Behind the TLS proxy, a context on
+<code>http://localhost:8180/realms/lumnik</code> is refused there. Point it at the proxy's issuer:
+<code>lm config set-context &lt;name&gt; --oidc-issuer https://erp.example.com/realms/lumnik</code>.</p>
+<h3 id="two-tenants-on-one-table-name-see-only-their-own-columns">Two tenants on one table name see only their own columns</h3>
+<p>Two tenants that ingest the same source write one hub table. Now each one sees only the columns its own data brought.</p>
+<ul>
+<li><strong>In Ask,</strong> "show everything" shows your columns only. A column you did not bring is answered as a column that
+  does not exist.</li>
+<li><strong>In an entity,</strong> naming another tenant's column is refused, as a column that does not exist.</li>
+<li><strong>A few rare question shapes</strong> are refused in Ask: <code>I won't run this: the query names '&lt;table&gt;' in a way I cannot
+  check against this scope's columns. Ask again, naming the columns you want.</code> Ask again,
+  naming the columns you want.</li>
+<li><strong>Tables ingested before this release</strong> may still show another tenant's columns to a tenant. The hub cannot tell
+  them apart from the tenant's own, so it leaves them. No command sets a tenant's columns by hand yet.</li>
+</ul>
+<p><strong>The gesture:</strong> none. To keep two tenants fully apart, give each connector its own target table
+(<a href="../../security/rls/#two-tenants-one-table-name">Two tenants, one table name</a>).</p>
+<h3 id="an-entity-a-view-or-an-app-belongs-to-the-tenant-that-applied-it">An entity, a view or an app belongs to the tenant that applied it</h3>
+<p>Each tenant sees only the entities, views and apps applied for it.</p>
+<ul>
+<li><strong>One tenant:</strong> nothing changes. Your entities, views and apps stay yours.</li>
+<li><strong>Several tenants:</strong> what you applied before is shared. Every tenant sees it. Change it as <code>hubadmin</code>.</li>
+<li><strong>Always shared:</strong> the built-in apps, <code>clients</code> and <code>stock</code>.</li>
+<li><strong>To share one with every tenant:</strong> apply it as <code>hubadmin</code>. That needs <code>lm_superadmin</code>, on top of the command's
+  usual role. The bundled <code>hubadmin</code> has <code>lm_superadmin</code>; give it <code>lm_integrator</code> to apply a view or an app.</li>
+<li><strong><code>lm rag reindex</code> as <code>hubadmin</code></strong> also needs <code>lm_superadmin</code>.</li>
+<li><strong>A name is unique on the hub.</strong> If another tenant uses it, choose another:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>409 {"error":"this name is already taken on this hub: choose another"}
+</code></pre></div>
+<ul>
+<li><strong>Another tenant's entity, view or app</strong> answers <code>404</code>. Ask does not see its entities.</li>
+<li><strong>The default app:</strong> a tenant can have its own, with <code>default: true</code>. Without one, it opens the shared default.</li>
+</ul>
+<p><strong>The gesture:</strong> with one tenant, none. With several, change a shared entity, view or app as <code>hubadmin</code>.</p>
+<h3 id="on-a-hub-with-several-tenants-lm-superadmin-writes-entities-views-and-apps">On a hub with several tenants, <code>lm_superadmin</code> writes entities, views and apps</h3>
+<p>With several tenants, only <code>lm_superadmin</code> applies and deletes entities, views and apps.</p>
+<ul>
+<li><strong>One tenant: nothing changes.</strong> <code>lm_admin</code> and <code>lm_integrator</code> apply and delete as before.</li>
+<li><strong>Several tenants: only <code>lm_superadmin</code> writes them.</strong> That is <code>lm entity apply</code> and <code>delete</code>, <code>lm view apply</code> and
+  <code>delete</code>, <code>lm app apply</code> and <code>delete</code>, and <code>lm rag reindex</code>. Anyone else gets:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>403 {"error":"deployment-wide: this hub serves several tenants, and entities, views, apps and the platform corpus are written by lm_superadmin only"}
+</code></pre></div>
+<ul>
+<li><strong>When it starts:</strong> with the first tenant you create besides the bundled ones, or at once with
+  <code>LUMNIK_TENANCY=multi</code>, the Helm default (<a href="../../security/role-management/#on-a-hub-with-several-tenants">the rule</a>).</li>
+</ul>
+<p><strong>The gesture:</strong> with several tenants, give <code>lm_superadmin</code> to the integrator who applies them, in the tenant they
+serve, beside the roles they hold (<a href="../../security/identity-admin/#make-someone-admin-integrator-superadmin">Make someone superadmin</a>).
+A view is checked against that tenant's data, so the bundled <code>hubadmin</code>, in its own tenant, is not the account for it.
+With your own IdP, create the role and grant it.</p>
+<h3 id="the-tls-proxy-serves-the-lumnik-realm-only">The TLS proxy serves the lumnik realm only</h3>
+<p>The TLS proxy passed every Keycloak realm, <code>master</code> included: anyone reaching it could try the
+admin's password on <code>master</code>'s token endpoint. It now passes the <code>lumnik</code> realm only (<code>/realms/lumnik</code> and
+<code>/realms/lumnik/*</code>); any other realm answers <code>404</code>.</p>
+<ul>
+<li><strong>Nothing changes for users, <code>lm</code> or the PWA:</strong> they sign in on <code>lumnik</code>.</li>
+<li><strong>The Keycloak admin console</strong> stays on <code>http://localhost:8180</code>, or an SSH tunnel to it, as
+  before.</li>
+</ul>
+<p><strong>The gesture:</strong> re-run <code>./deploy/selfhost/up.sh</code>. It reloads the proxy and says so:</p>
+<div class="highlight"><pre><span></span><code>    TLS façade: Caddyfile reloaded
+</code></pre></div>
+<h3 id="keycloak-runs-in-production-mode-on-postgresql">Keycloak runs in production mode on PostgreSQL</h3>
+<p>The self-host Keycloak ran in development mode, with its realms in a file of its own. It now runs
+in production mode, version 26.8.2, and keeps its realms in the stack's PostgreSQL, in a database
+named <code>keycloak</code>.</p>
+<ul>
+<li>
+<p><strong><code>up.sh</code> moves your realm</strong> at its first run: the <code>lumnik</code> realm, its users, their passwords
+  and their attributes. It says so:</p>
+<div class="highlight"><pre><span></span><code>==&gt; moving Keycloak's realm from its H2 file to PostgreSQL (the volume lumnik_selfhost_kc is kept)
+    realm lumnik moved, with its users and their passwords; every session ends: sign in again (lm login)
+</code></pre></div>
+</li>
+<li>
+<p><strong>Every session ends.</strong> Sign in again: <code>lm login</code>, and in the PWA.</p>
+</li>
+<li><strong>The <code>master</code> realm starts anew.</strong> Its admin is <code>KEYCLOAK_ADMIN</code> / <code>KEYCLOAK_ADMIN_PASSWORD</code>
+  from <code>.env</code>. A change you made by hand in <code>master</code> is not moved.</li>
+<li><strong>The old file stays</strong>, in the volume <code>&lt;folder&gt;_selfhost_kc</code>. Nothing uses it any more. Once the
+  new Keycloak has served for a while, remove it: <code>docker volume rm lumnik_selfhost_kc</code>.</li>
+<li><strong>If that file changes, <code>up.sh</code> moves it again</strong>, over the realm in PostgreSQL: restoring an
+  older snapshot into the volume does that. What you changed in Keycloak since is lost.</li>
+<li><strong>Keycloak hands out <code>http://localhost:8180</code> addresses only.</strong> A port you opened to other
+  devices no longer signs them in: put the <a href="../../deploy/#one-https-origin-the-tls-proxy">TLS proxy</a> in front.</li>
+<li><strong>A backup now holds <code>keycloak.dump</code>.</strong> <code>restore.sh</code> refuses a snapshot taken before this
+  release: <a href="../backup-restore/#troubleshooting">Backup &amp; Restore</a>.</li>
+<li><strong>If the move fails, Keycloak does not start</strong>, and nothing else changed. The message says why
+  and how to see more.</li>
+</ul>
+<p><strong>The gesture:</strong> re-run <code>./deploy/selfhost/up.sh</code>, then <code>lm login</code>.</p>
+<p><strong>Helm, with the bundled Keycloak (<code>auth.mode=oidc</code>):</strong> Keycloak runs in production mode too, and
+keeps its realm in the release's PostgreSQL. Its first start imports the realm ConfigMap; from then
+on, restarting Keycloak no longer re-reads it. Users and changes made in the console stay.</p>
+<ol>
+<li>
+<p>Refresh the two ConfigMaps from this release: the realm, and the PostgreSQL init scripts.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>lumnik-kc-realm<span class="w"> </span>--from-file<span class="o">=</span>infra/keycloak/lumnik-realm.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>lumnik-pg-init<span class="w"> </span>--from-file<span class="o">=</span>infra/postgres/init/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+</code></pre></div>
+</li>
+<li>
+<p>Add a password for Keycloak's database role to your secrets: <code>secrets.keycloakDbPassword</code>
+   (<code>openssl rand -base64 32</code>), or the key <code>KEYCLOAK_DB_PASSWORD</code> of a sealed Secret.</p>
+</li>
+<li><code>helm upgrade</code>. Keycloak waits for its database:
+   <code>kubectl logs deploy/&lt;release&gt;-keycloak -c wait-for-database</code> says <code>waiting for the keycloak database</code>.</li>
+<li>
+<p>Create that database. With the bundled PostgreSQL:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;release&gt;-postgres-0<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>/docker-entrypoint-initdb.d/03-keycloak.sh
+</code></pre></div>
+<p>With your own PostgreSQL, run <code>infra/postgres/init/03-keycloak.sh</code> as its superuser, with
+<code>KEYCLOAK_DB_PASSWORD</code> set to the same password.</p>
+</li>
+</ol>
+<p>Keycloak then starts and imports the realm. Every session ends: sign in again. A password set
+since Keycloak's last restart, by <code>up.sh</code> or in the console, is not carried over: set it again.</p>
+<ul>
+<li><strong>Set <code>keycloak.hostname</code></strong> to Keycloak's public origin, on a deployment others reach. Without
+  it, the links in Keycloak's emails follow the <code>Host</code> a request sends.</li>
+<li><strong>A later change to the bundled realm comes with its own gesture.</strong> Refreshing the realm
+  ConfigMap no longer changes a running realm.</li>
+</ul>
+<h3 id="the-public-clients-take-no-password">The public clients take no password</h3>
+<p><code>lm-cli</code> no longer takes a password, like <code>lumnik-spa</code> before it. Nobody who reaches the token
+endpoint can try passwords there.</p>
+<ul>
+<li><strong><code>lm login</code> is unchanged:</strong> it uses the device flow.</li>
+<li><strong>An <code>lm</code> context first signed in by password</strong> keeps working until its session ends. Then
+  run <code>lm login</code>.</li>
+<li>
+<p><strong>A script or a <code>curl</code> that minted a token by password</strong> now gets
+  <code>{"error":"unauthorized_client"}</code>. Use <code>lm token</code>: it prints the token of your <code>lm login</code>
+  session, renewed when it is about to expire.</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="k">$(</span>lm<span class="w"> </span>token<span class="k">)</span><span class="s2">"</span><span class="w"> </span>http://localhost:8080/api/platform/health
+</code></pre></div>
+</li>
+<li>
+<p><strong>Postman:</strong> a <em>Bearer Token</em> set from <code>lm token</code>, as in
+  <a href="../../recipes/test-the-api/#the-same-thing-in-postman">Test the API</a>.</p>
+</li>
+<li>
+<p><strong>Self-host:</strong> <code>./deploy/selfhost/up.sh</code> closes the password grant on both clients of an
+  existing realm. It says so:</p>
+<div class="highlight"><pre><span></span><code>  lm-cli: password grant now closed
+</code></pre></div>
+</li>
+<li>
+<p><strong>Helm:</strong> a running Keycloak keeps the realm it imported: refresh the realm ConfigMap and
+  restart Keycloak, as in <a href="#an-access-token-lives-5-minutes">An access token lives 5 minutes</a>.</p>
+</li>
+<li><strong><code>lm token</code> comes with <code>lm</code> 1.10.0.</strong> Update <code>lm</code> first.</li>
+</ul>
+<p><strong>The gesture:</strong> update <code>lm</code>; re-run <code>up.sh</code> (self-host) or refresh the realm (Helm); then replace
+each password mint in your scripts with <code>lm token</code>.</p>
+<h3 id="an-access-token-lives-5-minutes">An access token lives 5 minutes</h3>
+<p>The bundled realm's access tokens now live 5 minutes, not an hour. A role, a scope or an account
+you disable in Keycloak stops within 5 minutes, even when the hub checks tokens locally.</p>
+<ul>
+<li><strong>The PWA and <code>lm</code> renew by themselves</strong>, before a call. A phone that slept wakes into the app,
+  unless it slept longer than the sign-in session's idle time (30 minutes): then it asks to sign in.</li>
+<li><strong>A token you pass yourself is never renewed:</strong> <code>lm --token</code> or <code>LUMNIK_TOKEN</code> in a CI job, a
+  token minted for <code>curl</code> or Postman. It lasts 5 minutes: mint another on <code>401</code>, or let <code>lm login</code>
+  hold the session.</li>
+<li>
+<p><strong>Self-host:</strong> <code>./deploy/selfhost/up.sh</code> brings an existing realm's tokens to 5 minutes, and
+  keeps a shorter value you chose. It says so:</p>
+<div class="highlight"><pre><span></span><code>  access tokens: now 5 minutes (were 3600 s)
+</code></pre></div>
+</li>
+<li>
+<p><strong>Helm:</strong> a running Keycloak keeps the realm it imported at its last start. Refresh the realm
+  ConfigMap, then restart Keycloak:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>lumnik-kc-realm<span class="w"> </span>--from-file<span class="o">=</span>infra/keycloak/lumnik-realm.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dry-run<span class="o">=</span>client<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+kubectl<span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>deployment/&lt;release&gt;-keycloak
+</code></pre></div>
+</li>
+</ul>
+<p><strong>The gesture:</strong> self-host, re-run <code>up.sh</code>; Helm, the two commands above. Then mint the tokens your
+scripts pin more often.</p>
+<h3 id="the-bundled-keycloak-realm-is-stricter">The bundled Keycloak realm is stricter</h3>
+<p>A user could rewrite their own <code>tenant_id</code> from their account page once <em>Unmanaged attributes</em> was
+<strong>Enabled</strong>. New installs get the stricter realm.</p>
+<p><strong>An existing self-host install keeps its realm:</strong> Keycloak imports the realm file once.</p>
+<ul>
+<li>
+<p><strong>Run <code>./deploy/selfhost/up.sh</code>.</strong> It declares <code>tenant_id</code> and <code>user_id</code> admin-only on your
+  realm, and turns an <strong>Enabled</strong> <em>Unmanaged attributes</em> into <strong>Admin can edit</strong>. Your users keep
+  their values. It says so:</p>
+<div class="highlight"><pre><span></span><code>  tenant_id and user_id: now admin-only (the user profile declares them)
+</code></pre></div>
+</li>
+<li>
+<p><strong>The rest is yours to set,</strong> in the console (<code>http://localhost:8180</code>, realm <strong>lumnik</strong>):</p>
+<ul>
+<li><strong>Realm settings → Events:</strong> user events saved, expiring after 30 days; admin events saved,
+  without representation.</li>
+<li><strong>Authentication → Policies → Password policy:</strong> Minimum length <strong>12</strong>, Not username, Not
+  email.</li>
+</ul>
+</li>
+</ul>
+<p>What changes:</p>
+<ul>
+<li><strong>The PWA's client takes no password.</strong> <code>up.sh</code> closes it, with <code>lm-cli</code>'s
+  (<a href="#the-public-clients-take-no-password">The public clients take no password</a>).</li>
+</ul>
+<h3 id="the-hub-judges-the-address-it-connects-to">The hub checks the address it connects to</h3>
+<p>A source, a webhook or an export no longer reaches the cloud metadata address, nor <code>localhost</code>.
+What is refused, and the settings: <a href="../../security/outbound-addresses/">Where the hub connects</a>.</p>
+<ul>
+<li><strong>A source or a webhook on <code>localhost</code> or <code>127.0.0.1</code> fails.</strong> Nothing is sent:
+  <code>the host resolves to a loopback address, which this hub refuses (lumnik.outbound.allow-loopback)</code>.</li>
+<li><strong>The gesture, on a hub run next to its source:</strong> set <code>LUMNIK_OUTBOUND_ALLOW_LOOPBACK=true</code> in
+    the hub's environment, then recreate the hub. The self-host stack does not pass it from <code>.env</code>:
+    <a href="../../deploy/#read-local-files-or-change-what-the-hub-fetches">where to set it</a>.</li>
+<li><strong>In a container,</strong> <code>localhost</code> is the container. Point the source at its host name instead.</li>
+<li><strong>On Helm, private addresses are refused too.</strong> A source inside the cluster, such as
+  <code>kubernetes.default.svc</code>, needs the chart value <code>outbound.allowPrivate=true</code>.</li>
+<li><strong>An Oracle connector named by a TNS alias fails:</strong> <code>the hub cannot tell where this URL connects:
+  it reads as a TNS alias</code>. So does an LDAP URL or a URL naming <code>TNS_ADMIN</code>.</li>
+<li><strong>The gesture:</strong> write the host into the URL (<code>jdbc:oracle:thin:@//erp-db:1521/ERP</code>), then
+    <code>lm apply</code> the manifest.</li>
+<li><strong>A PostgreSQL URL with a <code>service=</code> parameter fails</strong> the same way. Write the host into the URL.</li>
+<li><strong>A JDBC test or discovery answers <code>400</code> with the reason</strong> when the address is refused. On a
+  PostgreSQL server that never answers, it gives up within about 12 s.</li>
+<li><strong>A webhook test or replay no longer shows the receiver's body.</strong> A failed delivery reads
+  <code>HTTP 500</code> alone, those stored before too. Read the body in the receiver's own log.</li>
+<li><strong>A REST response over 64 MiB fails the run.</strong> For a source that cannot page, raise
+  <code>LUMNIK_OUTBOUND_MAX_RESPONSE_MB</code>.</li>
+<li><strong>Why:</strong> a webhook test handed back whatever any address answered, the cloud metadata included.</li>
+</ul>
+<h3 id="a-connector-reads-only-the-secrets-whose-scopes-it-carries">A connector reads only the secrets whose scopes it carries</h3>
+<p>A connector reads a secret only when it carries every scope of the secret. An export reads it only
+when the secret's one scope is the export's scope. Every secret stored before this release has no
+scope: it keeps serving the connectors without scopes, and no other.</p>
+<ul>
+<li><strong>A run of a connector with scopes fails</strong>, naming the secret and the connector's scopes:
+  <code>secret ERP_PASSWORD does not serve scope ventes: lm secret scope ERP_PASSWORD SCOPES replaces the scopes it serves</code>.
+  Nothing was sent: the check runs before any request leaves the hub.</li>
+<li><strong>So does an export run, and a one-shot <code>lm source csv</code> ingest from S3 or SFTP.</strong> Such an ingest
+  always has a scope: <code>--scope</code>, or <code>system</code> when none is given.</li>
+<li>
+<p><strong>The gesture:</strong> give each secret the scopes of the connectors that name it. The value does not
+  change, and you do not type it again.</p>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-rlE<span class="w"> </span><span class="s1">'_env: *ERP_PASSWORD'</span><span class="w"> </span>manifests/<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>grep<span class="w"> </span>-h<span class="w"> </span><span class="s1">'scopes:'</span><span class="w">   </span><span class="c1"># the scopes that name it</span>
+lm<span class="w"> </span>secret<span class="w"> </span>scope<span class="w"> </span>ERP_PASSWORD<span class="w"> </span>ventes
+lm<span class="w"> </span>secret<span class="w"> </span>list<span class="w">                                                       </span><span class="c1"># the SCOPES column</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>One secret named by connectors of different scopes</strong> (<code>ventes</code> and <code>achats</code>): give it to one
+  scope, and store a copy for the other. Point that scope's connectors at the copy.</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ERP_PASSWORD_ACHATS<span class="w">        </span><span class="c1"># the same value</span>
+lm<span class="w"> </span>secret<span class="w"> </span>scope<span class="w"> </span>ERP_PASSWORD_ACHATS<span class="w"> </span>achats
+</code></pre></div>
+<p>Scoping it <code>ventes,achats</code> serves neither: it then serves only connectors carrying both.</p>
+</li>
+<li>
+<p><strong>Why:</strong> a scope-bound integrator may write connectors in its own scopes. It could name any secret
+  of the tenant in one, point it at its own server, and receive the value.</p>
+</li>
+</ul>
+<h3 id="a-declared-index-is-per-tenant">A declared index is per tenant</h3>
+<p>An index declared under <code>indexes:</code> (csv-file, jdbc-generic) now starts with <code>tenant_id</code>. A
+<code>connector.t_*</code> table is shared by every tenant ingesting under that name, so a unique index on
+<code>code</code> alone let one tenant's key refuse another tenant's row.</p>
+<ul>
+<li><strong>The upgrade rebuilds the existing declared indexes</strong>, under their own names, as
+  <code>(tenant_id, &lt;their columns&gt;)</code>. Until it finishes, the tables that carry one take no writes, and
+  the disk holds both copies of each index: on large tables this lengthens the upgrade. Reads go on
+  until the last moment.</li>
+<li><strong>With several hub replicas, stop the runs while the upgrade applies.</strong> An older replica writing
+  to a table at that moment can make it fail, and a table it creates then gets an index of the old
+  shape.</li>
+<li><strong><code>unique</code> now means unique within a tenant.</strong> No existing row can break the new index.</li>
+<li><strong>A declared index the upgrade cannot rebuild is left as it was, and named.</strong> That is one a
+  constraint or a foreign key holds, or one your database administrator set up for replication or
+  on another disk. The upgrade log names each one in a warning that ends <code>rebuild it by hand with
+  tenant_id first</code>. Do so, with <code>tenant_id</code> as its first column. An index you built yourself in another shape is left as it is, without a warning.</li>
+</ul>
+<h3 id="a-rest-target-is-a-table-under-ext-or-connector">A REST target is a table under ext or connector</h3>
+<p>An endpoint's <code>target.table</code> is <code>ext.&lt;name&gt;</code>, or <code>connector.&lt;name&gt;</code> for an Entity to fuse it.
+The hub writes that table as its own database owner, so any other schema is refused.</p>
+<ul>
+<li><strong><code>lm apply</code> refuses another schema, or a bare name</strong>, at <code>spec.endpoints[i].target.table</code>:
+  <code>must be ext.&lt;name&gt; or connector.&lt;name&gt;</code>. A connector stored before this release fails its runs
+  with <code>target.table must be ext.&lt;name&gt; or connector.&lt;name&gt; (…): &lt;its table&gt;</code>. A save that carries
+  its config is refused until the target is renamed.</li>
+<li><strong>A run refuses an existing table the hub did not make</strong>, before it changes anything in it:
+  <code>connector.connector is not a table this hub's writer made: name a new one under ext or connector as target.table</code>.</li>
+<li><strong>The gesture:</strong> name the target under <code>ext</code>, then <code>lm apply -f</code> again. The table is created at
+  the next run; the rows of the old one are not moved. A table the hub made under another schema
+  (<code>public.&lt;name&gt;</code> for a bare name) is neither purged nor dropped with its connector: drop it by hand.</li>
+</ul>
+<h3 id="the-hub-writes-only-the-rest-tables-it-made">The hub writes only the REST tables it made</h3>
+<p>A REST endpoint and a one-shot csv write their rows into a table under <code>ext</code> or <code>connector</code>. The
+hub now keeps the list of the tables it made. A run writes only into a table on that list. Purging
+an endpoint and deleting a connector touch only those tables too.</p>
+<ul>
+<li><strong>The upgrade lists the tables the hub already made.</strong> Nothing to do for them.</li>
+<li><strong>A run refuses any other existing table</strong>, before it changes anything in it:
+  <code>ext.orders is not a table this hub's writer made: name a new one under ext or connector as target.table</code>.</li>
+<li><strong>The hub repairs its own tables.</strong> After each restart, the first run on a table puts back what
+  keeps each tenant's rows apart and what lets Ask read them, if something was removed by hand.</li>
+<li><strong>A run refuses a table where someone added an access rule by hand.</strong> Such a rule can show a
+  tenant the rows of another:
+  <code>ext.orders carries the policy see_all, which the hub did not make and which widens what each tenant sees: drop it to write here again</code>.</li>
+<li><strong>A table is created complete, or not at all.</strong> If its creation fails, the run fails and leaves
+  no table. The next run creates it again.</li>
+<li><strong>The first run on a table after a restart may start late:</strong> it waits for the runs already
+  writing into that table. So does a run that adds a promoted column. The other runs do not wait.</li>
+<li><strong>With several hub replicas, stop the runs and the connector deletes while the upgrade applies.</strong>
+  An older replica does not keep the list: a table it creates then is refused afterwards.</li>
+</ul>
+<p><strong>The gesture:</strong>
+- <strong>For a refused access rule:</strong> remove it as the database owner, then run again:
+  <code>DROP POLICY see_all ON ext.orders;</code>
+- <strong>For a table the hub made that is not on the list</strong> (restored by hand, or created by an older
+  replica during the upgrade): add it as the database owner, then run again. No <code>lm</code> command does
+  this: it is one SQL line. Use the name <code>\dt ext.*</code> shows: Postgres cuts names at 63 characters.
+  <code>INSERT INTO connector.hybrid_table (table_schema, table_name) VALUES ('ext', 'orders');</code></p>
+<h3 id="a-hook-override-carries-no-code">A hook override carries no code</h3>
+<p>A tenant admin could store a Kotlin script as a hook override, and the hub ran it in its own process. It no longer
+does: the hub runs the operator's scripts only, and an override only switches a hook on or off for its tenant.</p>
+<ul>
+<li><strong><code>POST /api/platform/hooks/overrides</code> is refused</strong> (<code>400</code>, <code>a hook override carries no code</code>). Switch a hook with
+  <code>POST /api/platform/hooks/{hookId}/toggle</code>.</li>
+<li>
+<p><strong>The upgrade clears the scripts already stored.</strong> Export them before upgrading. A hook's code is now its
+  module's: the script declared in the module's manifest (<code>handler: { type: kotlin, script: … }</code>), built into the
+  hub. No command or setting brings an exported one back: it runs again only in a hub image you build yourself,
+  with the script in a module's manifest. The hooks directory serves connector mapping scripts only, not lifecycle
+  hooks.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-T<span class="w"> </span>postgres<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'psql -U "${POSTGRES_USER:-lumnik}" -d "${POSTGRES_DB:-lumnik}" -c \</span>
+<span class="s1">  "SELECT tenant_id, hook_id, script_content FROM core.hook_tenant_override WHERE script_content IS NOT NULL"'</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>The hook endpoints refuse a caller bound to a <code>scope:*</code> role</strong>, as the webhook and notification endpoints do, and list
+  the caller's tenant's hooks only.</p>
+</li>
+</ul>
+<h3 id="a-secret-name-resolves-in-lm-secret-only">A secret name resolves in <code>lm secret</code> only</h3>
+<p>A manifest's <code>*_env</code> key — <code>password_env</code>, <code>token_env</code>, <code>key_env</code>, <code>brokers_env</code>… — names an
+<code>lm secret</code> entry of the connector's tenant. So does SOAP's <code>{{env:NAME}}</code>. The hub's environment is
+no longer read: it holds the hub's own passwords, and any tenant could name one.</p>
+<ul>
+<li><strong>A name only the hub's environment held fails the run</strong>, naming it:
+  <code>password_env 'ERP_DB_PASSWORD' is not in lm secret</code>.</li>
+<li>
+<p><strong>The gesture:</strong> put each value in the tenant that uses it, under the same name. The manifest
+  does not change.</p>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-rhoE<span class="w"> </span><span class="s1">'[a-z_]+_env: *[A-Za-z0-9_-]+'</span><span class="w"> </span>manifests/<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u<span class="w">   </span><span class="c1"># the names your manifests use</span>
+lm<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ERP_DB_PASSWORD<span class="w">                                     </span><span class="c1"># prompts; what you type is not shown</span>
+</code></pre></div>
+<p>On the self-host stack, a value kept in <code>.env</code>:
+<code>grep '^ERP_DB_PASSWORD=' .env | cut -d= -f2- | lm secret set ERP_DB_PASSWORD -</code>.</p>
+</li>
+<li>
+<p><strong>S3 without <code>access_key_env</code> / <code>secret_key_env</code></strong> reads the <code>lm secret</code> entries
+  <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>. The hub's own AWS credentials are never used.</p>
+</li>
+<li><strong>Event Hubs:</strong> re-apply the manifest (<code>lm apply</code>). The preset now writes its fixed username,
+  <code>$ConnectionString</code>, as itself: no secret to set for it.</li>
+<li><strong>A JVM property (<code>-DNAME=…</code>) is not read either.</strong></li>
+</ul>
+<h3 id="the-local-transport-reads-one-folder">The local transport reads one folder</h3>
+<ul>
+<li><strong>A <code>csv-file</code> connector with <code>transport.kind: local</code></strong> reads its tenant's folder of
+  <code>LUMNIK_CSV_LOCAL_ROOT</code> only: <code>&lt;root&gt;/&lt;tenant id&gt;</code>. Its <code>path</code> is relative to that folder; an
+  absolute one is refused at <code>lm apply</code>, and fails the run of a connector stored before. Unset — the
+  default — every run fails:
+  <code>the local transport is off on this hub</code> (<a href="../../connectors/csv/#local-the-hubs-disk-not-yours">CSV § Local</a>).</li>
+<li>
+<p><strong>The gesture:</strong> set <code>LUMNIK_CSV_LOCAL_ROOT</code>, then recreate the hub as in step 3: <code>deploy/selfhost/up.sh</code>
+  (add <code>--build</code> for a stack run from source), or <code>helm upgrade</code> with it in <code>hub.extraEnv</code>. A plain
+  restart keeps the old environment. Move each tenant's files into
+  <code>&lt;root&gt;/&lt;tenant id&gt;/</code>. Rewrite each <code>path</code> relative to it (<code>/imports/*.csv</code> → <code>imports/*.csv</code>),
+  <code>lm apply</code> the manifest, then start its endpoint from the first file again: the stored position
+  names the old path. Until its path is rewritten, such a connector is also refused when saved through
+  <code>lm connector apply</code> or the TUI.</p>
+<div class="highlight"><pre><span></span><code>lm<span class="w"> </span>endpoint<span class="w"> </span>reset-cursor<span class="w"> </span>orders-drop/default
+</code></pre></div>
+</li>
+<li>
+<p><strong><code>lm csv ingest ./file.csv</code> is unchanged.</strong> Its endpoint no longer reads a path of the hub's disk: a
+  request naming one is a <code>400</code> (<code>a local ingest is the uploaded file</code>).</p>
+</li>
+</ul>
+<h3 id="a-hub-started-by-hand-refuses-the-published-defaults">A hub started by hand refuses the published defaults</h3>
+<p>This is for a hub you start yourself: <code>docker run</code> of the image, or the jar. The self-host stack and
+the Helm chart set every value already: nothing changes for them.</p>
+<p>The hub no longer starts on a default this repository publishes. It names each setting and its
+variable, never the value:</p>
+<div class="highlight"><pre><span></span><code>lumnik refuses to start on a published default:
+</code></pre></div>
+<p>followed by one line per setting:</p>
+<ul>
+<li>the crypto key: set <code>LUMNIK_CRYPTO_SECRET_KEY</code> (<code>openssl rand -base64 32</code>);</li>
+<li>the three database passwords: <code>LUMNIK_APP_DB_PASSWORD</code>, <code>LUMNIK_ADMIN_DB_PASSWORD</code>,
+  <code>LUMNIK_READONLY_DB_PASSWORD</code>, in the hub and in PostgreSQL;</li>
+<li><code>lumnik.security.dev-bypass</code>, which checks no token: turn it off;</li>
+<li><code>LUMNIK_TENANCY=single</code>: set <code>auto</code> or <code>multi</code>.</li>
+</ul>
+<p><strong>The gesture:</strong> set your own key and your own passwords. A hub in dev mode keeps its defaults.</p>
+<h3 id="an-entity-reads-connector-tables-only-within-their-scopes">An Entity reads connector tables only, within their scopes</h3>
+<p>An Entity's <code>sources[].table</code> and <code>joins[].table</code> are checked when you apply it.</p>
+<ul>
+<li><strong>A table no connector writes is refused:</strong>
+  <code>source table &lt;name&gt; is not a table a connector writes: an Entity fuses connector.t_&lt;name&gt; tables, the REST targets the hub made under connector, and other Entities' views</code>.</li>
+<li><strong>An Entity over another Entity's view</strong> declares only scopes that view has. Otherwise its readers
+  would read the other Entity without holding its scopes.</li>
+<li><strong>An Entity over a view whose Entity is not applied yet</strong> answers <code>409</code>: apply that Entity first.</li>
+<li><strong>A caller with a <code>scope:*</code> role</strong> applies an Entity only when every connector writing its tables
+  carries every scope the Entity declares.</li>
+<li><strong>A connector cannot drop a scope an Entity reading its tables needs</strong>: not by its tags, nor by
+  re-applying its manifest. Its first write into such a table is refused the same way.</li>
+<li><strong>Entities applied before this release</strong> keep serving until they are re-applied.</li>
+</ul>
+<p><strong>The gesture:</strong> re-apply your Entities after the upgrade, to see a refusal now rather than at the
+next rebuild. For a scope refusal, align the Entity's <code>scopes:</code> with the connectors that write its
+tables.</p>
+<h3 id="a-caller-with-a-scope-role-is-refused-the-tenant-wide-work">A caller with a scope role is refused the tenant-wide work</h3>
+<p>Some work acts on the whole tenant: secrets, users and roles, organisations, tenants, hooks, event
+dead letters, <code>lm rag reindex</code>, SCIM tokens. A caller holding a <code>scope:*</code> role is now refused it,
+whatever tenant the URL names:</p>
+<div class="highlight"><pre><span></span><code>403 {"error":"scope not granted"}
+</code></pre></div>
+<p>A caller with no <code>scope:*</code> role is unchanged. <code>lm hook list</code> now needs <code>lm_admin</code>, like the other
+hook commands, and lists your tenant's hooks only.</p>
+<p><strong>The gesture:</strong> do this work as an admin with no <code>scope:*</code> role.</p>
+<h3 id="ask-stays-closed-until-the-read-only-role-is-hardened">Ask stays closed until the read-only role is hardened</h3>
+<p>Ask runs the model's SQL as a read-only database role. That role must not be able to switch tenant.
+A superuser file takes those rights from it, and Ask stays closed until it has run. Everything else
+works meanwhile.</p>
+<ul>
+<li><strong>Nothing to do</strong> on self-host (<code>deploy/selfhost/up.sh</code>) and on Helm with <code>LUMNIK_PG_MODE=external</code>:
+  each start runs the file.</li>
+<li>
+<p><strong>Run it once</strong> on Helm with the bundled database, on the dev <code>docker-compose.yml</code>, or on a
+  PostgreSQL you run yourself:</p>
+<div class="highlight"><pre><span></span><code>psql<span class="w"> </span>-U<span class="w"> </span>&lt;superuser&gt;<span class="w"> </span>-d<span class="w"> </span>lumnik<span class="w"> </span>-f<span class="w"> </span>infra/postgres/init/02-extensions.sql
+</code></pre></div>
+</li>
+<li>
+<p><strong>Until then, a question answers <code>503</code>:</strong>
+  <code>analytic ask is unavailable: the readonly database role is not hardened</code>. Ask opens by itself
+  once the file has run, without a restart.</p>
+</li>
+<li><strong>From 1.14.0 the file also takes sleeps, notify and large objects</strong> from the role. Run it again
+  where the hub does not: Ask answers <code>503</code> until then, and the hub's log names what the role still
+  holds: <code>Ask is closed: the readonly role still holds …</code>.</li>
+<li><strong>A query of Ask stops after 5 seconds</strong>, and a result over 16 MB is refused:
+  <code>The result of this query is too large to read. Ask for fewer rows or shorter columns.</code></li>
+<li><strong>A backup role that is not a superuser</strong> needs <code>set_config</code> back for <code>pg_dump</code>:
+  <code>GRANT EXECUTE ON FUNCTION pg_catalog.set_config(text,text,boolean) TO &lt;backup role&gt;;</code></li>
+<li><strong>A table you create by hand under <code>connector</code></strong> is no longer readable by Ask on its own. Grant it:
+  <code>GRANT SELECT ON connector.&lt;table&gt; TO lumnik_readonly;</code></li>
+<li><strong>Ask refuses a name that starts with <code>pg_</code>,</strong> a string written <code>E'…'</code> or <code>U&amp;'…'</code>, and a name written <code>U&amp;"…"</code>. The model
+  rarely writes them; when it does, the question answers <code>I couldn't translate that into a safe
+  query.</code> Ask again in other words. A table or column named <code>pg_…</code> cannot be read by Ask: rename it.</li>
+</ul>
+<p>More: <a href="../../security/rls/#what-the-read-only-role-cannot-call">What the read-only role cannot call</a>.</p>
+<h3 id="a-rate-limit-is-per-user-under-a-tenant-ceiling">A rate limit is per user, under a tenant ceiling</h3>
+<ul>
+<li><strong>Each user has their own budget.</strong> One busy user no longer gets the whole tenant refused.</li>
+<li><strong>Each tenant has a ceiling:</strong> the limit × <code>LUMNIK_RATELIMIT_TENANT_FACTOR</code> (5; <code>0</code> switches it off).</li>
+<li><strong>Probing sources has its own limit</strong>, 60 per minute: the JDBC test, discover and add, the REST
+  probe and the OpenAPI import (<code>LUMNIK_RATELIMIT_SOURCE_PROBE_RPM</code>).</li>
+<li><strong>SCIM has its own limit</strong>, 600 per minute (<code>LUMNIK_RATELIMIT_SCIM_RPM</code>). Raise it for a first sync
+  of thousands of users.</li>
+<li>A refused call answers <code>429</code> with <code>rate limit exceeded</code> and a <code>Retry-After</code> header.</li>
+</ul>
+<p><strong>The gesture:</strong> a script that probes sources in a loop may now meet <code>429</code>. Slow it down, or raise
+the limit.</p>
+<h3 id="the-self-host-stack-hsts-on-request-three-more-settings-read">The self-host stack: HSTS on request, three more settings read</h3>
+<ul>
+<li><strong>HSTS comes from the TLS façade only, and only when you ask:</strong> <code>LUMNIK_TLS_HSTS=true</code>. Use it for
+  a public name with a real certificate; leave it off on a LAN name or <code>localhost</code>.</li>
+<li><strong><code>OIDC_SUBJECT_CLAIM</code>, <code>LUMNIK_AUTH_VERIFY_WITH_IDP</code> and
+  <code>LUMNIK_CONNECTOR_MAX_CONCURRENT_SCHEDULED_RUNS</code> are now read from <code>.env</code>.</strong> A value you set there
+  was ignored: it now takes effect.</li>
+<li><strong><code>./deploy/selfhost/backup.sh</code> writes files readable by their owner only.</strong> If another account
+  ships <code>backups/</code>, let that account run the backup itself.</li>
+</ul>
+<p><strong>The gesture:</strong> read your <code>.env</code> for those three settings, then re-run <code>up.sh</code>.</p>
+<h3 id="the-helm-charts-pods-run-with-fewer-rights">The Helm chart's pods run with fewer rights</h3>
+<ul>
+<li><strong>Every pod mounts no service-account token and runs under the runtime's seccomp profile.</strong> Every
+  container drops its Linux capabilities and gains no right. Every pod but PostgreSQL runs as a
+  non-root user. PostgreSQL's start still prepares its data as root, with five capabilities, then
+  drops to its own user: your data is untouched.</li>
+<li><strong>The hub and PostgreSQL cannot change their own files.</strong> The hub writes in <code>/tmp</code> only, an
+  <code>emptyDir</code> of <code>hub.tmpSizeLimit</code> (8 GiB). Raise it if a connector reads a larger file.</li>
+<li><strong>The bundled PostgreSQL answers the hub only</strong>, and the search cluster answers the hub only.
+  Neither opens a connection out. A NetworkPolicy refuses any other traffic into the release's pods;
+  the hub and Keycloak stay reachable on their ports.</li>
+<li><strong>Keycloak, PostgreSQL and the search cluster have a memory limit:</strong> <code>keycloak.resources</code>,
+  <code>postgresql.resources</code>, <code>search.cluster.resources</code>.</li>
+</ul>
+<p><strong>The gesture:</strong> <code>helm upgrade</code> as usual. Then list what of yours reaches the release's pods from
+another pod: it is now refused.</p>
+<ul>
+<li>A backup job or pgAdmin on the bundled PostgreSQL.</li>
+<li>OpenSearch Dashboards or a snapshot job on the search cluster.</li>
+<li>A Prometheus scraping Keycloak.</li>
+<li>A Prometheus scraping the hub's metrics: name it in <code>hub.managementFrom</code> instead
+  (<a href="../observability/#scraping-with-prometheus">Scraping with Prometheus</a>).</li>
+</ul>
+<p>Add a NetworkPolicy that lets that pod in, or run the tool with <code>kubectl exec</code> in the target pod.</p>
+<h3 id="the-self-host-containers-run-with-fewer-rights">The self-host containers run with fewer rights</h3>
+<ul>
+<li><strong>The hub, Postgres, Keycloak, the TLS façade and Mailpit gain no right they did not start
+  with</strong>, and each one drops its Linux capabilities. Postgres keeps the five its start needs. The
+  TLS façade keeps the right to listen on 80 and 443. The search cluster (<code>--search-cluster</code>) is
+  not hardened yet.</li>
+<li><strong>The hub, Postgres, the TLS façade and Mailpit cannot change their own files.</strong> The hub writes
+  in <code>/tmp</code> only. <code>/tmp</code> is now a volume, <code>selfhost_hub_tmp</code>: a downloaded CSV stays on disk.</li>
+<li><strong>A file copied into the hub outside <code>/tmp</code> is refused:</strong>
+  <code>Error response from daemon: container rootfs is marked read-only</code>.</li>
+</ul>
+<p><strong>The gesture:</strong> re-run <code>up.sh</code>. A <code>LUMNIK_CSV_LOCAL_ROOT</code> on a volume you mount keeps working. One
+you filled with <code>docker compose cp</code> outside <code>/tmp</code> does not: put it under <code>/tmp</code>, as in the
+<a href="../../connectors/csv/">CSV guide</a>, copy the files again, then
+<code>lm endpoint reset-cursor &lt;connector&gt;/&lt;endpoint&gt;</code>.</p>
+<h3 id="a-rest-header-reference-must-resolve">A REST header reference must resolve</h3>
+<p>A REST connector header declared with <code>value_env</code> now reads like the auth fields: the <code>lm secret</code>
+entry first, then the hub's environment (<a href="../../connectors/rest/#request-headers">REST § request headers</a>).</p>
+<ul>
+<li><strong>A name that resolves nowhere fails the run</strong>, <code>lm source rest test</code> and <code>lm source rest probe</code>:
+  <code>Header X-Client-Id unavailable (env=CLIENT_ID)</code>. Before, the header was dropped and the request
+  went out without it. Store the value (<code>lm secret set CLIENT_ID</code>), or remove the header from the
+  manifest if the source does not need it.</li>
+<li><strong>An <code>lm secret</code> entry now outranks an environment variable of the same name</strong> for a header. If
+  both exist with different values, the secret's value is sent: remove the one you do not want.</li>
+</ul>
+<h3 id="subscriptions-are-tenant-wide">Subscriptions are tenant-wide</h3>
+<p>Webhooks and email rules are refused to an admin bound to any <code>scope:*</code> role — see
+<a href="../../outputs/">Outputs</a>. Ones a bound admin created earlier keep firing. A tenant-wide admin lists
+them and removes what nobody owns:</p>
+<div class="highlight"><pre><span></span><code>$ lm notify list
+ID    EVENTS            RECIPIENT        TEMPLATE            ENABLED
+1000  decision.*        adv@example.com  decision-alert      true
+1001  data.row.changed  ops@example.com  event-notification  true
+$ lm integration list
+ID    NAME            URL                        EVENTS                      ENABLED
+1000  ops-automation  https://hooks.example.com  decision.*,connector.run.*  true
+$ lm notify rm 1001
+removed: 1001
+$ lm notify list
+ID    EVENTS      RECIPIENT        TEMPLATE        ENABLED
+1000  decision.*  adv@example.com  decision-alert  true
+</code></pre></div>
+<p>A webhook goes the same way: <code>lm integration rm &lt;ID&gt;</code>.</p>
+<h3 id="one-local-csv-file-is-now-the-tables-state">One local csv file is the table's state</h3>
+<p>A <code>csv-file</code> connector whose local <code>path</code> names one file (no <code>*</code> or <code>?</code>) removes the rows the file
+no longer holds — see <a href="../../connectors/csv/#one-file-is-the-table-full-refresh">CSV § full refresh</a>.
+Before the upgrade, the table kept every older version of a changed row. The first run that reads
+the file after upgrading counts those older versions as removed. A file is read again only once
+it changes. Later runs count only the rows the file lost. On that first run:</p>
+<ul>
+<li>up to 30 % of the table: they are removed;</li>
+<li>beyond 30 %: the run fails, removes nothing and names the counts;</li>
+<li>to keep them, point the connector at a folder (<code>*.csv</code>); to let them go, set
+  <code>refresh.max_removed: off</code> for that run, then remove the line.</li>
+</ul>
+<h3 id="a-jdbc-table-now-holds-one-row-per-key">A jdbc table holds one row per key</h3>
+<p>A <code>jdbc-generic</code> table holds one row per <code>pk_columns</code> value
+(<a href="../../connectors/jdbc/#one-row-per-key-a-changed-row-replaces-its-version">JDBC § one row per key</a>).
+The first run after upgrading keeps the newest row per key and removes the older versions, even
+when it reads nothing new:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run demo-invoices
+run scheduled: 13629016-e970-4a1a-92b7-aed86627f3f8
+$ lm run get 13629016
+ID        CONNECTOR      ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+13629016  demo-invoices  invoices  Completed  0   0    0        0             2026-10-18 13:49  2026-10-18 13:49
+• 2 row(s) removed — the source no longer holds them
+</code></pre></div>
+<p>If one earlier run read the same key twice with two different values, the run fails naming
+<code>pk_columns</code> and removes nothing. Declare the source table's whole primary key, apply, run again.</p>
+<h2 id="running-from-source">Running from source</h2>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>pull
+make<span class="w"> </span>-C<span class="w"> </span>lm<span class="w"> </span>install<span class="w">                 </span><span class="c1"># installs lm into ~/.local/bin (keep it on your PATH)</span>
+./deploy/selfhost/up.sh<span class="w"> </span>--build<span class="w">    </span><span class="c1"># rebuilds and restarts the hub</span>
+</code></pre></div>
+<p>Your data is kept; migrations run at the hub's next boot. On a TLS-proxy install, run its
+command again afterwards.</p>
+<h2 id="roll-back">Roll back</h2>
+<p>There is no down-migration. Rolling back is restoring the backup taken in step 1; writes made
+since are lost.</p>
+<ol>
+<li>Set <code>LUMNIK_VERSION</code> in <code>.env</code> back to the previous release.</li>
+<li><code>deploy/selfhost/up.sh</code>: the hub comes back on the previous image.</li>
+<li><code>deploy/selfhost/restore.sh backups/&lt;UTC-stamp&gt;</code>: the database as it was before the upgrade.</li>
+</ol>
+<h2 id="if-the-boot-fails-mid-migration">If the boot fails mid-migration</h2>
+<p>The migration stops at the failing version; later migrations do not touch your data, and the hub
+does not become healthy.</p>
+<ol>
+<li>Save the log: <code>docker compose -f docker-compose.selfhost.yml logs hub &gt; hub-upgrade.log</code>.</li>
+<li>Need service back now? <a href="#roll-back">Roll back</a>.</li>
+<li>Report the failing version: the last <code>Migrating schema … to version …</code> line in the log.</li>
+</ol>
+<h2 id="changing-the-public-address">Changing the public address</h2>
+<p>Do not change the hub's public address during an upgrade: every user would log in as a new one.
+<a href="../../security/byo-idp/#keep-the-same-public-address">Keep the same public address</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

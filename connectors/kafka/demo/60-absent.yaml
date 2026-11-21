@@ -1,0 +1,22 @@
+# 60-absent.yaml — a topic the broker does not have.
+#
+# acme.absent is never created, and the consumer the hub builds is forbidden to create it
+# (a read must not write to its source). The refusal names the topic and says which of two
+# situations it is: a first read (check the name) or an endpoint that had read this topic
+# before (the broker lost it, or the name was edited).
+#
+# Expect: Failed — `kafka topic 'acme.absent' does not exist on the broker`.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-absent
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_absent
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.absent
+  format: json

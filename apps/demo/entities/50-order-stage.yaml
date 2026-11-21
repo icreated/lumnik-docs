@@ -1,0 +1,17 @@
+# 50-order-stage.yaml — a stage several flows stamp: progress, not dispute.
+#
+# The delivery notes go first: the furthest flow is the answer. `conflicts: false` keeps the
+# stage out of _conflicts; the article is still compared.
+#
+# Expect: L1 and L2 read DELIVERED, L3 ORDERED; lm conflicts list shows L2 only, for its article.
+kind: Entity
+name: OrderStage
+match: [line_id]
+scopes: [desk]
+columns:
+  stage: { conflicts: false }
+sources:
+  - table: t_stage_deliveries
+    map: { line_id: line_id, stage: stage, article: article }
+  - table: t_stage_orders
+    map: { line_id: line_id, stage: stage, article: article }
