@@ -1,0 +1,43 @@
+# 20-event-hubs.yaml — Azure Event Hubs via the 'event-hubs' vendor preset.
+#
+# Apply and run:
+#   lm apply -f docs/connectors/kafka/20-event-hubs.yaml
+#   lm connector run event-hubs-telemetry
+#
+# How the event-hubs preset works
+# --------------------------------
+# connector_type stays 'kafka' — the preset just pre-wires the bootstrap
+# address (namespace.servicebus.windows.net:9093) and SASL/SSL settings from
+# the connection string, so you don't have to work those out by hand. No
+# Kafka consumer group is created or needed — the hub tracks offsets itself,
+# same as any other kafka connector.
+#
+# The 'connection_string_env' field NAMES the entry that holds the Event Hubs
+# connection string (Primary Connection String from the Azure portal). Every *_env key
+# resolves the same way: in the lm secret registry of your tenant.
+#   lm secret set EVENTHUBS_CONN_STR
+#   lm secret scope EVENTHUBS_CONN_STR demo,azure   # a connector reads a secret only when it carries all its scopes
+#
+# Auth: Event Hubs over Kafka uses SASL/PLAIN with the fixed username "$ConnectionString"
+# (the literal string, dollar sign included — it is not a secret). The preset writes it
+# as itself: `username: $ConnectionString`.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: event-hubs-telemetry         # unique connector name within the workspace
+  connector_type: kafka              # real engine type; the vendor alias is spec.preset below
+  scopes: [demo, azure]
+
+spec:
+  preset: event-hubs                 # vendor preset — expands to a real kafka config at apply time
+
+  name: telemetry_events             # logical/table name → target table connector.t_telemetry_events
+
+  namespace: my-namespace            # Azure Event Hubs namespace (without .servicebus.windows.net)
+
+  connection_string_env: EVENTHUBS_CONN_STR   # env var holding the Primary Connection String
+
+  topic: telemetry                   # Event Hub name (= Kafka topic name)
+
+  format: json                       # v1: one JSON object per message

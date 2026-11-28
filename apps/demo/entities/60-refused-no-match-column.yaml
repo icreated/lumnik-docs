@@ -1,0 +1,13 @@
+# 60-refused-no-match-column.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: every source must map the match column — a source that does not produce `code`
+# could never be matched to anything, so its rows would silently vanish from the fusion.
+kind: Entity
+name: AcmeRefusedNoMatch
+match: [code]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: name }
+  - table: t_acme_desk_crm
+    map: { customer: customer_code, company: name }

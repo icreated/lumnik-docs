@@ -1,0 +1,21 @@
+# 62-refused-terminal-outgoing.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: a terminal state may not carry an outgoing transition — a closed state that could still move is a contradiction.
+apiVersion: apps.lumnik.io/v1
+kind: Workflow
+metadata:
+  name: refused-terminal
+spec:
+  scope: desk
+  provenance: declared
+  on:
+    table: connector.t_acme_desk_erp
+    column: status
+  states:
+    - { code: BROUILLON, initial: true }
+    - { code: EN_COURS, aliases: [en cours] }
+    - { code: TERMINE, terminal: true }
+  transitions:
+    - { from: [BROUILLON], to: EN_COURS }
+    - { from: [EN_COURS], to: TERMINE }
+    - { from: [TERMINE], to: EN_COURS }

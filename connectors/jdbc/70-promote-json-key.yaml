@@ -1,0 +1,31 @@
+# 70-promote-json-key.yaml — one key of a JSON column, in a column of its own.
+#
+# Since Odoo 16, a translated field holds one JSON per row, one key per language:
+# {"en_US": "Office chair", "fr_FR": "Chaise de bureau"}. `promote:` reads the French name
+# into `name_fr`, or the English one when there is no French. The `name` column still lands,
+# JSON and all. Nothing is written on the source.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: odoo-products
+  connector_type: jdbc-generic
+  scopes: [catalogue]
+
+spec:
+  connection:
+    url: jdbc:postgresql://odoo-db:5432/odoo
+    user: lumnik_reader
+    password_env: ODOO_DB_PASSWORD   # lm secret scope ODOO_DB_PASSWORD catalogue
+
+  source:
+    tables:
+      - name: product_template
+        schema: public
+        mode: full
+        pk_columns: [id]
+        promote:
+          - name: name_fr
+            column: name
+            path: $.fr_FR
+            fallback: $.en_US
+            type: text

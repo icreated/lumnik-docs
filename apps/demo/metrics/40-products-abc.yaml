@@ -1,0 +1,22 @@
+# 40-products-abc.yaml — which products carry the desk's ordered value.
+#
+# Over the typed orders (entities/56-order.yaml), one row per product code. `across` places each product among the
+# others: its share of the value, its rank, and its ABC class. A product is A while the products before it carry
+# under 80 % of the value, B under 95 %, C beyond.
+apiVersion: apps.lumnik.io/v1
+kind: Metric
+metadata:
+  name: products_abc
+spec:
+  scope: desk
+  title: Valeur commandée par produit
+  description: La part de chaque produit dans la valeur commandée, et sa classe ABC.
+  source:
+    entity: DeskOrder
+  by: [code]
+  measures:
+    order_value: { sum: amount, unit: EUR }
+  across:
+    weight:    { share: order_value }
+    position:  { rank: order_value }
+    abc_class: { preset: abc, of: order_value }

@@ -1,0 +1,26 @@
+# 56-promote.yaml — a value nested in the message, promoted to a typed column.
+#
+# acme.probes is what ChirpStack's Kafka integration publishes for a store's cold-room probes: every
+# event type on one topic, and the decoded reading under `object`. Each top-level key still lands as
+# a column (object as jsonb); promote adds one typed column per entry, read by JSONPath.
+#
+# Expect: 500 rows; temperature_c numeric for the 449 readable uplinks, NULL for the 50 status
+#         events and for uplink 250 (its codec sent "sensor-fault") — 1 cell error on the run.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-probes
+  connector_type: kafka
+  scopes: [cold-chain]
+
+spec:
+  name: acme_probes
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.probes
+  format: json
+  promote:
+    - { name: temperature_c, path: $.object.temperature, type: decimal }
+    - { name: device, path: $.deviceInfo.deviceName, type: text }
+    - { name: measured_at, path: $.time, type: timestamptz }

@@ -1,0 +1,16 @@
+# 90-hr-employees.yaml — the HR export: three employees and their salaries. Only hr sees it.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: hr-employees
+  connector_type: csv-file
+  scopes: [hr]
+
+spec:
+  transport:
+    kind: local
+    path: acme-desk/hr-employees.csv
+  parser:
+    has_header: true
+  after_process: none

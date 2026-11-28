@@ -1,0 +1,12 @@
+kind: App
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: lumilait
+spec:
+  title: Lumilait
+  scope: lumilait
+  icon: generic
+  theme:
+    accentColor: "#4fd1a5"
+    backgroundColor: "#f4f1ea"
+  default: false

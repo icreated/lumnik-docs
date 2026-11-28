@@ -1,0 +1,23 @@
+# 45-compacted.yaml — a compacted topic carrying tombstones.
+#
+# 1 000 partner records, then the producer deletes the first 300 keys — on a compacted topic
+# a deletion is a record with a NULL value, the tombstone log compaction keeps as the marker.
+# The hub's ingestion is append-only: a tombstone is dead-lettered under a reason naming the
+# key, never applied as a DELETE on the table.
+#
+# Expect: Completed, in=1300 out=1000 skipped=300, 300 dead-letters each naming its key,
+#         1 000 rows in the table.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-kafka-compacted
+  connector_type: kafka
+  scopes: [billing]
+
+spec:
+  name: acme_partners_compacted
+  # The hub runs in Docker: `localhost` there is the hub's own container, not your machine.
+  brokers: host.docker.internal:29092
+  topic: acme.partners-compacted
+  format: json

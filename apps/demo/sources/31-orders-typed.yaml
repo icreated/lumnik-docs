@@ -1,0 +1,24 @@
+# 31-orders-typed.yaml — the same orders export as 30-orders.yaml, its amount and date typed at the door.
+#
+# Lands connector.t_acme_desk_orders_typed: `amount` a number, `ordered_on` a date, so a metric can sum
+# them. The status column stays as the ERP spells it. 30-orders.yaml is left as it is: other demo pieces
+# read its table.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: acme-desk-orders-typed
+  connector_type: csv-file
+  scopes: [desk]
+
+spec:
+  transport:
+    kind: local
+    path: acme-desk/acme-orders.csv      # the same file as 30-orders.yaml
+  parser:
+    has_header: true
+  after_process: none
+  mapping:
+    cell:
+      - parse-number: { column: amount, decimal-separator: "." }
+      - parse-date: { column: ordered_on, formats: ["yyyy-MM-dd"] }

@@ -1,0 +1,22 @@
+# 50-products-quartile.yaml — which products are in the top quarter by ordered value.
+#
+# Over the typed orders (entities/56-order.yaml), one row per product code. `quantile` cuts by number, not by value:
+# a product takes the first label while fewer than 25 % of the products lie before it, the second under 50 %, the
+# third under 75 %, the last beyond. Labels go from head to tail, so the usual quartile names are written
+# [Q4, Q3, Q2, Q1]: Q4 holds the largest values, Q1 the smallest. Each row also says what share of the ordered value
+# its quarter carries.
+apiVersion: apps.lumnik.io/v1
+kind: Metric
+metadata:
+  name: products_quartile
+spec:
+  scope: desk
+  title: Quartiles des produits par valeur commandée
+  description: Le quart de chaque produit par valeur commandée, et la part de la valeur que porte son quart.
+  source:
+    entity: DeskOrder
+  by: [code]
+  measures:
+    order_value: { sum: amount, unit: EUR }
+  across:
+    value_quarter: { quantile: order_value, bounds: [25, 50, 75], labels: [Q4, Q3, Q2, Q1] }

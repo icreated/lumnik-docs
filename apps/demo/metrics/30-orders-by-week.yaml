@@ -1,0 +1,19 @@
+# 30-orders-by-week.yaml — the desk's orders per week, computed again after a run of their source changes them.
+#
+# Over the typed orders (entities/56-order.yaml). `materialize: true` stores the computed result: a read takes the
+# stored numbers instead of computing them over the entity.
+apiVersion: apps.lumnik.io/v1
+kind: Metric
+metadata:
+  name: orders_by_week
+spec:
+  scope: desk
+  title: Commandes par semaine
+  materialize: true
+  source:
+    entity: DeskOrder
+  by:
+    - week: ordered_on
+  measures:
+    weekly_amount: { sum: amount, unit: EUR }
+    weekly_orders: { count: rows }

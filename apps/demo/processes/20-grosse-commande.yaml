@@ -1,0 +1,22 @@
+# 20-grosse-commande.yaml — a second watcher on the same table.
+#
+# Two processes on one table are independent: a row that matches both fires two decisions, one
+# per process, each under its own type. `amount` is a text column, as every CSV column is; the
+# ordering filter casts it, exactly as a kind:View filter does.
+#
+# Expect: nothing on apply; on the day-3 export, SO-000014 (EN LITIGE, 5 000 €) fires this one
+#         AND litige-ouvert.
+apiVersion: apps.lumnik.io/v1
+kind: Process
+metadata:
+  name: grosse-commande
+spec:
+  scope: desk
+  on:
+    event: data.row.changed
+    table: connector.t_acme_desk_orders
+  when:
+    - amount>1000
+  emit:
+    type: decision.grosse-commande
+    message: "Grosse commande {order_no} : {amount} € pour {code}"

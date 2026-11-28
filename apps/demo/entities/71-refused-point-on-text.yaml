@@ -1,0 +1,14 @@
+# 71-refused-point-on-text.yaml — a point on a column that holds text is refused at apply.
+# `city` is text: no distance can be measured from it.
+
+kind: Entity
+name: DeliverySiteByCity
+match: [site]
+scopes: [dispatch]
+sources:
+  - table: t_delivery_sites
+    map: { site: site, city: city, longitude: longitude }
+points:
+  - name: site_location
+    lat: city
+    lon: longitude

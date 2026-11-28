@@ -1,0 +1,16 @@
+# 20-due-orders.yaml — the orders due, over the ERP's and a partner's copy of them (entities/55-order-due.yaml).
+#
+# One row, no `by`: the amount due and how many orders carry a due date. The partner typed (sources/72) disagrees
+# with the ERP on SO-2's due day, so the metric's line says (disputed).
+apiVersion: apps.lumnik.io/v1
+kind: Metric
+metadata:
+  name: due_orders
+spec:
+  scope: desk
+  title: Commandes à échéance
+  source:
+    entity: OrderDue
+  measures:
+    due_amount: { sum: amount, unit: EUR }
+    dated_orders: { count: due }

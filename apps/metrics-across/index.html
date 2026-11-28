@@ -1,0 +1,5186 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Defrost the enterprise — deploy the hub, connect a legacy source, ask your data.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.lumnik.io/apps/metrics-across/">
+      
+      
+        <link rel="prev" href="../metrics/">
+      
+      
+        <link rel="next" href="../processes/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Metrics — position among peers - lumnik</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/lumnik.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <!-- Umami (cloud, EU) — cookieless, no personal data, so no consent banner is
+       needed. data-domains pins tracking to the production host: local
+       `make docs-serve` and preview builds never pollute the stats. -->
+  <script defer src="https://cloud.umami.is/script.js"
+          data-website-id="9873b20a-dda6-4f45-8692-eff3bf16fbee"
+          data-domains="docs.lumnik.io"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kind-metric-position-among-peers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="lumnik" class="md-header__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lumnik
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Metrics — position among peers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lumnik" class="md-nav__button md-logo" aria-label="lumnik" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lumnik
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy lumnik
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy on Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/other-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other first sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The WOW
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheat-sheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Understand
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Understand
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The two editions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../respiration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How lumnik breathes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectors
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectors
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CSV & files
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CSV & files (SFTP/S3)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/csv-quick-look/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One file, one command
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JDBC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JDBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    REST
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/rest/demo-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/graphql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/soap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SOAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kafka
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kafka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/when-the-topic-misbehaves/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When the topic misbehaves
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kafka/demo-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo broker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Transformers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repair the data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/transformers-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/kotlin-hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin hooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ingestion-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading a run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Entities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dates and numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-joins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entities-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resolve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Search
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/search-indexes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declare an index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/querying/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query it
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI & TUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CLI & TUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/lm-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration-as-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration as code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask your data
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ask your data
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-honesty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When Ask refuses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transparency/ask-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The rules, in detail
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/scopes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models & providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag/http-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps (the ladder)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Apps (the ladder)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Views — see
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics — count
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics — position among peers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics — position among peers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-and-after" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before and after
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-it-up-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set it up yourself
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-entry-adds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each entry adds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-class-is-decided" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a class is decided
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quarters-by-number-quantile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quarters by number: quantile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-zero-and-negative-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Null, zero and negative values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#within" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        within
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_disputed-on-an-across-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _disputed on an across metric
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-the-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the distribution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading the distribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#without-the-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Without the chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-chat-cites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the chat cites
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-the-business-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the business app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Refusals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bounds-that-do-not-increase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bounds that do not increase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-bound-with-5-decimals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A bound with 5 decimals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labels-that-do-not-fit-the-bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Labels that do not fit the bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#within-naming-every-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        within naming every key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Processes — react
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows — declare
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposal-dossier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal dossiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inbox — decide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exports — managed runs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The PWA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-desk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The demo desk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs — the roads out
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Email notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../choosing-what-your-hub-offers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choosing what your hub offers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/role-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles & permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/identity-admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tenants, users & scopes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/rls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLS & database roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/byo-idp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bring your own IdP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/scim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCIM deprovisioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/offboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offboarding the integrator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/echoed-credentials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credentials a source writes back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/outbound-addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the hub connects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/gdpr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDPR & personal data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting, by symptom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/diagnose-a-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnosing a failed run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading the logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/oncall-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-call runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dead-letters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event dead letters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/rate-limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rate limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sizing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sizing & load tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recipes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Recipes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/test-the-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test the API (Postman)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../recipes/analyze-the-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analyze the database directly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin-console-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../connectors/jdbc/writing-a-provider/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing a JDBC provider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Background
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Background
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../where-lumnik-stands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where lumnik stands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture — the why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reversibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reversibility & exit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-and-after" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before and after
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-it-up-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set it up yourself
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-entry-adds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each entry adds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-class-is-decided" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a class is decided
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quarters-by-number-quantile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quarters by number: quantile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-zero-and-negative-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Null, zero and negative values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#within" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        within
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_disputed-on-an-across-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _disputed on an across metric
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-the-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the distribution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading the distribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#without-the-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Without the chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-chat-cites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the chat cites
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-the-business-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the business app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Refusals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bounds-that-do-not-increase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bounds that do not increase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-bound-with-5-decimals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A bound with 5 decimals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labels-that-do-not-fit-the-bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Labels that do not fit the bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#within-naming-every-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        within naming every key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kind-metric-position-among-peers">kind: Metric — position among peers</h1>
+<blockquote>
+<p><code>across</code> places each group of a metric among the others: its share of the total, its rank, its
+ABC class. The class sizes sit on every row, so the chat reads them instead of counting.</p>
+</blockquote>
+<h2 id="before-and-after">Before and after</h2>
+<p>Each of the desk's orders carries a product code and an amount. A client's first ABC question is
+about the whole population: how many products in A, B and C, and what share of the value each
+class carries. Ask the chat. It cannot say:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask "Combien de produits sont en A, B et C, et quelle part de la valeur porte chaque classe ?" --scope desk
+Je ne peux pas répondre à partir des données disponibles pour ce périmètre — la question ne correspond pas au schéma déclaré.
+</code></pre></div>
+<p>The metric in <a href="#the-manifest">The manifest</a> places each product among the others. Ask the same
+question again. Look at the <code>metric:</code> lines under the answer:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask "Combien de produits sont en A, B et C, et quelle part de la valeur porte chaque classe ?" --scope desk
+Il y a 4 produits dans la classe A, représentant 36,36% des produits en tout. La classe A porte 86,55% de la valeur totale.
+
+Il y a 2 produits dans la classe B, représentant 18,18% des produits en tout. La classe B porte 10,68% de la valeur totale.
+
+Il y a 5 produits dans la classe C, représentant 45,45% des produits en tout. La classe C porte 2,77% de la valeur totale.
+  data as of: 2026-11-26T19:10:36.612389Z (last completed run)
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: this group's class; null when unclassified
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: groups in this class
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: share of the classified groups in this class (%)
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: share of order_value this class carries (%)
+
+  ABC_CLASS  ABC_CLASS_COUNT  ABC_CLASS_COUNT_SHARE  ABC_CLASS_SHARE
+  A          4                36.3636363636363636    86.5547050487924110
+  B          2                18.1818181818181818    10.6780969412696546
+  C          5                45.4545454545454545    2.7671980099379343
+  3 rows returned
+
+  SQL: SELECT DISTINCT "abc_class", "abc_class_count", "abc_class_count_share", "abc_class_share"
+FROM (SELECT "code", "order_value", "weight", "weight_total", "position", "position_population", "abc_class", "abc_class_before", "abc_class_count", "abc_class_count_share", "abc_class_share", "abc_class_population", "abc_class_unclassified" FROM connector."metric_products_abc") AS "metric_products_abc"
+LIMIT 500
+</code></pre></div>
+<ul>
+<li>Read the <code>SQL</code> line: the chat read the class columns. It did not count rows.</li>
+<li>Each <code>metric:</code> line names one column the answer reads, and what that column holds.</li>
+</ul>
+<p>The captures on this page come from an integrator with no <code>scope:*</code> role. <code>lm ask</code> needs
+<code>lm_integrator</code>.</p>
+<h2 id="the-manifest">The manifest</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 40-products-abc.yaml — which products carry the desk's ordered value.</span>
+<span class="c1">#</span>
+<span class="c1"># Over the typed orders (entities/56-order.yaml), one row per product code. `across` places each product among the</span>
+<span class="c1"># others: its share of the value, its rank, and its ABC class. A product is A while the products before it carry</span>
+<span class="c1"># under 80 % of the value, B under 95 %, C beyond.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Metric</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">products_abc</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Valeur commandée par produit</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">La part de chaque produit dans la valeur commandée, et sa classe ABC.</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeskOrder</span>
+<span class="w">  </span><span class="nt">by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">measures</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">order_value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> sum</span><span class="p">:</span><span class="w"> </span><span class="nv">amount</span><span class="p p-Indicator">,</span><span class="nt"> unit</span><span class="p">:</span><span class="w"> </span><span class="nv">EUR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w">    </span><span class="p p-Indicator">{</span><span class="nt"> share</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">position</span><span class="p">:</span><span class="w">  </span><span class="p p-Indicator">{</span><span class="nt"> rank</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> preset</span><span class="p">:</span><span class="w"> </span><span class="nv">abc</span><span class="p p-Indicator">,</span><span class="nt"> of</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<ul>
+<li><code>by: [code]</code> gives one row per product. A product is a group. A metric with no <code>by</code> and no time
+  grain has no groups, and <code>across</code> is refused there.</li>
+<li><code>order_value</code> is the measure the three entries read. An entry reads a number measure of the
+  metric, by its name.</li>
+<li><code>weight: { share: order_value }</code> is each product's share of the total value.</li>
+<li><code>position: { rank: order_value }</code> is each product's rank. 1 is the largest value.</li>
+<li><code>abc_class: { preset: abc, of: order_value }</code> is each product's ABC class. <code>preset: abc</code> stands
+  for <code>pareto: order_value, bounds: [80, 95], labels: [A, B, C]</code>. Write that form to choose your own
+  bounds and labels. <code>bounds</code> or <code>labels</code> written beside <code>preset: abc</code> replace its defaults.</li>
+<li><code>weight</code>, <code>position</code> and <code>abc_class</code> are names you choose. Each one names the columns its entry
+  adds.</li>
+</ul>
+<h3 id="set-it-up-yourself">Set it up yourself</h3>
+<p>Land the typed orders and apply the entity, as in
+<a href="../metrics/#land-the-typed-orders">kind: Metric — count</a>. Start from the demo file's twelve orders,
+as this page does. If you ran <a href="../metrics/#a-run-that-changes-a-row">A run that changes a row</a>, your
+file also holds SO-000013, and every number here would differ. Remove that line:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>hub<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">"sed -i '/^SO-000013,/d' /tmp/drop/1/acme-desk/acme-orders.csv"</span>
+</code></pre></div>
+<p>Then run the connector, and read its run when it says <code>Completed</code>. The file is the table's whole
+state, so the run removes the order the file no longer holds:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-desk-orders-typed
+run scheduled: c7b4796d-c76f-41a3-b69d-9a0bb8ae299e
+$ lm run get c7b4796d
+ID        CONNECTOR               ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+c7b4796d  acme-desk-orders-typed  default   Completed  12  12   0        0             2026-11-26 20:10  2026-11-26 20:10
+• 1 row(s) removed — the source no longer holds them
+</code></pre></div>
+<p>Then apply the metric:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f docs/apps/demo/metrics/40-products-abc.yaml
+Applied metric "products_abc" (definition version 1)
+$ lm metric list
+NAME          TITLE                         ENTITY     SCOPE  STATUS  MATERIALIZED  REASON
+products_abc  Valeur commandée par produit  DeskOrder  desk   valid
+</code></pre></div>
+<h2 id="what-each-entry-adds">What each entry adds</h2>
+<p>Each entry adds its own column and its companions, named after it. Every row of the metric carries
+them. With the demo's names:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Unit</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weight</code></td>
+<td>%</td>
+<td>the product's share of the total value</td>
+</tr>
+<tr>
+<td><code>weight_total</code></td>
+<td>EUR</td>
+<td>the total the share is taken of</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td></td>
+<td>the product's rank: 1 is the largest value, products with the same value share a rank</td>
+</tr>
+<tr>
+<td><code>position_population</code></td>
+<td></td>
+<td>the products ranked: the 11 of "3 of 11"</td>
+</tr>
+<tr>
+<td><code>abc_class</code></td>
+<td></td>
+<td>the product's class, <code>A</code>, <code>B</code> or <code>C</code>; empty when the product is not classified</td>
+</tr>
+<tr>
+<td><code>abc_class_before</code></td>
+<td>%</td>
+<td>the share of the value held by the products before this one: it sets the class</td>
+</tr>
+<tr>
+<td><code>abc_class_count</code></td>
+<td></td>
+<td>the products in this class</td>
+</tr>
+<tr>
+<td><code>abc_class_count_share</code></td>
+<td>%</td>
+<td>the share of the classified products that are in this class</td>
+</tr>
+<tr>
+<td><code>abc_class_share</code></td>
+<td>%</td>
+<td>the share of the value this class carries</td>
+</tr>
+<tr>
+<td><code>abc_class_population</code></td>
+<td></td>
+<td>the products classified</td>
+</tr>
+<tr>
+<td><code>abc_class_unclassified</code></td>
+<td></td>
+<td>the products left unclassified</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A share is in percentage points. <code>86.55</code> is 86.55 %.</li>
+<li><code>weight_total</code> has the measure's unit, EUR here.</li>
+<li><code>abc_class_count_share</code> and <code>abc_class_share</code> make one sentence from one row: 36 % of the
+  classified products carry 87 % of the value.</li>
+<li>The class column holds only its labels. The chat filters <code>abc_class = 'A'</code>. A query that filters
+  it on another value, such as <code>'a'</code>, is refused before it runs, and the refusal names A, B and C.</li>
+</ul>
+<h2 id="how-a-class-is-decided">How a class is decided</h2>
+<p>A product's class is read from the value of the products before it, never from its own value:</p>
+<ol>
+<li>The products are sorted by value, the largest first.</li>
+<li>The value of the products before a product, as a share of the total, is its <code>abc_class_before</code>.</li>
+<li>Under 80 %, the product is A. Under 95 %, it is B. From 95 %, it is C.</li>
+</ol>
+<p>The demo's products, in that order:</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Value (EUR)</th>
+<th>Before (%)</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-1008</td>
+<td>4100</td>
+<td>0</td>
+<td>A</td>
+</tr>
+<tr>
+<td>P-1006</td>
+<td>3000</td>
+<td>31.71</td>
+<td>A</td>
+</tr>
+<tr>
+<td>P-1002</td>
+<td>2200</td>
+<td>54.92</td>
+<td>A</td>
+</tr>
+<tr>
+<td>P-1000</td>
+<td>1890</td>
+<td>71.94</td>
+<td>A</td>
+</tr>
+<tr>
+<td>P-1009</td>
+<td>999.99</td>
+<td>86.55</td>
+<td>B</td>
+</tr>
+<tr>
+<td>P-1001</td>
+<td>380.5</td>
+<td>94.29</td>
+<td>B</td>
+</tr>
+<tr>
+<td>P-1010</td>
+<td>120</td>
+<td>97.23</td>
+<td>C</td>
+</tr>
+<tr>
+<td>P-1003</td>
+<td>90</td>
+<td>98.16</td>
+<td>C</td>
+</tr>
+<tr>
+<td>P-1004</td>
+<td>77</td>
+<td>98.86</td>
+<td>C</td>
+</tr>
+<tr>
+<td>P-1011</td>
+<td>55</td>
+<td>99.45</td>
+<td>C</td>
+</tr>
+<tr>
+<td>P-1005</td>
+<td>15.75</td>
+<td>99.88</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>P-1000 starts at 71.94 %, so it is A. With it, class A carries 86.55 % of the value. The product
+  that crosses 80 % stays A.</li>
+<li>P-1009 starts at 86.55 %, so it is B.</li>
+<li>Products with the same value travel together. They share one <code>abc_class_before</code>: the value before
+  all of them. So they land in one class, even when together they cross a bound.</li>
+</ul>
+<h2 id="quarters-by-number-quantile">Quarters by number: <code>quantile</code></h2>
+<p><code>pareto</code> cuts by value: which products carry the first 80 % of the value. <code>quantile</code> cuts by
+number: which products are in the first 25 % of the products. Same bounds, same labels, same
+columns, but a product's class is read from <strong>how many</strong> products lie before it, not from their
+value:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 50-products-quartile.yaml — which products are in the top quarter by ordered value.</span>
+<span class="c1">#</span>
+<span class="c1"># Over the typed orders (entities/56-order.yaml), one row per product code. `quantile` cuts by number, not by value:</span>
+<span class="c1"># a product takes the first label while fewer than 25 % of the products lie before it, the second under 50 %, the</span>
+<span class="c1"># third under 75 %, the last beyond. Labels go from head to tail, so the usual quartile names are written</span>
+<span class="c1"># [Q4, Q3, Q2, Q1]: Q4 holds the largest values, Q1 the smallest. Each row also says what share of the ordered value</span>
+<span class="c1"># its quarter carries.</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Metric</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">products_quartile</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Quartiles des produits par valeur commandée</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Le quart de chaque produit par valeur commandée, et la part de la valeur que porte son quart.</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeskOrder</span>
+<span class="w">  </span><span class="nt">by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">measures</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">order_value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> sum</span><span class="p">:</span><span class="w"> </span><span class="nv">amount</span><span class="p p-Indicator">,</span><span class="nt"> unit</span><span class="p">:</span><span class="w"> </span><span class="nv">EUR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">value_quarter</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> quantile</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="p p-Indicator">,</span><span class="nt"> bounds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">25</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">50</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">75</span><span class="p p-Indicator">],</span><span class="nt"> labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Q4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Q3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Q2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Q1</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<ol>
+<li>The products are sorted by value, the largest first.</li>
+<li>The products before a product, as a share of all the products, is its <code>value_quarter_before</code>.</li>
+<li>Under 25 %, the product takes the first label. Under 50 %, the second. Under 75 %, the third.
+   From 75 %, the last.</li>
+</ol>
+<p><strong>Labels go from head to tail.</strong> The first label holds the largest values, whatever its name. For
+the usual quartile names, write <code>[Q4, Q3, Q2, Q1]</code>: Q4 holds the largest values and Q1 the
+smallest, as "upper quartile" means. Nothing in a name is special: the order you write decides.</p>
+<p>The demo's 11 products:</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Value (EUR)</th>
+<th>Before (%)</th>
+<th>Quartile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-1008</td>
+<td>4100</td>
+<td>0</td>
+<td>Q4</td>
+</tr>
+<tr>
+<td>P-1006</td>
+<td>3000</td>
+<td>9.09</td>
+<td>Q4</td>
+</tr>
+<tr>
+<td>P-1002</td>
+<td>2200</td>
+<td>18.18</td>
+<td>Q4</td>
+</tr>
+<tr>
+<td>P-1000</td>
+<td>1890</td>
+<td>27.27</td>
+<td>Q3</td>
+</tr>
+<tr>
+<td>P-1009</td>
+<td>999.99</td>
+<td>36.36</td>
+<td>Q3</td>
+</tr>
+<tr>
+<td>P-1001</td>
+<td>380.5</td>
+<td>45.45</td>
+<td>Q3</td>
+</tr>
+<tr>
+<td>P-1010</td>
+<td>120</td>
+<td>54.55</td>
+<td>Q2</td>
+</tr>
+<tr>
+<td>P-1003</td>
+<td>90</td>
+<td>63.64</td>
+<td>Q2</td>
+</tr>
+<tr>
+<td>P-1004</td>
+<td>77</td>
+<td>72.73</td>
+<td>Q2</td>
+</tr>
+<tr>
+<td>P-1011</td>
+<td>55</td>
+<td>81.82</td>
+<td>Q1</td>
+</tr>
+<tr>
+<td>P-1005</td>
+<td>15.75</td>
+<td>90.91</td>
+<td>Q1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Q4, the upper quartile, holds 3 products, and <code>value_quarter_share</code> says they carry 71.94 % of
+  the value. Class A of <code>products_abc</code> holds 4: one cut counts the products, the other their value.</li>
+<li>Products with the same value travel together, as for <code>pareto</code>: they share one
+  <code>value_quarter_before</code>, the number of products before all of them.</li>
+<li><code>_before</code> is a share of the <strong>products</strong> here. Every other column means what it means for
+  <code>pareto</code>.</li>
+</ul>
+<h2 id="null-zero-and-negative-values">Null, zero and negative values</h2>
+<p>Each entry has its own rule:</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>Empty value</th>
+<th>Zero</th>
+<th>Negative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>share</code></td>
+<td>no share</td>
+<td>share 0</td>
+<td>a negative share, and the value stays in the total</td>
+</tr>
+<tr>
+<td><code>rank</code></td>
+<td>no rank, not counted in <code>_population</code></td>
+<td>ranked</td>
+<td>ranked</td>
+</tr>
+<tr>
+<td><code>pareto</code>, <code>preset: abc</code></td>
+<td>unclassified</td>
+<td>unclassified</td>
+<td>unclassified</td>
+</tr>
+<tr>
+<td><code>quantile</code></td>
+<td>unclassified</td>
+<td>classified</td>
+<td>classified</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>When the total is 0 or less, every share is empty: a <code>share</code>, and a <code>quantile</code> class's <code>_share</code>.</li>
+<li>A <code>share</code>, or a <code>quantile</code> class's <code>_share</code>, can be negative or above 100 when the population
+  mixes positive and negative values and its total stays positive. A total of 40 EUR made of 50 and
+  −10: the 50 EUR product carries 125 % of it.</li>
+<li>A return makes a negative value. Under <code>pareto</code>, that product is left unclassified, so it does
+  not move the other products' classes. Under <code>quantile</code>, it is counted and takes the tail label:
+  one product more in the population moves every other product's <code>_before</code>.</li>
+<li><code>abc_class_population</code> counts the classified products only. <code>abc_class_unclassified</code> counts the
+  others. Every row says both.</li>
+</ul>
+<p>Add three orders to the file in your tenant's folder
+(<a href="../demo-desk/#landing-the-sources">demo desk</a>): a return, an order at 0 and an order with no
+amount:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.selfhost.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>hub<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  cd /tmp/drop/1/acme-desk</span>
+<span class="s1">  echo "SO-000014,P-1013,AVOIR,-50.00,2026-08-14" &gt;&gt; acme-orders.csv</span>
+<span class="s1">  echo "SO-000015,P-1014,BROUILLON,0.00,2026-08-14" &gt;&gt; acme-orders.csv</span>
+<span class="s1">  echo "SO-000016,P-1015,BROUILLON,,2026-08-14" &gt;&gt; acme-orders.csv'</span>
+</code></pre></div>
+<p>Run the connector, and wait until the run says <code>Completed</code>:</p>
+<div class="highlight"><pre><span></span><code>$ lm connector run acme-desk-orders-typed
+run scheduled: 0c4df3d2-88db-4010-a1ae-e2acab62bd6c
+$ lm run list
+ID        CONNECTOR               ENDPOINT  STATUS     IN  OUT  SKIPPED  DEAD-LETTERS  STARTED           ENDED
+0c4df3d2  acme-desk-orders-typed  default   Completed  15  15   0        0             2026-11-26 20:10  2026-11-26 20:10
+c7b4796d  acme-desk-orders-typed  default   Completed  12  12   0        0             2026-11-26 20:10  2026-11-26 20:10
+79c1ab34  acme-desk-orders-typed  default   Completed  13  13   0        0             2026-11-26 20:10  2026-11-26 20:10
+1330e0b8  acme-desk-orders-typed  default   Completed  12  12   0        0             2026-11-26 20:10  2026-11-26 20:10
+</code></pre></div>
+<p>Read the three new products, and P-1008 beside them:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric get products_abc -o json | jq -c '.rows[] | select(.abc_class == null or .code == "P-1008") | {code, order_value, weight, position, abc_class, abc_class_population, abc_class_unclassified}'
+{"code":"P-1008","order_value":4100,"weight":31.8366484861285393,"position":1,"abc_class":"A","abc_class_population":11,"abc_class_unclassified":3}
+{"code":"P-1013","order_value":-50,"weight":-0.38825181080644560126,"position":13,"abc_class":null,"abc_class_population":11,"abc_class_unclassified":3}
+{"code":"P-1014","order_value":0,"weight":0,"position":12,"abc_class":null,"abc_class_population":11,"abc_class_unclassified":3}
+{"code":"P-1015","order_value":null,"weight":null,"position":null,"abc_class":null,"abc_class_population":11,"abc_class_unclassified":3}
+</code></pre></div>
+<ul>
+<li>P-1013, the return, has a negative share and ranks 13th. It has no class.</li>
+<li>P-1014 has a share of 0 and ranks 12th. It has no class.</li>
+<li>P-1015 has no value: no share, no rank. 13 products are ranked, not 14.</li>
+<li>P-1008's row says it too: 11 products classified, 3 unclassified.</li>
+<li>No class moved. A class reads the positive values only. <code>weight</code> reads them all: its total,
+  <code>weight_total</code>, is now 12878.24 EUR, the return included (<a href="#without-the-chat">Without the chat</a>).</li>
+</ul>
+<h2 id="within"><code>within</code></h2>
+<p>Without <code>within</code>, all the groups of the metric are one population. With <code>within</code>, each value of
+the keys it names is a population of its own:</p>
+<ul>
+<li><code>within</code> names <code>by</code> columns of the metric, or its time grain.</li>
+<li>It never names all the keys. Each group would be alone, and A. The apply refuses it
+  (<a href="#within-naming-every-key">Refusals</a>).</li>
+<li>When the metric has a time grain and a <code>by</code> column, <code>within</code> must name the grain. One ABC over
+  the products of several weeks is rarely what is meant, and nothing in the rows would show it.</li>
+<li>A metric whose only key is its grain has no <code>within</code>. Its population is the periods.</li>
+</ul>
+<p>An ABC per week, <code>products-abc-weekly.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Metric</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">products_abc_weekly</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Valeur commandée par produit et par semaine</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeskOrder</span>
+<span class="w">  </span><span class="nt">by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> week</span><span class="p">:</span><span class="w"> </span><span class="nv">ordered_on</span><span class="w"> </span><span class="p p-Indicator">}]</span>
+<span class="w">  </span><span class="nt">measures</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">order_value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> sum</span><span class="p">:</span><span class="w"> </span><span class="nv">amount</span><span class="p p-Indicator">,</span><span class="nt"> unit</span><span class="p">:</span><span class="w"> </span><span class="nv">EUR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">within</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">week</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> preset</span><span class="p">:</span><span class="w"> </span><span class="nv">abc</span><span class="p p-Indicator">,</span><span class="nt"> of</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Without the line <code>within: [week]</code>, the apply is refused:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f products-abc-weekly.yaml
+Error: API error 400: spec.across.within must name week: with a grain and a by column, a population is one period
+</code></pre></div>
+<p>With it, each week is a population:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f products-abc-weekly.yaml
+Applied metric "products_abc_weekly" (definition version 1)
+$ lm metric get products_abc_weekly
+Valeur commandée par produit et par semaine
+
+CODE    WEEK        ORDER_VALUE  ABC_CLASS  ABC_CLASS_BEFORE     ABC_CLASS_COUNT  ABC_CLASS_COUNT_SHARE  ABC_CLASS_SHARE       ABC_CLASS_POPULATION  ABC_CLASS_UNCLASSIFIED  _DISPUTED
+P-1000  2026-07-27  1250         A          0                    1                100.0000000000000000   100.0000000000000000  1                     0                       0
+P-1000  2026-08-03  640          B          84.8342029961285979  2                33.3333333333333333    13.7417943107221007   6                     0                       0
+P-1001  2026-08-03  380.5        B          93.4522807608146777  2                33.3333333333333333    13.7417943107221007   6                     0                       0
+P-1002  2026-08-03  2200         A          55.2095606800201986  2                33.3333333333333333    84.8342029961285979   6                     0                       0
+P-1003  2026-08-03  90           C          98.5759973068506985  2                33.3333333333333333    1.4240026931493015    6                     0                       0
+P-1004  2026-08-10  77           C          96.8955712501675686  2                40.0000000000000000    3.1044287498324314    5                     3                       0
+P-1005  2026-08-03  15.75        C          99.7879144925096785  2                33.3333333333333333    1.4240026931493015    6                     0                       0
+P-1006  2026-08-10  3000         A          0                    2                40.0000000000000000    94.0733632957744491   5                     3                       0
+P-1008  2026-08-03  4100         A          0                    2                33.3333333333333333    84.8342029961285979   6                     0                       0
+P-1009  2026-08-10  999.99       A          70.5551988598279864  2                40.0000000000000000    94.0733632957744491   5                     3                       0
+P-1010  2026-08-10  120          B          94.0733632957744491  1                20.0000000000000000    2.8222079543931195    5                     3                       0
+P-1011  2026-08-10  55           C          98.7064880209031536  2                40.0000000000000000    3.1044287498324314    5                     3                       0
+P-1013  2026-08-10  -50                                                                                                        5                     3                       0
+P-1014  2026-08-10  0                                                                                                          5                     3                       0
+P-1015  2026-08-10                                                                                                             5                     3                       0
+
+  order_value: EUR
+  abc_class_before: %
+  abc_class_count_share: %
+  abc_class_share: %
+  order_value = sum(amount), by code, by week of ordered_on, UTC
+  abc_class = pareto(order_value, bounds [80, 95], labels [A, B, C]) within week, prior mass, null and ≤ 0 unclassified
+  data as of: 2026-11-26T19:10:45.379884Z (last completed run)
+</code></pre></div>
+<ul>
+<li>P-1000 is A in the week of 27 July: it is the only product that week. It is B in the week of
+  3 August.</li>
+<li>Each week counts its own products: 1, 6 and 5 classified. The week of 10 August also holds the
+  three new products, unclassified.</li>
+<li>The definition line says <code>within week</code>.</li>
+</ul>
+<p>Delete it before you go on. The next sections read the desk without it:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric delete products_abc_weekly
+metric products_abc_weekly deleted
+</code></pre></div>
+<h2 id="_disputed-on-an-across-metric"><code>_disputed</code> on an across metric</h2>
+<p><code>_DISPUTED</code> counts the records whose sources disagree on a column the metric reads
+(<a href="../metrics/#the-line-says-disputed">kind: Metric — count</a>). With <code>across</code>, a row's share, rank
+and class depend on every group of its population. So a row's <code>_DISPUTED</code> counts the disputed
+records of its whole population, and one disputed group marks every row of it. With <code>within</code>, it
+marks the rows of its own population only.</p>
+<p>Land the two copies of the due orders and apply <code>OrderDue</code>, as in
+<a href="../metrics/#the-line-says-disputed">The line says (disputed)</a>. Its metric <code>due_orders</code> is not
+needed here. The two copies disagree on SO-2's due date. A metric per order, <code>due-by-order.yaml</code>,
+reads that date in <code>last_due</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps.lumnik.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Metric</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">due_by_order</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">desk</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Échéance par commande</span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OrderDue</span>
+<span class="w">  </span><span class="nt">by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">order_no</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">measures</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">due_amount</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> sum</span><span class="p">:</span><span class="w"> </span><span class="nv">amount</span><span class="p p-Indicator">,</span><span class="nt"> unit</span><span class="p">:</span><span class="w"> </span><span class="nv">EUR</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">last_due</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> max</span><span class="p">:</span><span class="w"> </span><span class="nv">due</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>Only SO-2 is disputed:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f due-by-order.yaml
+Applied metric "due_by_order" (definition version 1)
+$ lm metric get due_by_order
+Échéance par commande
+
+ORDER_NO  DUE_AMOUNT  LAST_DUE                       _DISPUTED
+SO-1      1500        2026-07-01T14:30:00.000+00:00  0
+SO-2      980.5       2026-07-03T09:00:00.000+00:00  1
+
+  due_amount: EUR
+  due_amount = sum(amount), by order_no
+  last_due = max(due), by order_no
+  data as of: 2026-11-26T19:10:46.766563Z (last completed run)
+</code></pre></div>
+<p>Add each order's share of the amount at the end of the file:</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> share</span><span class="p">:</span><span class="w"> </span><span class="nv">due_amount</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>SO-2 is disputed on its due date, not on its amount. But any disputed record of a population marks
+every row of it. Both rows are disputed:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f due-by-order.yaml
+Applied metric "due_by_order" (definition version 2)
+$ lm metric get due_by_order
+Échéance par commande
+
+ORDER_NO  DUE_AMOUNT  LAST_DUE                       WEIGHT               WEIGHT_TOTAL  _DISPUTED
+SO-1      1500        2026-07-01T14:30:00.000+00:00  60.4716790969562588  2480.5        1
+SO-2      980.5       2026-07-03T09:00:00.000+00:00  39.5283209030437412  2480.5        1
+
+  due_amount: EUR
+  weight: %
+  weight_total: EUR
+  due_amount = sum(amount), by order_no
+  last_due = max(due), by order_no
+  weight = share(due_amount) over every group
+  data as of: 2026-11-26T19:10:46.766563Z (last completed run)
+</code></pre></div>
+<p>Delete it before you go on:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric delete due_by_order
+metric due_by_order deleted
+</code></pre></div>
+<h2 id="reading-the-distribution">Reading the distribution</h2>
+<h3 id="without-the-chat">Without the chat</h3>
+<p><code>lm metric get</code> prints every column, then the units, then one line per measure and per entry:</p>
+<div class="highlight"><pre><span></span><code>$ lm metric get products_abc
+Valeur commandée par produit
+
+CODE    ORDER_VALUE  WEIGHT                   WEIGHT_TOTAL  POSITION  POSITION_POPULATION  ABC_CLASS  ABC_CLASS_BEFORE     ABC_CLASS_COUNT  ABC_CLASS_COUNT_SHARE  ABC_CLASS_SHARE      ABC_CLASS_POPULATION  ABC_CLASS_UNCLASSIFIED  _DISPUTED
+P-1000  1890         14.6759184484836437      12878.24      4         13                   A          71.9355457510070976  4                36.3636363636363636    86.5547050487924110  11                    3                       0
+P-1001  380.5        2.9545962802370510       12878.24      6         13                   B          94.2896326182063452  2                18.1818181818181818    10.6780969412696546  11                    3                       0
+P-1002  2200         17.0830796754836065      12878.24      3         13                   A          54.9185349281882143  4                36.3636363636363636    86.5547050487924110  11                    3                       0
+P-1003  90           0.69885325945160208227   12878.24      8         13                   C          98.1610025803976411  5                45.4545454545454545    2.7671980099379343   11                    3                       0
+P-1004  77           0.59790778864192622594   12878.24      9         13                   C          98.8571530231493227  5                45.4545454545454545    2.7671980099379343   11                    3                       0
+P-1005  15.75        0.12229932040403036440   12878.24      11        13                   C          99.8781736725184557  5                45.4545454545454545    2.7671980099379343   11                    3                       0
+P-1006  3000         23.2951086483867361      12878.24      2         13                   A          31.7135201697988280  4                36.3636363636363636    86.5547050487924110  11                    3                       0
+P-1008  4100         31.8366484861285393      12878.24      1         13                   A          0                    4                36.3636363636363636    86.5547050487924110  11                    3                       0
+P-1009  999.99       7.7649585657667507       12878.24      5         13                   B          86.5547050487924110  2                18.1818181818181818    10.6780969412696546  11                    3                       0
+P-1010  120          0.93180434593546944303   12878.24      7         13                   C          97.2328019900620657  5                45.4545454545454545    2.7671980099379343   11                    3                       0
+P-1011  55           0.42707699188709016139   12878.24      10        13                   C          99.4527484019479836  5                45.4545454545454545    2.7671980099379343   11                    3                       0
+P-1013  -50          -0.38825181080644560126  12878.24      13        13                                                                                                                11                    3                       0
+P-1014  0            0                        12878.24      12        13                                                                                                                11                    3                       0
+P-1015                                        12878.24                13                                                                                                                11                    3                       0
+
+  order_value: EUR
+  weight: %
+  weight_total: EUR
+  abc_class_before: %
+  abc_class_count_share: %
+  abc_class_share: %
+  order_value = sum(amount), by code
+  weight = share(order_value) over every group
+  position = rank(order_value) over every group, 1 = largest
+  abc_class = pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified
+  data as of: 2026-11-26T19:10:45.379884Z (last completed run)
+</code></pre></div>
+<ul>
+<li><code>abc_class</code> reads as the <code>pareto</code> that <code>preset: abc</code> stands for, with its bounds and labels.</li>
+<li><code>over every group</code> is one population. With <code>within</code>, the line says <code>within</code> and the keys.</li>
+<li><code>prior mass</code> is the rule of <a href="#how-a-class-is-decided">How a class is decided</a>.</li>
+<li><code>null and ≤ 0 unclassified</code> is the rule of <a href="#null-zero-and-negative-values">Null, zero and negative values</a>.</li>
+<li>The shares are in <code>%</code>. <code>weight_total</code> is in the measure's unit. Ranks and counts have no unit.</li>
+</ul>
+<h3 id="what-the-chat-cites">What the chat cites</h3>
+<p>The class sizes and value shares repeat on every row of a class. The chat reads them with
+<code>SELECT DISTINCT</code>, once per class:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask "Combien de produits sont en A, B et C, et quelle part de la valeur porte chaque classe ?" --scope desk
+Il y a 4 produits dans la classe A, représentant 36,36% des produits en tout. La classe A porte 86,55% de la valeur totale.
+
+Il y a 2 produits dans la classe B, représentant 18,18% des produits en tout. La classe B porte 10,68% de la valeur totale.
+
+Il y a 5 produits dans la classe C, représentant 45,45% des produits en tout. La classe C porte 2,77% de la valeur totale.
+  data as of: 2026-11-26T19:10:45.379884Z (last completed run)
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: this group's class; null when unclassified
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: groups in this class
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: share of the classified groups in this class (%)
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: share of order_value this class carries (%)
+
+  ABC_CLASS  ABC_CLASS_COUNT  ABC_CLASS_COUNT_SHARE  ABC_CLASS_SHARE
+  A          4                36.3636363636363636    86.5547050487924110
+  B          2                18.1818181818181818    10.6780969412696546
+  C          5                45.4545454545454545    2.7671980099379343
+
+  4 rows returned
+
+  SQL: SELECT DISTINCT "abc_class", "abc_class_count", "abc_class_count_share", "abc_class_share"
+FROM (SELECT "code", "order_value", "weight", "weight_total", "position", "position_population", "abc_class", "abc_class_before", "abc_class_count", "abc_class_count_share", "abc_class_share", "abc_class_population", "abc_class_unclassified" FROM connector."metric_products_abc") AS "metric_products_abc"
+LIMIT 500
+</code></pre></div>
+<p>The fourth row is empty: it is the three unclassified products. An empty cell claims nothing, so
+the answer is still cited.</p>
+<p>The answer says "des produits en tout". But 36,36 % is a share of the 11 classified products, not
+of all 14: 4 of 11.</p>
+<p>A list of products is cited when each row shows the class beside the product:</p>
+<div class="highlight"><pre><span></span><code>$ lm ask "Quels produits sont en A ?" --scope desk
+Il y a 4 produits en A. Les codes sont : P-1008, P-1006, P-1002 et P-1000.
+  data as of: 2026-11-26T19:10:45.379884Z (last completed run)
+  metric: Valeur commandée par produit — pareto(order_value, bounds [80, 95], labels [A, B, C]) over every group, prior mass, null and ≤ 0 unclassified: this group's class; null when unclassified
+
+  CODE    ABC_CLASS
+  P-1008  A
+  P-1006  A
+  P-1002  A
+  P-1000  A
+  4 rows returned
+
+  SQL: SELECT "code", "abc_class" FROM (SELECT "code", "order_value", "weight", "weight_total", "position", "position_population", "abc_class", "abc_class_before", "abc_class_count", "abc_class_count_share", "abc_class_share", "abc_class_population", "abc_class_unclassified" FROM connector."metric_products_abc") AS "metric_products_abc" WHERE "abc_class" = 'A'
+LIMIT 500
+</code></pre></div>
+<p>Three answers are not cited:</p>
+<ul>
+<li><strong>The key alone.</strong> The rows show the codes only. The <code>WHERE</code> filters on A, but no row shows it,
+  so no row proves the class:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ lm ask "Donne seulement les codes des produits en A, sans leur classe." --scope desk
+Il y a 4 produits en classe A. Les codes sont : P-1008, P-1006, P-1002 et P-1000.
+  data as of: 2026-11-26T19:10:45.379884Z (last completed run)
+
+  CODE
+  P-1008
+  P-1006
+  P-1002
+  P-1000
+  4 rows returned
+
+  SQL: SELECT "code" FROM (SELECT "code", "order_value", "weight", "weight_total", "position", "position_population", "abc_class", "abc_class_before", "abc_class_count", "abc_class_count_share", "abc_class_share", "abc_class_population", "abc_class_unclassified" FROM connector."metric_products_abc") AS "metric_products_abc" WHERE "abc_class" = 'A'
+LIMIT 500
+</code></pre></div>
+<ul>
+<li><strong>A count by class.</strong> <code>SELECT abc_class, count(*) … GROUP BY abc_class</code> counts the metric's
+  rows. A count of the metric's rows is never one of its figures. <code>abc_class_count</code> holds the
+  number of products per class: read it.</li>
+<li><strong>A value the chat computed.</strong> <code>SELECT sum(order_value) AS total … WHERE abc_class IS NULL</code>
+  returns 0 EUR. No column of the metric holds that total, so nothing is cited, even when a class
+  size or a rank happens to be the same number. For a figure of the metric, ask for the column
+  that holds it.</li>
+</ul>
+<h2 id="the-matrix">The matrix</h2>
+<p>Each cell is one way to place a group. The columns say what is measured: the number of groups,
+their value, or the group's own value alone. The rows say what comes out: a number or a label.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>by headcount</th>
+<th>by weight</th>
+<th>by own value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>number</strong></td>
+<td><code>rank</code></td>
+<td><code>share</code></td>
+<td>the measure itself</td>
+</tr>
+<tr>
+<td><strong>label</strong></td>
+<td><code>quantile</code></td>
+<td><code>pareto</code>, <code>preset: abc</code></td>
+<td>not available</td>
+</tr>
+</tbody>
+</table>
+<p>Only <code>rank</code>, <code>share</code>, <code>pareto</code> and <code>quantile</code> exist under <code>across</code>.</p>
+<h2 id="in-the-business-app">In the business app</h2>
+<p>The <a href="../pwa/#metrics">Metrics tab</a> of a business app shows a cut's classes: for each one, its size,
+its share of the groups and its share of the value, with two bars. Tap a class to see its groups.
+The figures are the companion columns above, read by the hub in one pass with the groups. Nothing
+is recomputed on the phone.</p>
+<p><img alt="The ABC of the demo's products, class A open on its four products" src="../img/pwa-08-metrics-abc.png" width="260" /></p>
+<h2 id="refusals">Refusals</h2>
+<p>An <code>across</code> the hub cannot compute is refused at apply. Nothing is created. Each file below is the
+manifest of <a href="#the-manifest">The manifest</a>, with its <code>across</code> changed.</p>
+<h3 id="bounds-that-do-not-increase">Bounds that do not increase</h3>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> pareto</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="p p-Indicator">,</span><span class="nt"> bounds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">95</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">80</span><span class="p p-Indicator">],</span><span class="nt"> labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">A</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">B</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">C</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f bounds-not-increasing.yaml
+Error: API error 400: spec.across.abc_class.bounds[1] must be greater than the one before: strictly increasing
+</code></pre></div>
+<p>The bounds go from the head to the tail. Each one lies between 0 and 100, both excluded.</p>
+<h3 id="a-bound-with-5-decimals">A bound with 5 decimals</h3>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> preset</span><span class="p">:</span><span class="w"> </span><span class="nv">abc</span><span class="p p-Indicator">,</span><span class="nt"> of</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="p p-Indicator">,</span><span class="nt"> bounds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">80.12345</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">95</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f bound-five-decimals.yaml
+Error: API error 400: spec.across.abc_class.bounds[0] takes at most 4 decimals (percentage points, as 99.5)
+</code></pre></div>
+<h3 id="labels-that-do-not-fit-the-bounds">Labels that do not fit the bounds</h3>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> preset</span><span class="p">:</span><span class="w"> </span><span class="nv">abc</span><span class="p p-Indicator">,</span><span class="nt"> of</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="p p-Indicator">,</span><span class="nt"> labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">A</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">B</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f labels-count.yaml
+Error: API error 400: spec.across.abc_class.labels must hold exactly one more label than bounds (3)
+</code></pre></div>
+<p>Two bounds make three classes. Each label is 1 to 16 ASCII letters (A-Z, a-z), digits or <code>_</code>, and
+appears once.</p>
+<h3 id="within-naming-every-key"><code>within</code> naming every key</h3>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">across</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">within</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">code</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">abc_class</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> preset</span><span class="p">:</span><span class="w"> </span><span class="nv">abc</span><span class="p p-Indicator">,</span><span class="nt"> of</span><span class="p">:</span><span class="w"> </span><span class="nv">order_value</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ lm metric apply -f within-every-key.yaml
+Error: API error 400: spec.across.within must be a strict subset of the keys: naming all of them leaves one group per population
+</code></pre></div>
+<p>Each product would be a population of one, and A. Name fewer keys, or leave <code>within</code> out.</p>
+<h2 id="limits">Limits</h2>
+<ul>
+<li><strong>No total across populations.</strong> With <code>within</code>, every figure belongs to one population. No column
+  holds the figure of all the weeks together, so an answer about all of them gets no <code>metric:</code> line.
+  Declare a metric without the week for it, such as <code>products_abc</code>.</li>
+<li><strong>At most 4 entries</strong> under <code>across</code>, <code>within</code> aside.</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Declares</strong></td>
+<td><code>spec.across</code>: 1 to 4 entries, each with one of <code>share</code>, <code>rank</code>, <code>pareto</code>, <code>quantile</code> or <code>preset</code>, over a number measure of the metric; an optional <code>within</code></td>
+</tr>
+<tr>
+<td><strong><code>share: m</code></strong></td>
+<td>adds <code>&lt;entry&gt;</code> (<code>%</code>) and <code>&lt;entry&gt;_total</code> (the unit of <code>m</code>)</td>
+</tr>
+<tr>
+<td><strong><code>rank: m</code></strong></td>
+<td>adds <code>&lt;entry&gt;</code> and <code>&lt;entry&gt;_population</code></td>
+</tr>
+<tr>
+<td><strong><code>pareto: m</code></strong></td>
+<td><code>bounds</code>: 1 to 9, strictly increasing, between 0 and 100, at most 4 decimals. <code>labels</code>: one more than the bounds, each 1 to 16 ASCII letters (A-Z, a-z), digits or <code>_</code>, all different. Adds <code>&lt;entry&gt;</code>, <code>_before</code>, <code>_count</code>, <code>_count_share</code>, <code>_share</code>, <code>_population</code>, <code>_unclassified</code></td>
+</tr>
+<tr>
+<td><strong><code>quantile: m</code></strong></td>
+<td><code>bounds</code> and <code>labels</code> as for <code>pareto</code>, both required. The population is every non-null value; <code>_before</code> is the share of the classified groups before (%). Adds the same columns as <code>pareto</code></td>
+</tr>
+<tr>
+<td><strong><code>preset: abc</code></strong></td>
+<td><code>of</code> (required), <code>bounds</code> and <code>labels</code> (optional): <code>pareto: &lt;of&gt;, bounds: [80, 95], labels: [A, B, C]</code></td>
+</tr>
+<tr>
+<td><strong><code>within</code></strong></td>
+<td>keys of the metric, never all of them; it names the grain when the metric has a grain and a <code>by</code> column</td>
+</tr>
+<tr>
+<td><strong>Names</strong></td>
+<td>an entry's name and its columns differ from the measures, the keys, the other entries' columns and <code>_disputed</code></td>
+</tr>
+<tr>
+<td><strong>Commands</strong></td>
+<td>those of any <a href="../metrics/#reference">metric</a></td>
+</tr>
+<tr>
+<td><strong>Edition</strong></td>
+<td>Open. The chat (<code>lm ask</code>) needs Pro</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../metrics/">kind: Metric — count</a> — measures, <code>where</code>, <code>by</code>, and the <code>metric:</code> line.</li>
+<li><a href="../../entities/">Entities</a> — what a metric reads.</li>
+<li><a href="../../transparency/ask-honesty/">When Ask refuses</a> — the <code>metric:</code> line among the others.</li>
+<li><a href="../../rag/http-api/#metric-get-apimetricsname">HTTP API</a> — a metric's <code>across</code> definition.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.tracking", "navigation.top", "toc.follow", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

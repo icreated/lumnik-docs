@@ -1,0 +1,15 @@
+# 70-delivery-site-point.yaml — the delivery sites of 74-parse-coordinates.yaml, with their GPS point declared.
+# The chat can then measure a distance from a site: "which sites are within 20 km of 45.764, 4.8357?"
+
+kind: Entity
+name: DeliverySite
+label: Delivery site
+match: [site]
+scopes: [dispatch]
+sources:
+  - table: t_delivery_sites
+    map: { site: site, city: city, latitude: latitude, longitude: longitude }
+points:
+  - name: site_location
+    lat: latitude
+    lon: longitude

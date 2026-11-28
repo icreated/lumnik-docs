@@ -1,0 +1,19 @@
+# 10-open-orders.yaml — what the desk still has to deliver.
+#
+# Over the typed orders (entities/56-order.yaml). `status~cours` keeps En cours, encours and
+# EN COURS alike: `~` is a case-insensitive substring.
+apiVersion: apps.lumnik.io/v1
+kind: Metric
+metadata:
+  name: open_orders
+spec:
+  scope: desk
+  title: Commandes en cours
+  description: Ce que le desk doit encore livrer.
+  source:
+    entity: DeskOrder
+  where:
+    - status~cours
+  measures:
+    open_amount: { sum: amount, unit: EUR }
+    open_orders: { count: rows }

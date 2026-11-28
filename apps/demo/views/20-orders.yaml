@@ -1,0 +1,16 @@
+# 20-orders.yaml — a view straight over a raw ingest table, no entity needed.
+#
+# A scope's card lists the raw tables as well as the fused views, so a freshly landed export
+# is viewable as it is. The status column is shown exactly as the ERP spells it.
+#
+#   lm view -f docs/apps/demo/views/20-orders.yaml --filter 'status~litige'
+#   lm view -f docs/apps/demo/views/20-orders.yaml --filter 'amount>1000'
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata:
+  name: acme-orders
+spec:
+  scope: desk
+  table: connector.t_acme_desk_orders
+  title: Commandes
+  columns: [order_no, code, status, amount, ordered_on]

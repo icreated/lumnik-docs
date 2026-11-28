@@ -1,0 +1,9 @@
+# 71-refused-salary.yaml — refused on purpose: the staff scope has no salary column.
+
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata: { name: staff-salaries }
+spec:
+  scope: staff
+  table: connector.v_directory
+  columns: [code, name, salary]

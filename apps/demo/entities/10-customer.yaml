@@ -1,0 +1,47 @@
+# 10-customer.yaml — one Customer fused from the ERP and the CRM on the customer code.
+#
+# The ERP is listed first, so on a disagreement its value is the representative and the
+# CRM's is kept in the row's _conflicts ledger — nothing is silently dropped. The `columns`
+# block grounds the canonical shape for the surfaces above: labels a kind:View renders,
+# descriptions the chat reads, and a `values` domain the filters enforce.
+#
+# Expect: 14 rows (12 ERP + 2 CRM-only; the CRM's blank-code row is excluded), and exactly
+#         three in dispute — P-1000 (name), P-1002 (city), P-1008 (city). P-1005 is not one:
+#         the ERP had no city and the CRM filled it, and a gap is not a disagreement.
+kind: Entity
+name: AcmeCustomer
+description: "A customer, fused from the ERP export and the CRM export."
+match: [code]
+scopes: [desk]
+columns:
+  code:
+    label: "Code client"
+  name:
+    label: "Raison sociale"
+  city:
+    label: "Ville"
+    description: "Billing city, free text."
+    example: "Lyon"
+  segment:
+    label: "Segment"
+    description: "Commercial segment."
+    values: [GOLD, SILVER, BRONZE]
+  credit_limit:
+    label: "Encours autorisé"
+    description: "Credit limit in euros."
+  email:
+    label: "Email"
+sources:
+  - table: t_acme_desk_erp
+    map:
+      code: code
+      name: name
+      city: city
+      segment: segment
+      credit_limit: credit_limit
+  - table: t_acme_desk_crm
+    map:
+      customer: code
+      company: name
+      town: city
+      email: email

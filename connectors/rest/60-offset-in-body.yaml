@@ -1,0 +1,38 @@
+# 60-offset-in-body.yaml — an API that reads its page from the JSON body: Odoo 19's JSON-2 API.
+#
+# `POST /json/2/<model>/search_read` reads `offset` and `limit` from the body only. In the query
+# string it ignores them, and every page answers the whole model. `body:` is sent as JSON, and
+# `param_binding: body` writes `offset` and `limit` into it on every page.
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: odoo-partners
+  connector_type: rest-generic
+  scopes: [crm]
+
+spec:
+  base_url: https://odoo.example.com
+  auth:
+    kind: bearer
+    token_env: ODOO_API_KEY          # lm secret scope ODOO_API_KEY crm
+  endpoints:
+    - id: partners
+      method: POST
+      path: /json/2/res.partner/search_read
+      body:
+        domain: []
+        fields: [name, email]
+      pagination:
+        kind: offset
+        param_binding: body
+        offset_param: offset
+        limit_param: limit
+        limit: 100
+        response_path: $
+      target:
+        kind: hybrid
+        table: ext.odoo_partners
+        unique_key: $.id
+        promote:
+          - { name: name, path: $.name, type: text }
+          - { name: email, path: $.email, type: text }

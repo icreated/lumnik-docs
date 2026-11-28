@@ -1,0 +1,13 @@
+# 65-refused-missing-table.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: a source table no connector has created yet is a 409, not a 400 — run the source connector first, then apply again.
+
+kind: Entity
+name: AcmeRefusedMissing
+match: [code]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: name }
+  - table: t_acme_desk_nowhere
+    map: { code: code }

@@ -1,0 +1,9 @@
+# 80-employee.yaml — every column of the HR export, for the hr scope.
+
+kind: Entity
+name: Employee
+scopes: [hr]
+match: [code]
+sources:
+  - table: t_hr_employees
+    map: { code: code, name: name, department: department, salary: salary }

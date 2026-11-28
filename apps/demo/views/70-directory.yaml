@@ -1,0 +1,12 @@
+# 70-directory.yaml — the staff directory, over the Directory entity.
+#
+#   lm --context staff view -f docs/apps/demo/views/70-directory.yaml
+
+kind: View
+apiVersion: apps.lumnik.io/v1
+metadata: { name: staff-directory }
+spec:
+  scope: staff
+  table: connector.v_directory
+  title: Staff directory
+  columns: [code, name, department]

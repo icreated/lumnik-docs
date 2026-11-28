@@ -1,0 +1,13 @@
+# 61-refused-case-collision.yaml — must be refused at apply. A clean apply on this file is the defect.
+#
+# The rule: `email` in one source and `Email` in another would silently become two SQL columns.
+
+kind: Entity
+name: AcmeRefusedCollision
+match: [code]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_erp
+    map: { code: code, name: Email }
+  - table: t_acme_desk_crm
+    map: { customer: code, email: email }

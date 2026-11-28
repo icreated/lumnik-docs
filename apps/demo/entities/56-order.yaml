@@ -1,0 +1,10 @@
+# 56-order.yaml — the desk's orders, typed: what metrics/10-open-orders.yaml counts and sums.
+#
+# Over the typed source (sources/31-orders-typed.yaml): `amount` is a number, `ordered_on` a date.
+kind: Entity
+name: DeskOrder
+match: [order_no]
+scopes: [desk]
+sources:
+  - table: t_acme_desk_orders_typed
+    map: { order_no: order_no, code: code, status: status, amount: amount, ordered_on: ordered_on }

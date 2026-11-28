@@ -1,0 +1,10 @@
+# 81-directory.yaml — the same table for the staff scope, without the salary.
+# Apply it as an lm_admin who holds no scope.
+
+kind: Entity
+name: Directory
+scopes: [staff]
+match: [code]
+sources:
+  - table: t_hr_employees
+    map: { code: code, name: name, department: department }

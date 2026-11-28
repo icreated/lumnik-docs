@@ -1,0 +1,19 @@
+# 40-products.yaml — the product master, one row per product.
+#
+# Lands connector.t_products. `m_product_category_id` references the category table
+# (50-product-categories.yaml); the Entity 30-product-with-category.yaml joins it.
+
+apiVersion: connectors.lumnik.io/v1
+kind: Connector
+metadata:
+  name: products
+  connector_type: csv-file
+  scopes: [catalogue]
+
+spec:
+  transport:
+    kind: local
+    path: acme-catalogue/m_product.csv   # in your tenant's folder of the hub's local root — see entities-joins.md
+  parser:
+    has_header: true
+  after_process: none
